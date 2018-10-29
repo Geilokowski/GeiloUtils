@@ -1,0 +1,76 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url = "http://files.minecraftforge.net/maven" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+
+plugins {
+  id 'com.github.johnrengelman.shadow' version '1.2.3'
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+
+version = "1.3.4"
+group = "play.ai.dragonrealm.geiloutils" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "geiloutils"
+
+sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+minecraft {
+    version = "1.12.2-14.23.4.2760"
+    runDir = "run"
+    mappings = "snapshot_20171003"
+}
+
+shadowJar {
+    classifier = ""
+    relocate "org.slf4j","play.ai.dragonrealm.geiloutils.repack.org.slf4j"
+    relocate "com.iwebpp.crypto", "play.ai.dragonrealm.geiloutils.repack.com.iwebpp.crypto"
+    relocate "com.neovisionaries.ws.client", "play.ai.dragonrealm.geiloutils.repack.com.neovisionaries.ws.client"
+    relocate "com.sun.jna", "play.ai.dragonrealm.geiloutils.repack.com.sun.jna"
+    relocate "com.vdurmont.emoji", "play.ai.dragonrealm.geiloutils.repack.com.vdurmont.emoji"
+    relocate "gnu.trove", "play.ai.dragonrealm.geiloutils.gnu.trove"
+    relocate "net.dv8tion.jda", "play.ai.dragonrealm.geiloutils.repack.net.dv8tion.jda"
+    relocate "okhttp3", "play.ai.dragonrealm.geiloutils.repack.okhttp3"
+    relocate "okio", "play.ai.dragonrealm.geiloutils.repack.okio"
+    relocate "org.apache.commons.collections4", "play.ai.dragonrealm.geiloutils.repack.org.apache.commons.collections4"
+    relocate "org.apache.commons.lang3", "play.ai.dragonrealm.geiloutils.repack.org.apache.commons.lang3"
+    relocate "org.json", "play.ai.dragonrealm.geiloutils.repack.org.json"
+    relocate "tomp2p.opuswrapper", "play.ai.dragonrealm.geiloutils.repack.tomp2p.opuswrapper"
+
+    dependencies {
+        include(dependency("JDA:JDA:3.8.0_428:withDependencies"))
+    }
+}
+
+repositories {
+    flatDir {
+        dirs "/libs"
+    }
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+reobf { shadowJar { mappingType = "SEARGE" } }
+tasks.reobfShadowJar.mustRunAfter shadowJar
