@@ -1,13 +1,18 @@
 package play.ai.dragonrealm.geiloutils.config.discord;
 
+import java.util.List;
+
 public class ConfigDiscord {
 	private boolean enabled;
+	private boolean isSingleToMulti;
 	private String token;
 	private String channelIDCommands;
 	private String channelIDRelay;
 	private String minecraftChatPrefix;
 	private String discordChatPrefix;
 	private String discordCommandPrefix;
+	private List<String> validColors;
+
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -49,5 +54,22 @@ public class ConfigDiscord {
 	}
 	public void setDiscordCommandPrefix(String discordCommandPrefix) {
 		this.discordCommandPrefix = discordCommandPrefix;
+	}
+
+
+	public boolean isSingleToMulti() {
+		return isSingleToMulti;
+	}
+
+	public void setSingleToMulti(boolean singleToMulti) {
+		isSingleToMulti = singleToMulti;
+	}
+
+	public void setValidColors(List<String> validColors) {
+		this.validColors = validColors;
+	}
+
+	public List<String> getValidColors() {
+		return validColors;
 	}
 }

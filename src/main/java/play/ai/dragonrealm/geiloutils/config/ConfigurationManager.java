@@ -135,12 +135,22 @@ public class ConfigurationManager
 	private static ConfigDiscord defaultDiscordConfig() {
 		ConfigDiscord defaultDiscordConfig = new ConfigDiscord();
 		defaultDiscordConfig.setEnabled(false);
+		defaultDiscordConfig.setSingleToMulti(false);
 		defaultDiscordConfig.setMinecraftChatPrefix("[Discord] ");
 		defaultDiscordConfig.setChannelIDCommands("");
 		defaultDiscordConfig.setChannelIDRelay("");
 		defaultDiscordConfig.setToken("");
 		defaultDiscordConfig.setDiscordCommandPrefix("?");
 		defaultDiscordConfig.setDiscordChatPrefix("MC >> ");
+		ArrayList<String> color = new ArrayList<>();
+		color.add("§c");
+		color.add("§e");
+		color.add("§2");
+		color.add("§a");
+		color.add("§b");
+		color.add("§3");
+		color.add("§9");
+		defaultDiscordConfig.setValidColors(color);
 		return defaultDiscordConfig;
 	}
 	

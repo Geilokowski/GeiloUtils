@@ -9,6 +9,7 @@ public class Playerstat {
 	private double money = 0.0;
 	private String rank = "";
 	private List<KitLastUsed> kitLastUsed = new ArrayList<KitLastUsed>();
+	private List<String> mutedChats = new ArrayList<>();
 	
 	public String getName() {
 		return name;
@@ -39,5 +40,13 @@ public class Playerstat {
 	}
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
+	}
+
+	public List<String> getMutedChats() {
+		return mutedChats;
+	}
+
+	public void setMutedChats(List<String> mutedChats) {
+		this.mutedChats = mutedChats;
 	}
 }

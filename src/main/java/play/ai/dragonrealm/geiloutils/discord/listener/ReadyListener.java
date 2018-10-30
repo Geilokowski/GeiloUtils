@@ -12,8 +12,8 @@ public class ReadyListener extends ListenerAdapter{
 		GeiloUtils.getLogger().info("The bot is running on the following servers: ");
 		for (Guild g : event.getJDA().getGuilds()) {
 			GeiloUtils.getLogger().info(("Name: " + g.getName() + " ID: " + g.getId()));
-			GeiloBot.channelCommands = g.getTextChannelById(ConfigurationManager.getDiscordConfig().getChannelIDCommands());
-			GeiloBot.channelIRC = g.getTextChannelById(ConfigurationManager.getDiscordConfig().getChannelIDRelay());
+			GeiloBot.channelCommands = g.getTextChannelsByName(ConfigurationManager.getDiscordConfig().getChannelIDCommands(), true).get(0);
+			GeiloBot.channelIRC = g.getTextChannelsByName(ConfigurationManager.getDiscordConfig().getChannelIDRelay(), true).get(0);
 			
 			//TODO: Reenable in the final release
 			//GeiloBot.channelIRC.sendMessage("Server Online!").queue();

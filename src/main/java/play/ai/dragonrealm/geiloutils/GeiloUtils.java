@@ -35,6 +35,7 @@ import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
 import play.ai.dragonrealm.geiloutils.events.ChatEvent;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerBlocks;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerPlayer;
+import play.ai.dragonrealm.geiloutils.events.EventMoneyPickup;
 import play.ai.dragonrealm.geiloutils.utils.CraftingUtils;
 import play.ai.dragonrealm.geiloutils.utils.MoneyUtils;
 
@@ -95,6 +96,7 @@ public class GeiloUtils
 	    MinecraftForge.EVENT_BUS.register(new EventHandlerBlocks());
 	    MinecraftForge.EVENT_BUS.register(new EventHandlerPlayer());
 	    MinecraftForge.EVENT_BUS.register(new ChatEvent());
+	    //MinecraftForge.EVENT_BUS.register(new EventMoneyPickup());
 	    
 	    CraftingUtils.removeAllRecipes();
 	  }
