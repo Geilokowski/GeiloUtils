@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import ibxm.Player;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -13,13 +14,17 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.kits.Kit;
 import play.ai.dragonrealm.geiloutils.config.kits.KitItem;
 import play.ai.dragonrealm.geiloutils.config.permissions.Permission;
+import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
 import play.ai.dragonrealm.geiloutils.config.ranks.Rank;
+import play.ai.dragonrealm.geiloutils.utils.ArrayUtils;
 import play.ai.dragonrealm.geiloutils.utils.KitUtils;
 import play.ai.dragonrealm.geiloutils.utils.PermissionUtils;
+import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 public class CommandGeiloRank extends CommandBase{
 
@@ -41,7 +46,7 @@ public class CommandGeiloRank extends CommandBase{
 		if(sender instanceof EntityPlayer) {
 			player = (EntityPlayer) sender;
 		}else {
-			return tmpList;
+
 		}
 		
 		if(args.length == 1) {
@@ -53,7 +58,19 @@ public class CommandGeiloRank extends CommandBase{
 			tmpList.add("list");
 			tmpList.add("delete");
 			tmpList.add("info");
+
+			return ArrayUtils.startsWith(tmpList, args[1]);
 		}
+
+        if(args.length == 2 && (args[1].equals("delete") || args[1].equals("info"))){
+            tmpList.addAll(ArrayUtils.startsWith(PermissionUtils.getRankNameList(), args[1]));
+            return tmpList;
+        }
+
+        if(args.length == 2 && args[1].equals("addPerm")){
+            tmpList.addAll(ArrayUtils.startsWith(PermissionUtils.getPermissionNames(), args[1]));
+            return tmpList;
+        }
 		
 		return tmpList;
 	}
@@ -61,7 +78,40 @@ public class CommandGeiloRank extends CommandBase{
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		ITextComponent msg;
-		if(args.length == 3 && args[0].equals("addPerm") && !args[1].equals(null) && !args[2].equals(null)) {
+		if(args.length == 3 && args[0].equals("addUser") && !args[1].equals("") && !args[2].equals("")) {
+			if(PermissionUtils.doesRankExist(args[1])) {
+				if(PlayerUtils.getPlayerByName(args[2]) != null){
+					Rank rank = PermissionUtils.getRankFromName(args[1]);
+                    Playerstat ps = PlayerUtils.getPlayerstatByUUID(PlayerUtils.getPlayerByName(args[2]).getCachedUniqueIdString());
+                    ps.setRank(rank.getName());
+                    PlayerUtils.updatePlayerstat(ps);
+                    msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + " Set the rank " + rank.getName() + " for user " + ps.getName());
+                    sender.sendMessage(msg);
+				}else{
+                    msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + " Error: Couln't find player. Try tab completion."); //TODO: Tab Completions
+                    sender.sendMessage(msg);
+				}
+			}else{
+				msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + " Error: Couln't find rank. Get a list of all ranks with /geilorank list");
+				sender.sendMessage(msg);
+			}
+		}
+
+		if(args.length == 2 && args[0].equals("delUser") && !args[1].equals("")) {
+                if(PlayerUtils.getPlayerByName(args[1]) != null){
+                    Playerstat ps = PlayerUtils.getPlayerstatByUUID(PlayerUtils.getPlayerByName(args[1]).getCachedUniqueIdString());
+                    ps.setRank("");
+                    PlayerUtils.updatePlayerstat(ps);
+
+                    msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + " Removed all ranks the player " + ps.getName() + " had");
+                    sender.sendMessage(msg);
+                }else{
+                    msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + " Error: Couln't find player. Try tab completion.");
+                    sender.sendMessage(msg);
+                }
+		}
+
+		if(args.length == 3 && args[0].equals("addPerm") && !args[1].equals("") && !args[2].equals("")) {
 			if(PermissionUtils.doesRankExist(args[1])) {
 				if(PermissionUtils.doesPermissionExist(args[2])) {
 					Rank rank = PermissionUtils.getRankFromName(args[1]);
@@ -88,7 +138,7 @@ public class CommandGeiloRank extends CommandBase{
 			}
 		}
 		
-		if(args.length == 3 && args[0].equals("delPerm") && !args[1].equals(null) && !args[2].equals(null)) {
+		if(args.length == 3 && args[0].equals("delPerm") && !args[1].equals("") && !args[2].equals("")) {
 			if(PermissionUtils.doesRankExist(args[1])) {
 				if(PermissionUtils.doesPermissionExist(args[2])) {
 					Rank rank = PermissionUtils.getRankFromName(args[1]);
@@ -120,7 +170,7 @@ public class CommandGeiloRank extends CommandBase{
 			}
 		}
 		
-		if(args.length == 2 && args[0].equals("create") && !args[1].equals(null)) {
+		if(args.length == 2 && args[0].equals("create") && !args[1].equals("")) {
 			
 			if(PermissionUtils.doesRankExist(args[1])) {
 				msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "This rank already exists");
@@ -148,7 +198,7 @@ public class CommandGeiloRank extends CommandBase{
 		}
 		
 		// TODO: Test if this works
-		if(args.length == 2 && args[0].equals("delete") && !args[1].equals(null)) {
+		if(args.length == 2 && args[0].equals("delete") && !args[1].equals("")) {
 			if(PermissionUtils.removeRank(args[1]).equals("")) {
 				// No rank found
 				msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Couldnt find the rank '" + args[1] + "'");
@@ -160,7 +210,7 @@ public class CommandGeiloRank extends CommandBase{
 			}
 		}
 		
-		if(args.length == 2 && args[0].equals("info") && !args[1].equals(null)) {
+		if(args.length == 2 && args[0].equals("info") && !args[1].equals("")) {
 			if(PermissionUtils.doesRankExist(args[1])) {
 				Rank rank = PermissionUtils.getRankFromName(args[1]);
 				// Beginning
@@ -173,12 +223,12 @@ public class CommandGeiloRank extends CommandBase{
 				msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Rank inherits the following rank: " + rank.getInherits());
 				sender.sendMessage(msg);
 				// Member
-				if(rank.getPlayerList().isEmpty()) {
+				if(PermissionUtils.getUsersWithRank(rank).isEmpty()) {
 					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Player who own this rank: None");
 					sender.sendMessage(msg);
 				}else {
 					String tmp = "";
-					for(String s : rank.getPlayerList()) {
+					for(String s : PermissionUtils.getUsersWithRank(rank)) {
 						tmp = tmp + s + ", ";
 					}
 					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Players who have this rank: " + tmp.substring(0, tmp.length() - 1));

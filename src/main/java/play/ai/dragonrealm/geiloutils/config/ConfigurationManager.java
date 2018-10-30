@@ -29,12 +29,9 @@ import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstats;
 import play.ai.dragonrealm.geiloutils.config.ranks.Ranks;
 import play.ai.dragonrealm.geiloutils.config.rtp.ConfigRTP;
 import play.ai.dragonrealm.geiloutils.utils.ArrayUtils;
-//TODO: Move the config System to JSON
+
 public class ConfigurationManager
 {
-	//TODO: Make this look better. Probably split it up to different classes.
-	//TODO: Make a separate Config file for playerstats
-	
 	static private File fileBannedBlocks = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "BannedBlocks.json");
 	static private File fileGenral = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "General.json");
 	static private File fileKits = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "Kits.json");

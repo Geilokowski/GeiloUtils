@@ -62,6 +62,7 @@ public class PlayerUtils {
 			  if(oldPlayerstats.getUuid().equals(ps.getUuid())) {
 				  ConfigurationManager.getPlayerstats().getPlayerstats().remove(oldPlayerstats);
 				  ConfigurationManager.getPlayerstats().getPlayerstats().add(ps);
+				  ConfigurationManager.syncFromFields();
 				  return;
 			  }
 		  }
