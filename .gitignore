@@ -32,5 +32,7 @@ wi
 \.idea/
 /classes/
 *.iml
-GelioUtils.ipr
-GelioUtils.iws
+GeiloUtils.ipr
+GeiloUtils.iws
+*.ipr
+*.iws

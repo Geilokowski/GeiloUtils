@@ -1,13 +1,22 @@
 package play.ai.dragonrealm.geiloutils.config.economy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ConfigEconomy {
 	private boolean enabled;
 	private double startingMoney;
 	private boolean goodOlCurrencyIntegration;
 	private boolean enablePlayerNameIdentification;
+	private boolean enablePaymentTimer;
+	private int paymentTimeInSeconds;
+	private int baseTierIncome;
+	private double baseMultiplier;
+	private HashMap<String, Integer> permPaymentMap;
+
+
 	public boolean isEnablePlayerNameIdentification() {
 		return enablePlayerNameIdentification;
 	}
@@ -46,5 +55,44 @@ public class ConfigEconomy {
 	}
 	public void setSellItems(List<EcoItem> sellItems) {
 		this.sellItems = sellItems;
+	}
+
+	public double getBaseMultiplier() {
+		return baseMultiplier;
+	}
+	public int getPaymentTimeInSeconds() {
+		return paymentTimeInSeconds;
+	}
+
+	public int getBaseTierIncome() {
+		return baseTierIncome;
+	}
+
+	public boolean isPaymentTimerEnabled() {
+		return enablePaymentTimer;
+	}
+
+	public void setBaseMultiplier(double baseMultiplier) {
+		this.baseMultiplier = baseMultiplier;
+	}
+
+	public void setPaymentTimeInSeconds(int paymentTimeInSeconds) {
+		this.paymentTimeInSeconds = paymentTimeInSeconds;
+	}
+
+	public void setBaseTierIncome(int baseTierIncome) {
+		this.baseTierIncome = baseTierIncome;
+	}
+
+	public void setEnablePaymentTimer(boolean enablePaymentTimer) {
+		this.enablePaymentTimer = enablePaymentTimer;
+	}
+
+	public HashMap<String, Integer> getPermPaymentMap() {
+		return permPaymentMap;
+	}
+
+	public void setPermPaymentMap(HashMap<String, Integer> permPaymentMap) {
+		this.permPaymentMap = permPaymentMap;
 	}
 }

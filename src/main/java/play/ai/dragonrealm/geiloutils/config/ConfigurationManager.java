@@ -43,7 +43,7 @@ public class ConfigurationManager
 	static private File filePlayerstats = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "Playerstats.json");
 	static private File fileRTP = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "rtp.json");
 	static private File fileDiscord = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "Discord.json");
-	static private File fileEconomy = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "Economy.json");
+	static private File fileEconomy = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "economy.json");
 	
 	private static BannedBlocks bannedBlocksConfig;
 	private static Kits kitsConfig;

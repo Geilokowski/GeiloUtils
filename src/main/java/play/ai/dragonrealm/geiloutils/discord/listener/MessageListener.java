@@ -25,7 +25,7 @@ public class MessageListener extends ListenerAdapter{
 	private static List<String> colors = ConfigurationManager.getDiscordConfig().getValidColors();
 
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		if(event.getChannel().getName().toLowerCase().equals(ConfigurationManager.getDiscordConfig().getChannelIDRelay()) && !(event.getAuthor().getId().equals(GeiloBot.jda.getSelfUser().getId()))) {
+		if(event.getChannel().getId().equals(ConfigurationManager.getDiscordConfig().getChannelIDRelay()) && !(event.getAuthor().getId().equals(GeiloBot.jda.getSelfUser().getId()))) {
 			// Var that stores location prefix
 			String prefix;
 			// If the message is coming from a bot, make it look prettier -> [SERVER] >> <Player> message

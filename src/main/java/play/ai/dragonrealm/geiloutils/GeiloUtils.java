@@ -1,8 +1,5 @@
 package play.ai.dragonrealm.geiloutils;
 
-import net.minecraft.init.Blocks;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -10,7 +7,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import play.ai.dragonrealm.geiloutils.commands.CommandDebug;
 import play.ai.dragonrealm.geiloutils.commands.admin.CommandGeiloReload;
 import play.ai.dragonrealm.geiloutils.commands.admin.CommandRN;
 import play.ai.dragonrealm.geiloutils.commands.ban.CommandGeiloBan;
@@ -25,27 +21,15 @@ import play.ai.dragonrealm.geiloutils.commands.permissions.CommandGeiloPerm;
 import play.ai.dragonrealm.geiloutils.commands.ranks.CommandGeiloRank;
 import play.ai.dragonrealm.geiloutils.commands.rtp.CommandRTP;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.config.kits.Kit;
-import play.ai.dragonrealm.geiloutils.config.kits.KitItem;
-import play.ai.dragonrealm.geiloutils.config.kits.Kits;
-import play.ai.dragonrealm.geiloutils.config.permissions.Permission;
-import play.ai.dragonrealm.geiloutils.config.playerstats.KitLastUsed;
-import play.ai.dragonrealm.geiloutils.config.rtp.ConfigRTP;
 import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
+import play.ai.dragonrealm.geiloutils.economy.MoneyDistribution;
 import play.ai.dragonrealm.geiloutils.events.ChatEvent;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerBlocks;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerPlayer;
-import play.ai.dragonrealm.geiloutils.events.EventMoneyPickup;
 import play.ai.dragonrealm.geiloutils.utils.CraftingUtils;
 import play.ai.dragonrealm.geiloutils.utils.MoneyUtils;
 
-import java.util.Date;
-
-import javax.security.auth.login.LoginException;
-
 import org.apache.logging.log4j.Logger;
-
-import com.google.gson.Gson;
 
 @Mod(modid="geiloutils", name="GeiloUtils", version="1.3.3", acceptableRemoteVersions="*", acceptedMinecraftVersions="[1.12.2]")
 public class GeiloUtils
@@ -96,7 +80,8 @@ public class GeiloUtils
 	    MinecraftForge.EVENT_BUS.register(new EventHandlerBlocks());
 	    MinecraftForge.EVENT_BUS.register(new EventHandlerPlayer());
 	    MinecraftForge.EVENT_BUS.register(new ChatEvent());
-	    //MinecraftForge.EVENT_BUS.register(new EventMoneyPickup());
+
+	    MoneyDistribution.enablePaymentTimer();
 	    
 	    CraftingUtils.removeAllRecipes();
 	  }
