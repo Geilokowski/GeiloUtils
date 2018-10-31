@@ -77,7 +77,7 @@ public class ConfigurationManager
 			writeToFile(fileBannedBlocks, gson.toJson(defaultBannedBlocks()));
 			writeToFile(fileRanks, gson.toJson(defaultRanks()));
 			writeToFile(filePermissions, gson.toJson(defaultPermissions()));
-			writeToFile(filePlayerstats, gson.toJson(defaultBannedBlocks()));
+			writeToFile(filePlayerstats, gson.toJson(defaultPlayerstats()));
 			writeToFile(fileKits, gson.toJson(defaultKits()));
 			writeToFile(fileDiscord, gson.toJson(defaultDiscordConfig()));
 			writeToFile(fileEconomy, gson.toJson(defaultEconomyConfig()));

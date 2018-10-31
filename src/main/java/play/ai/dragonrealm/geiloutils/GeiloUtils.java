@@ -10,6 +10,8 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import play.ai.dragonrealm.geiloutils.commands.admin.CommandGeiloReload;
 import play.ai.dragonrealm.geiloutils.commands.admin.CommandRN;
 import play.ai.dragonrealm.geiloutils.commands.ban.CommandGeiloBan;
+import play.ai.dragonrealm.geiloutils.commands.discord.CommandMute;
+import play.ai.dragonrealm.geiloutils.commands.discord.CommandUnmute;
 import play.ai.dragonrealm.geiloutils.commands.economy.CommandBalance;
 import play.ai.dragonrealm.geiloutils.commands.economy.CommandDeposit;
 import play.ai.dragonrealm.geiloutils.commands.economy.CommandGeiloEconomy;
@@ -72,6 +74,11 @@ public class GeiloUtils
 	    event.registerServerCommand(new CommandGeiloPerm());
 	    event.registerServerCommand(new CommandGeiloRank());
 	    event.registerServerCommand(new CommandGeiloReload());
+
+	    if(ConfigurationManager.getDiscordConfig().isSingleToMulti()) {
+	    	event.registerServerCommand(new CommandMute());
+	    	event.registerServerCommand(new CommandUnmute());
+		}
 	  }
 	  
 	  @EventHandler

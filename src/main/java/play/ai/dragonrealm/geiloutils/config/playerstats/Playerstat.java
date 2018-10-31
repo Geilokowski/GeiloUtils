@@ -10,6 +10,7 @@ public class Playerstat {
 	private String rank = "";
 	private List<KitLastUsed> kitLastUsed = new ArrayList<KitLastUsed>();
 	private List<String> mutedChats = new ArrayList<>();
+	private boolean directDeposit;
 	
 	public String getName() {
 		return name;
@@ -48,5 +49,13 @@ public class Playerstat {
 
 	public void setMutedChats(List<String> mutedChats) {
 		this.mutedChats = mutedChats;
+	}
+
+	public boolean shouldDirectDeposit() {
+		return directDeposit;
+	}
+
+	public void setDirectDeposit(boolean directDeposit) {
+		this.directDeposit = directDeposit;
 	}
 }

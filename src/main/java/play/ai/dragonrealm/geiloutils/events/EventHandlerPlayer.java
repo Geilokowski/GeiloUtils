@@ -19,6 +19,7 @@ public class EventHandlerPlayer {
 			ps.setName(event.player.getDisplayNameString());
 			ps.setMoney(50.0);
 			ps.setUuid(event.player.getCachedUniqueIdString());
+			ps.setDirectDeposit(true);
 			ConfigurationManager.getPlayerstats().getPlayerstats().add(ps);
 			ConfigurationManager.syncFromFields();
 		}

@@ -8,6 +8,8 @@ import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
 
+import java.util.List;
+
 public class PlayerUtils {
 	public static void sendMessageToAllPlayers() {
 		
@@ -92,6 +94,38 @@ public class PlayerUtils {
 		  updatePlayerstat(ps);
 		  ConfigurationManager.syncFromFields();
 	  }
+
+	  public static void addToMuteList(EntityPlayer player, String addition) {
+		if(player == null) {
+			return;
+		}
+
+		Playerstat ps = getPlayerstatByUUID(player.getCachedUniqueIdString());
+		List<String> muted = ps.getMutedChats();
+		muted.add(addition);
+		ps.setMutedChats(muted);
+
+		updatePlayerstat(ps);
+		ConfigurationManager.syncFromFields();
+	  }
+
+	public static boolean removeFromMuteList(EntityPlayer player, String removal) {
+		if(player == null) {
+			return false;
+		}
+
+		Playerstat ps = getPlayerstatByUUID(player.getCachedUniqueIdString());
+		List<String> muted = ps.getMutedChats();
+
+		if(muted.contains(removal)) {
+			muted.remove(removal);
+			updatePlayerstat(ps);
+			ConfigurationManager.syncFromFields();
+			return true;
+		}
+
+		return false;
+	}
 	  
 	  public static double getPlayerBalance(EntityPlayer player)
 	  {
