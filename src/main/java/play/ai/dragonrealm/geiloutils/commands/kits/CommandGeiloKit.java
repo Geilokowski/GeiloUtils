@@ -3,15 +3,24 @@ package play.ai.dragonrealm.geiloutils.commands.kits;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerProfileCache;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.kits.Kit;
 import play.ai.dragonrealm.geiloutils.config.kits.KitItem;
 import play.ai.dragonrealm.geiloutils.config.permissions.Permission;
+import play.ai.dragonrealm.geiloutils.utils.ArrayUtils;
+import play.ai.dragonrealm.geiloutils.utils.ItemUtils;
 import play.ai.dragonrealm.geiloutils.utils.KitUtils;
+import play.ai.dragonrealm.geiloutils.utils.PermissionUtils;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommandGeiloKit extends CommandBase{
 
@@ -25,10 +34,36 @@ public class CommandGeiloKit extends CommandBase{
 		return "Manage your kits";
 	}
 
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos){
+        List<String> tmpList = new ArrayList<String>();
+        EntityPlayer player;
+        if(sender instanceof EntityPlayer) {
+            player = (EntityPlayer) sender;
+        }
+
+        if(args.length == 1) {
+            tmpList.add("addPermission");
+            tmpList.add("addItem");
+            tmpList.add("delPermission");
+            tmpList.add("delItem");
+            tmpList.add("create");
+            tmpList.add("list");
+            tmpList.add("delete");
+            tmpList.add("info");
+
+            return ArrayUtils.startsWith(tmpList, args[0]);
+        }
+
+        //TODO: Tab Completion
+
+        return tmpList;
+    }
+
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		ITextComponent msg;
-		if(args.length == 2 && args[0].equals("create") && !args[1].equals(null)) {
+		if(args.length == 2 && args[0].equals("create") && !args[1].equals("")) {
 			if(KitUtils.doesKitExist(args[1])) {
 				msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "This kit already exists");
 				sender.sendMessage(msg);
@@ -44,7 +79,7 @@ public class CommandGeiloKit extends CommandBase{
 			}
 		}
 		
-		if(args.length == 2 && args[0].equals("delete") && !args[1].equals(null)) {
+		if(args.length == 2 && args[0].equals("delete") && !args[1].equals("")) {
 			String kit = KitUtils.removeKitByName(args[1]); 
 			if(!kit.equals("")) {
 				ConfigurationManager.syncFromFields();
@@ -67,31 +102,105 @@ public class CommandGeiloKit extends CommandBase{
 			}
 		}
 		
-		if(args.length == 3 && args[0].equals("addItem") && !args[1].equals(null) && !args[2].equals(null)) {
+		if(args.length == 5 && args[0].equals("addItem") && !args[1].equals("") && !args[2].equals("")) {
 			if(KitUtils.doesKitExist(args[1])) {
-				
+				Kit kit = KitUtils.getKitByName(args[1]);
+				if(ItemUtils.doesItemExist(args[2])){
+					if(!KitUtils.doesKitHaveItem(kit, new KitItem(args[2], Integer.parseInt(args[3]), 0))){
+						kit.getItems().add(new KitItem(args[2], Integer.parseInt(args[3]), Integer.parseInt(args[4])));
+						KitUtils.updateKit(kit);
+
+						msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Added Item to kit");
+						sender.sendMessage(msg);
+					}else{
+						msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Kit already has that item");
+						sender.sendMessage(msg);
+					}
+				}else{
+					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Couldn't find the item '" + args[2] + "'. Try tab completion");
+					sender.sendMessage(msg);
+				}
+			}else{
+				msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Couldn't find kit '" + args[1] + "'. Try /geilokit list");
+				sender.sendMessage(msg);
 			}
 		}
 		
-		if(args.length == 3 && args[0].equals("addPermission") && !args[1].equals(null) && !args[2].equals(null)) {
+		if(args.length == 3 && args[0].equals("addPermission") && !args[1].equals("") && !args[2].equals("")) {
 			if(KitUtils.doesKitExist(args[1])) {
-				
+				if(PermissionUtils.doesPermissionExist(args[2])){
+				    if(!KitUtils.doesKitHavePermission(KitUtils.getKitByName(args[1]), new Permission(args[2]))) {
+                        Kit kit = KitUtils.getKitByName(args[1]);
+                        kit.getPermissionList().add(new Permission(args[2]));
+                        KitUtils.updateKit(kit);
+
+                        msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Added permission to kit");
+                        sender.sendMessage(msg);
+                    }else{
+                        msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Kit already has that permission");
+                        sender.sendMessage(msg);
+                    }
+				}else{
+                    msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Couldn't find permissions '" + args[2] + "'. Try /geiloperm list");
+                    sender.sendMessage(msg);
+                }
+			}else{
+                msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Couldn't find kit '" + args[1] + "'. Try /geilokit list");
+                sender.sendMessage(msg);
+            }
+		}
+		
+		if(args.length == 4 && args[0].equals("removeItem") && !args[1].equals("") && !args[2].equals("")) {
+			if(KitUtils.doesKitExist(args[1])) {
+				Kit kit = KitUtils.getKitByName(args[1]);
+                if(ItemUtils.doesItemExist(args[2])){
+                    KitItem kitItem = new KitItem(args[2], Integer.parseInt(args[3]), 0);
+                    if(KitUtils.doesKitHaveItem(kit, kitItem)){
+                        KitUtils.updateKit(KitUtils.removeItemFromKit(kit, kitItem));
+
+                        msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Removed the item from the Kit");
+                        sender.sendMessage(msg);
+                    }else{
+                        msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Kit doesn't have that item");
+                        sender.sendMessage(msg);
+                    }
+                }else{
+                    msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Couldn't find item '" + args[2] + "'. Try tab completion");
+                    sender.sendMessage(msg);
+                }
+			}else{
+                msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Couldn't find kit '" + args[1] + "'. Try /geilokit list");
+                sender.sendMessage(msg);
+            }
+		}
+		
+		if(args.length == 3 && args[0].equals("removePermission") && !args[1].equals("") && !args[2].equals("")) {
+			if(KitUtils.doesKitExist(args[1])) {
+				if(KitUtils.doesKitExist(args[1])) {
+					if(PermissionUtils.doesPermissionExist(args[2])){
+						if(KitUtils.doesKitHavePermission(KitUtils.getKitByName(args[1]), new Permission(args[2]))) {
+							Kit kit = KitUtils.getKitByName(args[1]);
+							KitUtils.removePermissionFromKit(kit, new Permission(args[2]));
+							KitUtils.updateKit(kit);
+
+							msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Removed permission from kit");
+							sender.sendMessage(msg);
+						}else{
+							msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Kit doesn't have that permission");
+							sender.sendMessage(msg);
+						}
+					}else{
+						msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Couldn't find permissions '" + args[2] + "'. Try /geiloperm list");
+						sender.sendMessage(msg);
+					}
+				}else{
+					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Couldn't find kit '" + args[1] + "'. Try /geilokit list");
+					sender.sendMessage(msg);
+				}
 			}
 		}
 		
-		if(args.length == 3 && args[0].equals("removeItem") && !args[1].equals(null) && !args[2].equals(null)) {
-			if(KitUtils.doesKitExist(args[1])) {
-				
-			}
-		}
-		
-		if(args.length == 3 && args[0].equals("removePermission") && !args[1].equals(null) && !args[2].equals(null)) {
-			if(KitUtils.doesKitExist(args[1])) {
-				
-			}
-		}
-		
-		if(args.length == 2 && args[0].equals("info") && !args[1].equals(null)) {
+		if(args.length == 2 && args[0].equals("info") && !args[1].equals("")) {
 			if(KitUtils.doesKitExist(args[1])) {
 				Kit kit = KitUtils.getKitByName(args[1]);
 				// Beginning
@@ -127,7 +236,10 @@ public class CommandGeiloKit extends CommandBase{
 					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Items: " + tmp.substring(0, tmp.length() - 1));
 					sender.sendMessage(msg);
 				}
-			}
+			}else{
+                msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Couldn't find kit");
+                sender.sendMessage(msg);
+            }
 		}
 	}
 

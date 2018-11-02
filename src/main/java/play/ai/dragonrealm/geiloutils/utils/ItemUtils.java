@@ -6,25 +6,15 @@ import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class ItemUtils {
-	public static Item getItemFromMod(String name)
-	  {
-	    Collection<Item> itemCollection = ForgeRegistries.ITEMS.getValuesCollection();
-	    for (Item item : itemCollection) {
-	      if (item.getRegistryName().toString().equals(name)) {
-	        return item;
-	      }
-	    }
-	    return null;
-	  }
+	public static Item getItemFromMod(String registryName) {
+        return ForgeRegistries.ITEMS.getValuesCollection().stream().filter(item -> item.getRegistryName().toString().equals(registryName)).findFirst().orElse(null);
+    }
+
+    public static boolean doesItemExist(String registryName){
+	    return (getItemFromMod(registryName) != null);
+    }
 	  
-	  public static Item getItemFromUnlocalized(String name)
-	  {
-	    Collection<Item> itemCollection = ForgeRegistries.ITEMS.getValuesCollection();
-	    for (Item item : itemCollection) {
-	      if (item.getUnlocalizedName().toString().equals(name)) {
-	        return item;
-	      }
-	    }
-	    return null;
-	  }
+	public static Item getItemFromUnlocalized(String name) {
+        return ForgeRegistries.ITEMS.getValuesCollection().stream().filter(item -> item.getUnlocalizedName().equals(name)).findFirst().orElse(null);
+    }
 }

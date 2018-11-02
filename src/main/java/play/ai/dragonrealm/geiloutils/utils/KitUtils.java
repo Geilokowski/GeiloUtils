@@ -10,6 +10,42 @@ import play.ai.dragonrealm.geiloutils.config.permissions.Permission;
 import play.ai.dragonrealm.geiloutils.internals.Statics;
 
 public class KitUtils {
+	public static boolean doesKitHaveItem(Kit kit, KitItem item){
+		for(KitItem ki : kit.getItems()){
+			if(item.getRegistryName().equals(ki.getRegistryName()) && item.getMetadata() == ki.getMetadata()){
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static Kit removeItemFromKit(Kit kit, KitItem item){
+		for(KitItem ki : kit.getItems()){
+			if(item.getRegistryName().equals(ki.getRegistryName()) && item.getMetadata() == ki.getMetadata()){
+				kit.getItems().remove(ki);
+			}
+		}
+
+		return kit;
+	}
+
+	public static Kit removePermissionFromKit(Kit kit, Permission permission){
+		kit.getPermissionList().stream().filter(p -> p.getName().equals(permission.getName())).findFirst().ifPresent(p -> kit.getPermissionList().remove(p));
+
+		return kit;
+	}
+
+    public static boolean doesKitHavePermission(Kit k, Permission perm){
+        return k.getPermissionList().stream().anyMatch(ps -> ps.getName().equals(perm.getName()));
+    }
+
+	public static void updateKit(Kit kit){
+		ConfigurationManager.getKitsConfig().getKits().stream().filter(k -> k.getName().equals(kit.getName())).findFirst().ifPresent(k -> ConfigurationManager.getKitsConfig().getKits().remove(k));
+		ConfigurationManager.getKitsConfig().getKits().add(kit);
+		ConfigurationManager.syncFromFields();
+	}
+
 	public static boolean doesKitExist(String kitName) {
 		for(Kit kit : ConfigurationManager.getKitsConfig().getKits()) {
 			if(kit.getName().equals(kitName)) {

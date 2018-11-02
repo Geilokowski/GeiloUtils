@@ -40,13 +40,11 @@ public class CommandGeiloRank extends CommandBase{
 	
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos){
-		//TODO: Make this better (More precise)
+		//TODO: Add addUser and delUser
 		List<String> tmpList = new ArrayList<String>();
 		EntityPlayer player;
 		if(sender instanceof EntityPlayer) {
 			player = (EntityPlayer) sender;
-		}else {
-
 		}
 		
 		if(args.length == 1) {
@@ -59,17 +57,27 @@ public class CommandGeiloRank extends CommandBase{
 			tmpList.add("delete");
 			tmpList.add("info");
 
-			return ArrayUtils.startsWith(tmpList, args[1]);
+			return ArrayUtils.startsWith(tmpList, args[0]);
 		}
 
-        if(args.length == 2 && (args[1].equals("delete") || args[1].equals("info"))){
-            tmpList.addAll(ArrayUtils.startsWith(PermissionUtils.getRankNameList(), args[1]));
-            return tmpList;
+        if(args.length == 2 && (args[0].equals("delete") || args[0].equals("info"))){
+            return ArrayUtils.startsWith(PermissionUtils.getRankNameList(), args[1]);
         }
 
-        if(args.length == 2 && args[1].equals("addPerm")){
-            tmpList.addAll(ArrayUtils.startsWith(PermissionUtils.getPermissionNames(), args[1]));
-            return tmpList;
+        if(args.length == 3 && args[0].equals("addPerm")){
+            return ArrayUtils.startsWith(PermissionUtils.getPermissionNames(), args[2]);
+        }
+
+        if(args.length == 2 && args[0].equals("addPerm")){
+            return ArrayUtils.startsWith(PermissionUtils.getRankNameList(), args[1]);
+        }
+
+        if(args.length == 3 && args[0].equals("delPerm")){
+            return ArrayUtils.startsWith(PermissionUtils.getPermissionNamesOfRank(args[1]), args[2]);
+        }
+
+        if(args.length == 2 && args[0].equals("delPerm")){
+            return ArrayUtils.startsWith(PermissionUtils.getRankNameList(), args[1]);
         }
 		
 		return tmpList;

@@ -2,6 +2,7 @@ package play.ai.dragonrealm.geiloutils.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import net.minecraft.entity.player.EntityPlayer;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
@@ -12,26 +13,23 @@ import play.ai.dragonrealm.geiloutils.config.ranks.Rank;
 import play.ai.dragonrealm.geiloutils.internals.Statics;
 
 public class PermissionUtils {
-
     public static List<String> getPermissionNamesOfRank(Rank rank){
-        return  null;
+		return rank.getPermList().stream().map(Permission::getName).collect(Collectors.toList());
+    }
+
+    public static List<String> getPermissionNamesOfRank(String rankName){
+        return getRankFromName(rankName).getPermList().stream().map(Permission::getName).collect(Collectors.toList());
     }
 
     public static List<String> getPermissionNames(){
-        List<String> tmpList = new ArrayList<>();
-        for(Permission p : ConfigurationManager.getPermissionsConfig().getPermissions()){
-            tmpList.add(p.getName());
-        }
-
-        return tmpList;
+        return ConfigurationManager.getPermissionsConfig().getPermissions().stream().map(Permission::getName).collect(Collectors.toList());
     }
 
 	public static String removePermission(String permName) {
 		for(int i = 0; i < ConfigurationManager.getPermissionsConfig().getPermissions().size(); i++) {
 			if(ConfigurationManager.getPermissionsConfig().getPermissions().get(i).getName().equals(permName)) {
-				String tmp = ConfigurationManager.getPermissionsConfig().getPermissions().remove(i).getName();
 				ConfigurationManager.syncFromFields();
-				return tmp;
+				return ConfigurationManager.getPermissionsConfig().getPermissions().remove(i).getName();
 			}
 		}
 
@@ -39,12 +37,7 @@ public class PermissionUtils {
 	}
 	
 	public static boolean doesRankHavePermission(Rank rank, Permission perm) {
-		for(Permission permIterator : rank.getPermList()) {
-			if(permIterator.getName().equals(perm.getName()))
-				return true;
-		}
-		
-		return false;
+        return rank.getPermList().stream().anyMatch(permIterator -> permIterator.getName().equals(perm.getName()));
 	}
 	
 	public static String removePermission(Permission perm) {
@@ -60,31 +53,15 @@ public class PermissionUtils {
 	}
 	
 	public static boolean doesPermissionExist(String permName) {
-		for(Permission s : ConfigurationManager.getPermissionsConfig().getPermissions()) {
-			if(s.getName().equals(permName))
-				return true;
-		}
-		
-		return false;
+        return ConfigurationManager.getPermissionsConfig().getPermissions().stream().anyMatch(s -> s.getName().equals(permName));
 	}
 	
 	public static boolean doesPermissionExist(Permission perm) {
-		for(Permission s : ConfigurationManager.getPermissionsConfig().getPermissions()) {
-			if(s.getName().equals(perm.getName()))
-				return true;
-		}
-		
-		return false;
+        return ConfigurationManager.getPermissionsConfig().getPermissions().stream().anyMatch(s -> s.getName().equals(perm.getName()));
 	}
 	
 	public static boolean doesRankExist(String rankName) {
-		for(Rank s : ConfigurationManager.getRankConfig().getRanks()) {
-			if(s.getName().equals(rankName)) {
-				return true;
-			}
-		}
-		
-		return false;
+        return ConfigurationManager.getRankConfig().getRanks().stream().anyMatch(s -> s.getName().equals(rankName));
 	}
 	
 	public static String removeRank(String name) {
@@ -100,32 +77,14 @@ public class PermissionUtils {
 	}
 	
 	public static List<String> getRankNameList(){
-		List<String> nameList = new ArrayList<String>();
-		for(Rank r : ConfigurationManager.getRankConfig().getRanks()) {
-			nameList.add(r.getName());
-		}
-		
-		return nameList;
+		return ConfigurationManager.getRankConfig().getRanks().stream().map(Rank::getName).collect(Collectors.toList());
 	}
 	
 	public static Rank getRankFromName(String name) {
-		for(Rank r : ConfigurationManager.getRankConfig().getRanks()) {
-			if(r.getName().equals(name)) {
-				return r;
-			}
-		}
-		
-		return null;
-	}
+        return ConfigurationManager.getRankConfig().getRanks().stream().filter(r -> r.getName().equals(name)).findFirst().orElse(null);
+    }
 
 	public static List<String> getUsersWithRank(Rank rank){
-		List<String> tmpList = new ArrayList<>();
-		for(Playerstat ps : ConfigurationManager.getPlayerstats().getPlayerstats()){
-			if(ps.getRank().equals(rank.getName())){
-				tmpList.add(ps.getName());
-			}
-		}
-
-		return tmpList;
+		return ConfigurationManager.getPlayerstats().getPlayerstats().stream().filter(ps -> ps.getRank().equals(rank.getName())).map(Playerstat::getName).collect(Collectors.toList());
 	}
 }

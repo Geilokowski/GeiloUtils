@@ -28,7 +28,7 @@ public class CommandGeiloPerm extends CommandBase{
 		ITextComponent msg;
 		if(args.length > 0) {
 			if(args[0].equals("create")) {
-				if(!args[1].equals(null)) {
+
 					if(args.length == 2) {
 						Permission perm = new Permission(args[1]);
 						ConfigurationManager.getPermissionsConfig().getPermissions().add(perm);
@@ -40,14 +40,10 @@ public class CommandGeiloPerm extends CommandBase{
 						msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Wrong Syntax: /geiloperm create <name>");
 						sender.sendMessage(msg);
 					}
-				}else {
-					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Wrong Syntax: /geiloperm create <name>");
-					sender.sendMessage(msg);
-				}
 			}
 			
 			if((args[0].equals("delete") || args[0].equals("remove"))) {
-				if(args.length == 2 && !args[1].equals(null)) {
+				if(args.length == 2) {
 					if(PermissionUtils.doesPermissionExist(args[1])) {
 						if(!PermissionUtils.removePermission(args[1]).equals("")) {
 							msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Deleted the permission '" + args[1] + "'");

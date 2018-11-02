@@ -117,7 +117,7 @@ public class ConfigurationManager
 	
 	private static ConfigGeneral defaultGeneralConfig() {
 		ConfigGeneral defaultGeneralConfig = new ConfigGeneral();
-		defaultGeneralConfig.setCommandPrefix("[GeiloUtils]");
+		defaultGeneralConfig.setCommandPrefix("[GeiloUtils] ");
 		return defaultGeneralConfig;
 	}
 	
