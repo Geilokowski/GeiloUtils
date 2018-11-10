@@ -26,6 +26,7 @@ import play.ai.dragonrealm.geiloutils.config.kits.Kits;
 import play.ai.dragonrealm.geiloutils.config.permissions.Permissions;
 import play.ai.dragonrealm.geiloutils.config.playerstats.KitLastUsed;
 import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstats;
+import play.ai.dragonrealm.geiloutils.config.ranks.Rank;
 import play.ai.dragonrealm.geiloutils.config.ranks.Ranks;
 import play.ai.dragonrealm.geiloutils.config.rtp.ConfigRTP;
 import play.ai.dragonrealm.geiloutils.utils.ArrayUtils;
@@ -133,11 +134,11 @@ public class ConfigurationManager
 		ConfigDiscord defaultDiscordConfig = new ConfigDiscord();
 		defaultDiscordConfig.setEnabled(false);
 		defaultDiscordConfig.setSingleToMulti(false);
-		defaultDiscordConfig.setMinecraftChatPrefix("[Discord] ");
+		defaultDiscordConfig.setMinecraftChatPrefix("§3[§6Discord§3] §r");
 		defaultDiscordConfig.setChannelIDCommands("");
 		defaultDiscordConfig.setChannelIDRelay("");
 		defaultDiscordConfig.setToken("");
-		defaultDiscordConfig.setDiscordCommandPrefix("?");
+		defaultDiscordConfig.setDiscordCommandPrefix("!");
 		defaultDiscordConfig.setDiscordChatPrefix("MC >> ");
 		ArrayList<String> color = new ArrayList<>();
 		color.add("§c");
@@ -158,6 +159,7 @@ public class ConfigurationManager
 	
 	private static Ranks defaultRanks() {
 		Ranks ranks = new Ranks();
+		ranks.getRanks().add(new Rank(defaultGeneralConfig().getStandartRank()));
 		return ranks;
 	}
 	

@@ -7,7 +7,16 @@ public class BannedBlock {
 	private String metadata;
 	private String dimension;
 	private String permission;
-	
+	private String bypassPerm;
+
+	public String getBypassPerm() {
+		return bypassPerm;
+	}
+
+	public void setBypassPerm(String bypassPerm) {
+		this.bypassPerm = bypassPerm;
+	}
+
 	public BannedBlock(String registryName, String metadata, String dimension) {
 		this.registryName = registryName;
 		this.metadata = metadata;

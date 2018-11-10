@@ -13,6 +13,26 @@ import play.ai.dragonrealm.geiloutils.config.ranks.Rank;
 import play.ai.dragonrealm.geiloutils.internals.Statics;
 
 public class PermissionUtils {
+	public static Rank getRankFromPlayer(EntityPlayer player){
+		for(Playerstat ps : ConfigurationManager.getPlayerstats().getPlayerstats()){
+			if(ps.getUuid().equals(player.getCachedUniqueIdString())){
+				return getRankFromName(ps.getRank());
+			}
+		}
+
+		return null;
+	}
+
+	public static Rank getRankFromPlayer(String playerName){
+		for(Playerstat ps : ConfigurationManager.getPlayerstats().getPlayerstats()){
+			if(ps.getName().equals(playerName)){
+				return getRankFromName(ps.getRank());
+			}
+		}
+
+		return null;
+	}
+
     public static List<String> getPermissionNamesOfRank(Rank rank){
 		return rank.getPermList().stream().map(Permission::getName).collect(Collectors.toList());
     }

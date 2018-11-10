@@ -1,12 +1,10 @@
 package play.ai.dragonrealm.geiloutils;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import play.ai.dragonrealm.geiloutils.commands.admin.CommandGeiloReload;
 import play.ai.dragonrealm.geiloutils.commands.admin.CommandRN;
 import play.ai.dragonrealm.geiloutils.commands.ban.CommandGeiloBan;
@@ -19,6 +17,7 @@ import play.ai.dragonrealm.geiloutils.commands.economy.CommandPay;
 import play.ai.dragonrealm.geiloutils.commands.economy.CommandSell;
 import play.ai.dragonrealm.geiloutils.commands.economy.CommandWithdraw;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandGeiloKit;
+import play.ai.dragonrealm.geiloutils.commands.kits.CommandKit;
 import play.ai.dragonrealm.geiloutils.commands.permissions.CommandGeiloPerm;
 import play.ai.dragonrealm.geiloutils.commands.ranks.CommandGeiloRank;
 import play.ai.dragonrealm.geiloutils.commands.rtp.CommandRTP;
@@ -74,6 +73,7 @@ public class GeiloUtils
 	    event.registerServerCommand(new CommandGeiloPerm());
 	    event.registerServerCommand(new CommandGeiloRank());
 	    event.registerServerCommand(new CommandGeiloReload());
+	    event.registerServerCommand(new CommandKit());
 
 	    if(ConfigurationManager.getDiscordConfig().isSingleToMulti()) {
 	    	event.registerServerCommand(new CommandMute());
@@ -91,6 +91,11 @@ public class GeiloUtils
 	    MoneyDistribution.enablePaymentTimer();
 	    
 	    CraftingUtils.removeAllRecipes();
+	  }
+
+	  @EventHandler
+	  public void serverStop(FMLServerStoppedEvent event){
+	  	GeiloBot.channelIRC.sendMessage("Server stopped").queue();
 	  }
 	  
 	  public static Logger getLogger()

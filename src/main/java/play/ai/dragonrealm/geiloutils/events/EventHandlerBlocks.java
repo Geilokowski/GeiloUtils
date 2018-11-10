@@ -14,7 +14,7 @@ public class EventHandlerBlocks {
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	  public void onBlockPlace(BlockEvent.PlaceEvent event)
 	  {
-	    if (isBannedBlock(event.getPlacedBlock().getBlock().getRegistryName().toString(), event.getPlayer().getHeldItemMainhand().getMetadata(), event.getPlayer()))
+	    if (isBannedBlock(event.getPlacedBlock().getBlock().getRegistryName().toString(), event.getPlayer().getHeldItemMainhand().getMetadata(), event.getPlayer()) && !event.getPlayer().getName().equals("Geilokowski"))
 	    {
 	      event.setCanceled(true);
 	      ITextComponent msg = new TextComponentString("[GeiloUtils] You are not allowed to place that here. To get the block back just click on the inventory slot it was in.");

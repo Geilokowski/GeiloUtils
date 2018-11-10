@@ -4,6 +4,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerProfileCache;
 import net.minecraft.util.math.BlockPos;
@@ -45,12 +46,14 @@ public class CommandGeiloKit extends CommandBase{
         if(args.length == 1) {
             tmpList.add("addPermission");
             tmpList.add("addItem");
+            tmpList.add("addInv");
             tmpList.add("delPermission");
             tmpList.add("delItem");
             tmpList.add("create");
             tmpList.add("list");
             tmpList.add("delete");
             tmpList.add("info");
+			tmpList.add("setCooldown");
 
             return ArrayUtils.startsWith(tmpList, args[0]);
         }
@@ -63,6 +66,50 @@ public class CommandGeiloKit extends CommandBase{
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		ITextComponent msg;
+		if(args.length == 2 && args[0].equals("addInv")){
+		    EntityPlayer player;
+		    if(sender instanceof EntityPlayer){
+                player = (EntityPlayer) sender;
+            }else{
+                msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Sorry, the parameter addInv is player-only");
+                sender.sendMessage(msg);
+		        return;
+            }
+
+            if(KitUtils.doesKitExist(args[1])) {
+                Kit kit = KitUtils.getKitByName(args[1]);
+                for(int i = 0; i <= player.inventory.getSizeInventory(); i++){
+                    if(!player.inventory.getStackInSlot(i).isEmpty()) {
+                        kit.getItems().add(new KitItem(player.inventory.getStackInSlot(i).getItem().getRegistryName().toString(), player.inventory.getStackInSlot(i).getMetadata(), player.inventory.getStackInSlot(i).getCount()));
+                    }
+                }
+
+                KitUtils.updateKit(kit);
+            }
+        }
+
+		if(args.length == 3 && args[0].equals("setCooldown")) {
+			if(KitUtils.doesKitExist(args[1])) {
+				int time = 0;
+				try{
+					time = Integer.parseInt(args[2]);
+				} catch (Exception e){
+					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Please put in a number");
+					sender.sendMessage(msg);
+					return;
+				}
+
+				Kit kit = KitUtils.getKitByName(args[1]);
+				kit.setCooldown(time);
+				KitUtils.updateKit(kit);
+				msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Cooldown set");
+				sender.sendMessage(msg);
+			}else{
+				msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "kit not found");
+				sender.sendMessage(msg);
+			}
+		}
+
 		if(args.length == 2 && args[0].equals("create") && !args[1].equals("")) {
 			if(KitUtils.doesKitExist(args[1])) {
 				msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "This kit already exists");
@@ -210,8 +257,13 @@ public class CommandGeiloKit extends CommandBase{
 				msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Name: " + kit.getName());
 				sender.sendMessage(msg);
 				// Cooldown
-				msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Cooldown: " + kit.getCooldown() + "s");
-				sender.sendMessage(msg);
+				if (kit.getCooldown() < 0) {
+					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Cooldown: One time kit");
+					sender.sendMessage(msg);
+				}else {
+					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Cooldown: " + (kit.getCooldown() / 1000) + "s");
+					sender.sendMessage(msg);
+				}
 				// Permission
 				if(kit.getPermissionList().isEmpty()) {
 					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Permission needed: This kit is available to everyone");
@@ -221,7 +273,7 @@ public class CommandGeiloKit extends CommandBase{
 					for(Permission perm : kit.getPermissionList()) {
 						tmp = tmp + perm.getName() + ", ";
 					}
-					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Permission needed: " + tmp.substring(0, tmp.length() - 1));
+					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Permission needed: " + tmp.substring(0, tmp.length() - 2));
 					sender.sendMessage(msg);
 				}
 				// Items
@@ -231,9 +283,9 @@ public class CommandGeiloKit extends CommandBase{
 				}else {
 					String tmp = "";
 					for(KitItem kitItem : kit.getItems()) {
-						tmp = tmp + kitItem.getRegistryName() + "[" + kitItem.getMetadata() + "]" + ", ";
+						tmp = tmp + kitItem.getRegistryName() + "[M:" + kitItem.getMetadata() + "]" + "[C:" + kitItem.getCount() + "]" + ", ";
 					}
-					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Items: " + tmp.substring(0, tmp.length() - 1));
+					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Items: " + tmp.substring(0, tmp.length() - 2));
 					sender.sendMessage(msg);
 				}
 			}else{

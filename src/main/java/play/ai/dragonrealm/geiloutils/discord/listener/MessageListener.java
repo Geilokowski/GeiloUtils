@@ -5,6 +5,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.event.world.NoteBlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
@@ -26,6 +27,27 @@ public class MessageListener extends ListenerAdapter{
 
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		if(event.getChannel().getId().equals(ConfigurationManager.getDiscordConfig().getChannelIDRelay()) && !(event.getAuthor().getId().equals(GeiloBot.jda.getSelfUser().getId()))) {
+			if(event.getMessage().getContentDisplay().startsWith(ConfigurationManager.getDiscordConfig().getDiscordCommandPrefix())){
+			    if(event.getMessage().getContentDisplay().substring(1).equals("online")){
+			        if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().size() == 0) {
+                        GeiloBot.channelIRC.sendMessage("No players online!").queue();
+                    }else{
+
+			            if(PlayerUtils.getOnlinePlayerNames().length == 1){
+                            GeiloBot.channelIRC.sendMessage("1 Player online: " + PlayerUtils.getOnlinePlayerNames()[0]).queue();
+			                return;
+                        }
+
+                        String output = "";
+                        for(String s : PlayerUtils.getOnlinePlayerNames()){
+                            output = output + s + ", ";
+                        }
+                        output = output.substring(0, output.length() - 2);
+
+                        GeiloBot.channelIRC.sendMessage(PlayerUtils.getOnlinePlayerNames().length + " Players online: " + output).queue();
+                    }
+                }
+            }
 			// Var that stores location prefix
 			String prefix;
 			// If the message is coming from a bot, make it look prettier -> [SERVER] >> <Player> message

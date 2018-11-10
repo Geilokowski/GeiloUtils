@@ -7,6 +7,13 @@ import play.ai.dragonrealm.geiloutils.config.permissions.Permission;
 import play.ai.dragonrealm.geiloutils.internals.Statics;
 
 public class Rank {
+	public Rank(String name){
+		this.name = name;
+	}
+
+	public Rank(){
+
+	}
 	private List<Permission> permList = new ArrayList<Permission>();
 	private String name = "";
 	private String inherits = "";

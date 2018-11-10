@@ -11,8 +11,8 @@ import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
 import java.util.List;
 
 public class PlayerUtils {
-	public static void sendMessageToAllPlayers() {
-		
+	public static String[] getOnlinePlayerNames() {
+		return FMLCommonHandler.instance().getMinecraftServerInstance().getOnlinePlayerNames();
 	}
 	
 	public static boolean isFirstJoin(EntityPlayer player) {
