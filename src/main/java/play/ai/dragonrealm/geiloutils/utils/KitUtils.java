@@ -1,15 +1,93 @@
 package play.ai.dragonrealm.geiloutils.utils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.kits.Kit;
 import play.ai.dragonrealm.geiloutils.config.kits.KitItem;
 import play.ai.dragonrealm.geiloutils.config.permissions.Permission;
+import play.ai.dragonrealm.geiloutils.config.playerstats.KitLastUsed;
+import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
+import play.ai.dragonrealm.geiloutils.config.ranks.Rank;
 import play.ai.dragonrealm.geiloutils.internals.Statics;
 
 public class KitUtils {
+    public static void deliverKit(EntityPlayer player, Kit kit){
+        for(KitItem ki : kit.getItems()){
+            PlayerUtils.addItemByName(player, ki.getRegistryName(), ki.getCount(), ki.getMetadata());
+        }
+
+        updateLastUsed(player, kit);
+    }
+
+    private static void updateLastUsed(EntityPlayer player, Kit kit){
+        Date date = new Date();
+        Playerstat ps = PlayerUtils.getPlayerstatByUUID(player.getCachedUniqueIdString());
+        for(KitLastUsed klu : ps.getKitLastUsed()){
+            if(klu.getKitname().equals(kit.getName())){
+                ps.getKitLastUsed().remove(klu);
+                klu.setLastUsed(date);
+                ps.getKitLastUsed().add(klu);
+                PlayerUtils.updatePlayerstat(ps);
+                return;
+            }
+        }
+
+        KitLastUsed klu = new KitLastUsed(kit.getName(), date);
+        ps.getKitLastUsed().add(klu);
+        PlayerUtils.updatePlayerstat(ps);
+
+        //ConfigurationManager.syncFromFields();
+    }
+
+	public static boolean canPlayerUseKit(EntityPlayer player, Kit kit){
+		Rank rank = PermissionUtils.getRankFromPlayer(player);
+		if(kit.getPermissionList().isEmpty()){
+			return !isCooldownStillActive(player, kit);
+		}
+
+		for(Permission perm : kit.getPermissionList()){
+			if(PermissionUtils.doesRankHavePermission(rank, perm)){
+				return !isCooldownStillActive(player, kit);
+			}
+		}
+
+		return false;
+	}
+	private static boolean isCooldownStillActive(EntityPlayer player, Kit kit){
+	    if(kit.getCooldown() == 0){
+            //System.out.println("1");
+            return false;
+        }else{
+	        if(PlayerUtils.getPlayerstatByUUID(player.getCachedUniqueIdString()).getKitLastUsed().isEmpty()){
+                //System.out.println("2");
+	            return false;
+            }else{
+	            for(KitLastUsed lastUsed : PlayerUtils.getPlayerstatByUUID(player.getCachedUniqueIdString()).getKitLastUsed()){
+	                if(lastUsed.getKitname().equals(kit.getName())){
+	                    if(kit.getCooldown() < 0){
+	                        return true;
+                        }else{
+                            Date date = new Date();
+	                        if(kit.getCooldown() <= (date.getTime() - lastUsed.getLastUsed().getTime())){
+                                //System.out.println("3");
+	                            return false;
+                            }else{
+	                            //System.out.println("Cooldown last step: " + date.getTime() + " and " + (date.getTime() - lastUsed.getLastUsed().getTime()));
+	                            return true;
+                            }
+                        }
+                    }
+                }
+
+                return false;
+            }
+        }
+	}
+
 	public static boolean doesKitHaveItem(Kit kit, KitItem item){
 		for(KitItem ki : kit.getItems()){
 			if(item.getRegistryName().equals(ki.getRegistryName()) && item.getMetadata() == ki.getMetadata()){

@@ -8,7 +8,7 @@ public class Playerstat {
 	private String uuid = "";
 	private double money = 0.0;
 	private String rank = "";
-	private List<KitLastUsed> kitLastUsed = new ArrayList<KitLastUsed>();
+	private List<KitLastUsed> kitLastUsed = new ArrayList<>();
 	private List<String> mutedChats = new ArrayList<>();
 	private boolean directDeposit;
 	

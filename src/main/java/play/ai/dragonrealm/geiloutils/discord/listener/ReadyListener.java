@@ -16,7 +16,7 @@ public class ReadyListener extends ListenerAdapter{
 			GeiloBot.channelIRC = g.getTextChannelById(ConfigurationManager.getDiscordConfig().getChannelIDRelay());
 			
 			//TODO: Reenable in the final release
-			//GeiloBot.channelIRC.sendMessage("Server Online!").queue();
+			GeiloBot.channelIRC.sendMessage("Server Online!").queue();
 		}
 	}
 }
