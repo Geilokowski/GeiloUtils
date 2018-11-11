@@ -15,7 +15,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 
-version = "1.3.4"
+version = "1.4"
 group = "play.ai.dragonrealm.geiloutils" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "geiloutils"
 

@@ -65,7 +65,7 @@ public class MessageListener extends ListenerAdapter{
 				// Not a bot, this is from a discord user, so [DISCORD] <User> >> msg
 				prefix = ConfigurationManager.getDiscordConfig().getMinecraftChatPrefix() + event.getMessage().getAuthor().getName();
 			}
-			String output = prefix + " §6\u00BB §r" + event.getMessage().getContentDisplay();
+			String output = prefix + " " + "\u00A76" + "\u00BB " + "\u00A7r" + event.getMessage().getContentDisplay();
 			try {
 				// Multi-server chat clogs up the readers view. This allows us to mute any chat network we don't like
 				if (ConfigurationManager.getDiscordConfig().isSingleToMulti()){
