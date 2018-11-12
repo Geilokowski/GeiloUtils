@@ -11,6 +11,7 @@ public class Playerstat {
 	private List<KitLastUsed> kitLastUsed = new ArrayList<>();
 	private List<String> mutedChats = new ArrayList<>();
 	private boolean directDeposit;
+	private Long discordID;
 	
 	public String getName() {
 		return name;
@@ -57,5 +58,17 @@ public class Playerstat {
 
 	public void setDirectDeposit(boolean directDeposit) {
 		this.directDeposit = directDeposit;
+	}
+
+	public boolean isDiscordVerified(){
+		return discordID != null;
+	}
+
+	public Long getDiscordID() {
+		return discordID;
+	}
+
+	public void setDiscordID(Long discordID) {
+		this.discordID = discordID;
 	}
 }

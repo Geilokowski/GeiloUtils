@@ -16,6 +16,7 @@ import play.ai.dragonrealm.geiloutils.commands.economy.CommandGeiloEconomy;
 import play.ai.dragonrealm.geiloutils.commands.economy.CommandPay;
 import play.ai.dragonrealm.geiloutils.commands.economy.CommandSell;
 import play.ai.dragonrealm.geiloutils.commands.economy.CommandWithdraw;
+import play.ai.dragonrealm.geiloutils.commands.geilokill.GeiloKill;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandGeiloKit;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandKit;
 import play.ai.dragonrealm.geiloutils.commands.permissions.CommandGeiloPerm;
@@ -74,6 +75,7 @@ public class GeiloUtils
 	    event.registerServerCommand(new CommandGeiloRank());
 	    event.registerServerCommand(new CommandGeiloReload());
 	    event.registerServerCommand(new CommandKit());
+	    event.registerServerCommand(new GeiloKill());
 
 	    if(ConfigurationManager.getDiscordConfig().isSingleToMulti()) {
 	    	event.registerServerCommand(new CommandMute());
@@ -95,7 +97,9 @@ public class GeiloUtils
 
 	  @EventHandler
 	  public void serverStop(FMLServerStoppedEvent event){
-	  	GeiloBot.channelIRC.sendMessage("Server stopped").queue();
+	  	if(ConfigurationManager.getDiscordConfig().isEnabled()) {
+			GeiloBot.channelIRC.sendMessage("Server stopped").queue();
+		}
 	  }
 	  
 	  public static Logger getLogger()
