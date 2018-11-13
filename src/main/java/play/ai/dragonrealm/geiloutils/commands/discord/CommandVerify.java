@@ -57,8 +57,19 @@ public class CommandVerify extends CommandBase {
                     }
                 }
             }
+        } else if(args.length == 2) {
+            EntityPlayer entityplayer = getCommandSenderAsPlayer(sender);
+            String uuid = entityplayer.getCachedUniqueIdString();
+            AuthenticationRegistry.AuthenticStatus status = AuthenticationRegistry.INSTANCE.verifyUserAndAdd(uuid, args[1]);
+            switch (status) {
+                case INCORRECT_CODE:
+                    break;
+                case PLAYER_NOT_FOUND:
+                    break;
+                case COMPLETED:
+                    break;
+            }
         }
-
 
     }
 

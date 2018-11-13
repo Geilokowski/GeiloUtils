@@ -33,14 +33,25 @@ public class AuthenticationRegistry {
         return testCode.equals(code);
     }
 
-    public void verifyUserAndAdd(String mcUID, String testCode) {
+    public AuthenticStatus verifyUserAndAdd(String mcUID, String testCode) {
         if(isCorrectCode(mcUID, testCode)) {
             Playerstat stat = PlayerUtils.getPlayerstatByUUID(mcUID);
-            stat.setDiscordID(userMap.get(mcUID).getIdLong());
-            ConfigurationManager.syncFromFields();
+            if(stat != null) {
+                stat.setDiscordID(userMap.get(mcUID).getIdLong());
+                ConfigurationManager.syncFromFields();
 
-            userMap.remove(mcUID);
-            nameMap.remove(mcUID);
+                userMap.remove(mcUID);
+                nameMap.remove(mcUID);
+                return AuthenticStatus.COMPLETED;
+            }
+            return AuthenticStatus.PLAYER_NOT_FOUND;
         }
+        return AuthenticStatus.INCORRECT_CODE;
+    }
+
+    public enum AuthenticStatus {
+        COMPLETED,
+        PLAYER_NOT_FOUND,
+        INCORRECT_CODE;
     }
 }
