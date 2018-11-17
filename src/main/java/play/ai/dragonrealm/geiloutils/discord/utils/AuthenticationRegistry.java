@@ -1,11 +1,15 @@
-package play.ai.dragonrealm.geiloutils.discord.main;
+package play.ai.dragonrealm.geiloutils.discord.utils;
 
 import net.dv8tion.jda.core.entities.User;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
+import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AuthenticationRegistry {
@@ -14,6 +18,26 @@ public class AuthenticationRegistry {
     private Map<String, String> nameMap = new HashMap<>();
     private Map<String, User> userMap = new HashMap<>();
 
+    public User getUserFromPlayerUUID(String mcUID) {
+        Playerstat stat = PlayerUtils.getPlayerstatByUUID(mcUID);
+        if(stat != null) {
+            Long id = stat.getDiscordID();
+            if(id != null){
+                return GeiloBot.jda.getUserById(id);
+            }
+        }
+        return null;
+    }
+
+    public void updateOnlineUsers() {
+        List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
+        for(EntityPlayerMP player : players) {
+            User discordAcc = getUserFromPlayerUUID(player.getCachedUniqueIdString());
+            if(discordAcc != null) {
+                //GeiloBot.jda.getRoles()
+            }
+        }
+    }
 
     public void addAuthAttempt(String mcUID, String code, User discordUser) {
         nameMap.put(mcUID, code);
@@ -21,7 +45,7 @@ public class AuthenticationRegistry {
     }
 
     public boolean hasTriedAuthenticating(String mcUID){
-        return nameMap.containsKey(mcUID) && !PlayerUtils.getPlayerstatByUUID(mcUID).isDiscordVerified();
+        return nameMap.containsKey(mcUID) || PlayerUtils.getPlayerstatByUUID(mcUID).isDiscordVerified();
     }
 
     public String getCode(String mcUID) {

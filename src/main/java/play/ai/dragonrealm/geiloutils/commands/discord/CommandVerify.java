@@ -6,7 +6,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import play.ai.dragonrealm.geiloutils.discord.main.AuthenticationRegistry;
+import play.ai.dragonrealm.geiloutils.discord.utils.AuthenticationRegistry;
 import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
 
 import java.util.List;
@@ -43,8 +43,7 @@ public class CommandVerify extends CommandBase {
                     String uuid = entityplayer.getCachedUniqueIdString();
                     if(AuthenticationRegistry.INSTANCE.hasTriedAuthenticating(uuid)){
 
-                        String directMessage = String.format("To authenticate, please use the following command in Minecraft: /verify %s %s", args[0], AuthenticationRegistry.INSTANCE.getCode(uuid));
-                        sendPrivateMessage(target, directMessage);
+                        notifyCommandListener(sender, this, "DiscordVerify: Your account is already linked!", new Object[] {});
 
                     } else {
                         Random rand = new Random();
@@ -63,10 +62,13 @@ public class CommandVerify extends CommandBase {
             AuthenticationRegistry.AuthenticStatus status = AuthenticationRegistry.INSTANCE.verifyUserAndAdd(uuid, args[1]);
             switch (status) {
                 case INCORRECT_CODE:
+                    notifyCommandListener(sender, this, "DiscordVerify: Verification unsuccessful, incorrect pin code.", new Object[] {});
                     break;
                 case PLAYER_NOT_FOUND:
+                    notifyCommandListener(sender, this, "DiscordVerify: Verification unsuccessful, player not found!", new Object[] {});
                     break;
                 case COMPLETED:
+                    notifyCommandListener(sender, this, "DiscordVerify: Account successfully linked!", new Object[] {});
                     break;
             }
         }

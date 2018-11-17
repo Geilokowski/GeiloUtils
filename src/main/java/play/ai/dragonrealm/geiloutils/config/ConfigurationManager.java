@@ -8,15 +8,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.Loader;
-import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.config.discord.ConfigDiscord;
 import play.ai.dragonrealm.geiloutils.config.economy.ConfigEconomy;
 import play.ai.dragonrealm.geiloutils.config.geiloban.BannedBlock;
@@ -29,7 +27,7 @@ import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstats;
 import play.ai.dragonrealm.geiloutils.config.ranks.Rank;
 import play.ai.dragonrealm.geiloutils.config.ranks.Ranks;
 import play.ai.dragonrealm.geiloutils.config.rtp.ConfigRTP;
-import play.ai.dragonrealm.geiloutils.utils.ArrayUtils;
+import play.ai.dragonrealm.geiloutils.discord.utils.DiscordRank;
 
 public class ConfigurationManager
 {
@@ -149,6 +147,10 @@ public class ConfigurationManager
 		color.add("§3");
 		color.add("§9");
 		defaultDiscordConfig.setValidColors(color);
+		defaultDiscordConfig.setServerIP("dragonrealm.me");
+        HashMap<Long, DiscordRank> empty = new HashMap<>();
+        empty.put(157740521039724544L, DiscordRank.ADMIN); //This is Ch33z's UID.
+		defaultDiscordConfig.setAdminMap(empty);
 		return defaultDiscordConfig;
 	}
 	

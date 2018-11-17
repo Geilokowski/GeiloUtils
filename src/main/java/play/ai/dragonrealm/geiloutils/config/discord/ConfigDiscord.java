@@ -1,6 +1,9 @@
 package play.ai.dragonrealm.geiloutils.config.discord;
 
+import play.ai.dragonrealm.geiloutils.discord.utils.DiscordRank;
+
 import java.util.List;
+import java.util.Map;
 
 public class ConfigDiscord {
 	private boolean enabled;
@@ -12,6 +15,8 @@ public class ConfigDiscord {
 	private String discordChatPrefix;
 	private String discordCommandPrefix;
 	private List<String> validColors;
+	private String serverIP;
+	private Map<Long, DiscordRank> adminMap;
 
 	public boolean isEnabled() {
 		return enabled;
@@ -71,5 +76,21 @@ public class ConfigDiscord {
 
 	public List<String> getValidColors() {
 		return validColors;
+	}
+
+	public void setServerIP(String serverIP) {
+		this.serverIP = serverIP;
+	}
+
+	public String getServerIP() {
+		return serverIP;
+	}
+
+	public void setAdminMap(Map<Long, DiscordRank> adminMap) {
+		this.adminMap = adminMap;
+	}
+
+	public Map<Long, DiscordRank> getAdminMap() {
+		return adminMap;
 	}
 }

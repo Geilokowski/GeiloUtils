@@ -10,6 +10,7 @@ import play.ai.dragonrealm.geiloutils.commands.admin.CommandRN;
 import play.ai.dragonrealm.geiloutils.commands.ban.CommandGeiloBan;
 import play.ai.dragonrealm.geiloutils.commands.discord.CommandMute;
 import play.ai.dragonrealm.geiloutils.commands.discord.CommandUnmute;
+import play.ai.dragonrealm.geiloutils.commands.discord.CommandVerify;
 import play.ai.dragonrealm.geiloutils.commands.economy.CommandBalance;
 import play.ai.dragonrealm.geiloutils.commands.economy.CommandDeposit;
 import play.ai.dragonrealm.geiloutils.commands.economy.CommandGeiloEconomy;
@@ -23,6 +24,7 @@ import play.ai.dragonrealm.geiloutils.commands.permissions.CommandGeiloPerm;
 import play.ai.dragonrealm.geiloutils.commands.ranks.CommandGeiloRank;
 import play.ai.dragonrealm.geiloutils.commands.rtp.CommandRTP;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
+import play.ai.dragonrealm.geiloutils.discord.command.CommandProcessor;
 import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
 import play.ai.dragonrealm.geiloutils.economy.MoneyDistribution;
 import play.ai.dragonrealm.geiloutils.events.ChatEvent;
@@ -80,6 +82,11 @@ public class GeiloUtils
 	    if(ConfigurationManager.getDiscordConfig().isSingleToMulti()) {
 	    	event.registerServerCommand(new CommandMute());
 	    	event.registerServerCommand(new CommandUnmute());
+		}
+
+		if(ConfigurationManager.getDiscordConfig().isEnabled()) {
+	    	//event.registerServerCommand(new CommandVerify());
+			CommandProcessor.registerCommands();
 		}
 	  }
 	  
