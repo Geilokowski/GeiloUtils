@@ -12,8 +12,16 @@ public class ChatEvent {
 	@SubscribeEvent
 	public void onMessage(ServerChatEvent event) {
 		if(ConfigurationManager.getDiscordConfig().isEnabled()) {
-			GeiloBot.channelIRC.sendMessage("<" + event.getUsername() + ">" + " " + event.getMessage()).queue();
-			GeiloUtils.getLogger().info("MSG: " + event.getMessage());
+			String prefix = ConfigurationManager.getDiscordConfig().getDiscordChatPrefix();
+			String finMsg = "";
+			if(prefix.contains("%s")) {
+				finMsg += String.format(prefix, event.getUsername());
+			} else {
+				finMsg += prefix + " " + event.getUsername() + " ";
+			}
+			finMsg += event.getMessage();
+			GeiloBot.channelIRC.sendMessage(finMsg).queue();
+			//GeiloUtils.getLogger().info("MSG: " + event.getMessage());
 		}
 	}
 

@@ -137,7 +137,7 @@ public class ConfigurationManager
 		defaultDiscordConfig.setChannelIDRelay("");
 		defaultDiscordConfig.setToken("");
 		defaultDiscordConfig.setDiscordCommandPrefix("!");
-		defaultDiscordConfig.setDiscordChatPrefix("MC >> ");
+		defaultDiscordConfig.setDiscordChatPrefix("[%s] >> ");
 		ArrayList<String> color = new ArrayList<>();
 		color.add("§c");
 		color.add("§e");
