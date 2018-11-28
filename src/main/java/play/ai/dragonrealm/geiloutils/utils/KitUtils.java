@@ -31,7 +31,8 @@ public class KitUtils {
 			for(KitItem ki : kit.getItems()){
 				NBTTagCompound compound = null;
 				try {
-					compound = JsonToNBT.getTagFromJson(ki.getNbtMap());
+					if(ki.getNbtMap() != null)
+						compound = JsonToNBT.getTagFromJson(ki.getNbtMap());
 				} catch (NBTException e) {
 
 				}
