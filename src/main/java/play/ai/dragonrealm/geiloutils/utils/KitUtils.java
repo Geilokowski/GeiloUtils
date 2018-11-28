@@ -5,6 +5,10 @@ import java.util.Date;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTException;
+import net.minecraft.nbt.NBTTagCompound;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.kits.Kit;
 import play.ai.dragonrealm.geiloutils.config.kits.KitItem;
@@ -15,12 +19,30 @@ import play.ai.dragonrealm.geiloutils.config.ranks.Rank;
 import play.ai.dragonrealm.geiloutils.internals.Statics;
 
 public class KitUtils {
-    public static void deliverKit(EntityPlayer player, Kit kit){
-        for(KitItem ki : kit.getItems()){
-            PlayerUtils.addItemByName(player, ki.getRegistryName(), ki.getCount(), ki.getMetadata());
-        }
+    public static boolean deliverKit(EntityPlayer player, Kit kit){
+    	int kitSize = kit.getItems().size();
+    	int inventoryFree = 0;
+    	for(ItemStack stack: player.inventory.mainInventory){
+    		if(stack.isEmpty() || stack.equals(ItemStack.EMPTY)){
+    			inventoryFree++;
+			}
+		}
+		if(kitSize <= inventoryFree){
+			for(KitItem ki : kit.getItems()){
+				NBTTagCompound compound = null;
+				try {
+					compound = JsonToNBT.getTagFromJson(ki.getNbtMap());
+				} catch (NBTException e) {
 
-        updateLastUsed(player, kit);
+				}
+				PlayerUtils.addItemByName(player, ki.getRegistryName(), ki.getCount(), ki.getMetadata(), compound);
+			}
+
+			updateLastUsed(player, kit);
+			return true;
+		}
+
+		return false;
     }
 
     private static void updateLastUsed(EntityPlayer player, Kit kit){

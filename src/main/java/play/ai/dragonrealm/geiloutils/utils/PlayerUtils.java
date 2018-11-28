@@ -2,13 +2,16 @@ package play.ai.dragonrealm.geiloutils.utils;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class PlayerUtils {
 	public static String[] getOnlinePlayerNames() {
@@ -142,4 +145,12 @@ public class PlayerUtils {
 	  {
 	    return player.inventory.addItemStackToInventory(new ItemStack(ItemUtils.getItemFromMod(itemName), amount, meta));
 	  }
+
+	public static boolean addItemByName(EntityPlayer player, String itemName, int amount, int meta, NBTTagCompound nbtCompound)
+	{
+        ItemStack stack = new ItemStack(ItemUtils.getItemFromMod(itemName), amount, meta);
+        stack.setTagCompound(nbtCompound);
+		return player.inventory.addItemStackToInventory(stack);
+	}
+
 }

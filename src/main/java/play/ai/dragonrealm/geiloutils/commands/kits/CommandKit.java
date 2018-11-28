@@ -77,8 +77,12 @@ public class CommandKit extends CommandBase {
                 if (KitUtils.doesKitExist(args[0])) {
                     Kit kit = KitUtils.getKitByName(args[0]);
                     if(KitUtils.canPlayerUseKit(player, kit)){
-                        KitUtils.deliverKit(player, kit);
-                        msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Kit devlivered!");
+                        boolean completed = KitUtils.deliverKit(player, kit);
+                        if(completed) {
+                            msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Kit devlivered!");
+                        } else {
+                            msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Not enough inventory space to deliver kit!");
+                        }
                         sender.sendMessage(msg);
                     }else{
                         msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Error: No permission, kit already used or coodown still active");

@@ -80,8 +80,12 @@ public class CommandGeiloKit extends CommandBase{
                 Kit kit = KitUtils.getKitByName(args[1]);
                 for(int i = 0; i <= player.inventory.getSizeInventory(); i++){
                     if(!player.inventory.getStackInSlot(i).isEmpty()) {
-                        kit.getItems().add(new KitItem(player.inventory.getStackInSlot(i).getItem().getRegistryName().toString(), player.inventory.getStackInSlot(i).getMetadata(), player.inventory.getStackInSlot(i).getCount()));
-                    }
+						if (player.inventory.getStackInSlot(i).getTagCompound() != null) {
+							kit.getItems().add(new KitItem(player.inventory.getStackInSlot(i).getItem().getRegistryName().toString(), player.inventory.getStackInSlot(i).getMetadata(), player.inventory.getStackInSlot(i).getCount(), player.inventory.getStackInSlot(i).getTagCompound().toString()));
+						} else {
+							kit.getItems().add(new KitItem(player.inventory.getStackInSlot(i).getItem().getRegistryName().toString(), player.inventory.getStackInSlot(i).getMetadata(), player.inventory.getStackInSlot(i).getCount()));
+						}
+					}
                 }
 
                 KitUtils.updateKit(kit);
