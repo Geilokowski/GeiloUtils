@@ -64,6 +64,26 @@ public class CommandKit extends CommandBase {
         ITextComponent msg;
         if(sender instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) sender;
+            if(args.length == 0){
+                List<String> kitNames = KitUtils.getKitNameList();
+                int count = 0;
+                msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "You have access to the following kits. Use /kit <kit_name> to receive them.");
+                sender.sendMessage(msg);
+                for (String name : kitNames) {
+                    Kit kit = KitUtils.getKitByName(name);
+                    if (kit != null && KitUtils.canPlayerUseKit(player, kit)) {
+                        msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Kit: " + name);
+                        sender.sendMessage(msg);
+                        count++;
+                    }
+                }
+                if(count == 0) {
+                    msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "No kits available!");
+                    sender.sendMessage(msg);
+                }
+                return;
+            }
+
             if (args.length == 1 && args[0].equals("list")) {
                 msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Found " + KitUtils.getKitCount() + " kits. Use /kit info <kit> to gte more detailed information about a kit");
                 sender.sendMessage(msg);

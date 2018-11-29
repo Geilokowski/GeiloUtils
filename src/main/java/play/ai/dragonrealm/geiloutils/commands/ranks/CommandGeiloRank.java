@@ -108,7 +108,7 @@ public class CommandGeiloRank extends CommandBase{
 		if(args.length == 2 && args[0].equals("delUser") && !args[1].equals("")) {
                 if(PlayerUtils.getPlayerByName(args[1]) != null){
                     Playerstat ps = PlayerUtils.getPlayerstatByUUID(PlayerUtils.getPlayerByName(args[1]).getCachedUniqueIdString());
-                    ps.setRank("");
+                    ps.setRank(ConfigurationManager.getGeneralConfig().getStandartRank());
                     PlayerUtils.updatePlayerstat(ps);
 
                     msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + " Removed all ranks the player " + ps.getName() + " had");
