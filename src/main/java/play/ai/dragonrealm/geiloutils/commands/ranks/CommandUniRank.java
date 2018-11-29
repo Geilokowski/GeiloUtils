@@ -35,7 +35,7 @@ public class CommandUniRank extends CommandBase {
                 if(entity instanceof EntityPlayer) {
                     final String ftbu = "ranks set " + args[0] + " " + FTBU_RANKS[rank];
                     final String lucky = "lp user "+ args[0] +" parent set " + LUCKY_PERM_RANKS[rank];
-                    final String scoreboard = "scoreboard teasms join " + args[0] + " " + SCOREBOARD_RANKS[rank];
+                    final String scoreboard = "scoreboard teams join " + args[0] + " " + SCOREBOARD_RANKS[rank];
                     final String geiloClear = "geilorank delUser " + args[0];
                     final String geiloRank = "geilorank addUser " + SCOREBOARD_RANKS[rank] + " " + args[0];
 

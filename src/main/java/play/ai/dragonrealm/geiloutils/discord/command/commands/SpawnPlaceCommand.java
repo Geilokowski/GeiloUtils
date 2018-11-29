@@ -51,7 +51,6 @@ public class SpawnPlaceCommand implements ICommand {
 
                 player.setPositionAndUpdate(spawnPos.getX() + 0.5d, spawnPos.getY() + 0.5d, spawnPos.getZ() + 0.5d);
             }
-            return true;
         }
         return false;
     }

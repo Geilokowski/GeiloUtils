@@ -21,7 +21,7 @@ public class TellCommand implements ICommand {
 
     @Override
     public String getCommandUsage() {
-        return "!tell <your message here>";
+        return "!tell <Player> <your message here>";
     }
 
     @Override
@@ -34,7 +34,7 @@ public class TellCommand implements ICommand {
                 b.append(commandFeatures[i]).append(" ");
             }
             if(player != null) {
-                player.sendMessage(new TextComponentString("[Discord DM] " + discordUser.getName() + " \\u003e\\u003e" + b.toString()));
+                player.sendMessage(new TextComponentString("[Discord DM] " + discordUser.getName() + " \u003e\u003e" + b.toString()));
                 return true;
             }
         }
