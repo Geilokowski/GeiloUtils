@@ -22,6 +22,7 @@ import play.ai.dragonrealm.geiloutils.commands.kits.CommandGeiloKit;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandKit;
 import play.ai.dragonrealm.geiloutils.commands.permissions.CommandGeiloPerm;
 import play.ai.dragonrealm.geiloutils.commands.ranks.CommandGeiloRank;
+import play.ai.dragonrealm.geiloutils.commands.ranks.CommandUniRank;
 import play.ai.dragonrealm.geiloutils.commands.rtp.CommandRTP;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.discord.command.CommandProcessor;
@@ -74,6 +75,7 @@ public class GeiloUtils
 	    event.registerServerCommand(new CommandRN());
 	    event.registerServerCommand(new CommandGeiloKit());
 	    event.registerServerCommand(new CommandGeiloPerm());
+	    event.registerServerCommand(new CommandUniRank());
 	    event.registerServerCommand(new CommandGeiloRank());
 	    event.registerServerCommand(new CommandGeiloReload());
 	    event.registerServerCommand(new CommandKit());

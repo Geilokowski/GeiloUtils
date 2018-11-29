@@ -70,7 +70,7 @@ public class ConfigurationManager
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	  
+
 		if(firstStart) {
 			writeToFile(fileRTP, gson.toJson(defaultRTPConfig()));
 			writeToFile(fileBannedBlocks, gson.toJson(defaultBannedBlocks()));
@@ -125,6 +125,8 @@ public class ConfigurationManager
 		defaultEconomyConfig.setEnabled(true);
 		defaultEconomyConfig.setGoodOlCurrencyIntegration(true);
 		defaultEconomyConfig.setStartingMoney(50);
+		HashMap<String, Integer> payements = new HashMap<>();
+		defaultEconomyConfig.setPermPaymentMap(payements);
 		return defaultEconomyConfig;
 	}
 	

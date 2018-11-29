@@ -8,6 +8,7 @@ import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
 
 public class ReadyListener extends ListenerAdapter{
+
 	public void onReady(ReadyEvent event) {
 		GeiloUtils.getLogger().info("The bot is running on the following servers: ");
 		for (Guild g : event.getJDA().getGuilds()) {
