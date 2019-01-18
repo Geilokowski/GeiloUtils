@@ -6,8 +6,10 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.discord.utils.AuthenticationRegistry;
 import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
+import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 import java.util.List;
 import java.util.Random;
@@ -43,7 +45,7 @@ public class CommandVerify extends CommandBase {
                     String uuid = entityplayer.getCachedUniqueIdString();
                     if(AuthenticationRegistry.INSTANCE.hasTriedAuthenticating(uuid)){
 
-                        notifyCommandListener(sender, this, "DiscordVerify: Your account is already linked!", new Object[] {});
+                        notifyCommandListener(sender, this, "[DiscordVerify]: Your account is already linked!", new Object[] {});
 
                     } else {
                         Random rand = new Random();
@@ -53,6 +55,7 @@ public class CommandVerify extends CommandBase {
                         sendPrivateMessage(target, directMessage);
 
                         AuthenticationRegistry.INSTANCE.addAuthAttempt(uuid, code, target);
+                        notifyCommandListener(sender, this, "[DiscordVerify]: A DM has been sent to you from the server chat bot with additional details.");
                     }
                 }
             }
@@ -62,13 +65,14 @@ public class CommandVerify extends CommandBase {
             AuthenticationRegistry.AuthenticStatus status = AuthenticationRegistry.INSTANCE.verifyUserAndAdd(uuid, args[1]);
             switch (status) {
                 case INCORRECT_CODE:
-                    notifyCommandListener(sender, this, "DiscordVerify: Verification unsuccessful, incorrect pin code.", new Object[] {});
+                    notifyCommandListener(sender, this, "[DiscordVerify]: Verification unsuccessful, incorrect pin code.", new Object[] {});
                     break;
                 case PLAYER_NOT_FOUND:
-                    notifyCommandListener(sender, this, "DiscordVerify: Verification unsuccessful, player not found!", new Object[] {});
+                    notifyCommandListener(sender, this, "[DiscordVerify]: Verification unsuccessful, player not found!", new Object[] {});
                     break;
                 case COMPLETED:
-                    notifyCommandListener(sender, this, "DiscordVerify: Account successfully linked!", new Object[] {});
+                    notifyCommandListener(sender, this, "[DiscordVerify]: Account successfully linked!", new Object[] {});
+                    GeiloBot.getRankFromDiscord(PlayerUtils.getPlayerstatByUUID(uuid).getDiscordID(), PlayerUtils.getPlayerstatByUUID(uuid).getName());
                     break;
             }
         }
@@ -80,6 +84,11 @@ public class CommandVerify extends CommandBase {
     {
         // notice that we are not placing a semicolon (;) in the callback this time!
         user.openPrivateChannel().queue( (channel) -> channel.sendMessage(content).queue() );
+    }
+
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender)
+    {
+        return true;
     }
 
 }

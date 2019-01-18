@@ -17,6 +17,8 @@ public class ConfigDiscord {
 	private List<String> validColors;
 	private String serverIP;
 	private Map<Long, DiscordRank> adminMap;
+	private Map<String, List<String>> patronRanks;
+	private String patronGlobalRank;
 
 	public boolean isEnabled() {
 		return enabled;
@@ -61,6 +63,17 @@ public class ConfigDiscord {
 		this.discordCommandPrefix = discordCommandPrefix;
 	}
 
+	public void setPatronRanks(Map<String, List<String>> patronRanks) {
+		this.patronRanks = patronRanks;
+	}
+	public Map<String, List<String>> getPatronRanks() {
+		return patronRanks;
+	}
+	public String getPatronGlobalRank(){return patronGlobalRank;}
+
+	public void setPatronGlobalRank(String patronGlobalRank) {
+		this.patronGlobalRank = patronGlobalRank;
+	}
 
 	public boolean isSingleToMulti() {
 		return isSingleToMulti;

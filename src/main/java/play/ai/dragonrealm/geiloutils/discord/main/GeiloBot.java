@@ -6,14 +6,20 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
+import play.ai.dragonrealm.geiloutils.discord.command.BotSender;
 import play.ai.dragonrealm.geiloutils.discord.listener.MessageListener;
 import play.ai.dragonrealm.geiloutils.discord.listener.ReadyListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Callable;
 
 public class GeiloBot {
 	public static JDA jda;
@@ -59,5 +65,53 @@ public class GeiloBot {
 		}
 
 		return bots;
+	}
+
+	public static void getRankFromDiscord(Long discordVerifiedID, String userName){
+		String patronGlobal = ConfigurationManager.getDiscordConfig().getPatronGlobalRank();
+		if(!patronGlobal.isEmpty()) {
+			Guild guild = jda.getTextChannelById(ConfigurationManager.getDiscordConfig().getChannelIDRelay()).getGuild();
+			List<Role> roles = guild.getRolesByName(patronGlobal, true);
+			if(!roles.isEmpty()) {
+				Role role = roles.get(0);
+				List<Member> allPatrons = guild.getMembersWithRoles(role);
+
+				Member selectedPatron = null;
+				for(Member patron : allPatrons){
+					if(patron.getUser().getIdLong() == discordVerifiedID) {
+						selectedPatron = patron;
+						break;
+					}
+				}
+
+				if (selectedPatron != null) {
+					List<Role> patronRoles = selectedPatron.getRoles();
+
+					String teirRole = "";
+					Set<String> teiredRoles = ConfigurationManager.getDiscordConfig().getPatronRanks().keySet();
+					for (Role memberRole : patronRoles) {
+						if(teiredRoles.contains(memberRole.getName().toLowerCase().replace(" ", "_"))) {
+							teirRole = memberRole.getName().toLowerCase().replace(" ", "_");
+							break;
+						}
+					}
+
+					if(!teirRole.isEmpty()) {
+						List<String> commands = ConfigurationManager.getDiscordConfig().getPatronRanks().get(teirRole);
+						FMLCommonHandler.instance().getMinecraftServerInstance().callFromMainThread(new Callable<Object>() {
+							@Override
+							public Object call() throws Exception {
+								for (String command : commands) {
+									String entry = String.format(command, userName);
+									FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(BotSender.INSTANCE, entry);
+								}
+								return null;
+							}
+						});
+					}
+
+				}
+			}
+		}
 	}
 }

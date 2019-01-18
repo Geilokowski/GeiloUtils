@@ -87,7 +87,7 @@ public class GeiloUtils
 		}
 
 		if(ConfigurationManager.getDiscordConfig().isEnabled()) {
-	    	//event.registerServerCommand(new CommandVerify());
+	    	event.registerServerCommand(new CommandVerify());
 			CommandProcessor.registerCommands();
 		}
 	  }

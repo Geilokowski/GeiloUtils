@@ -33,6 +33,7 @@ public class CommandProcessor {
         String rootCommand = input.substring(1);
         String[] keys = rootCommand.split(" ");
         rootCommand = keys[0];
+        rootCommand = rootCommand.toLowerCase();
 
 
         if(commandMap.containsKey(rootCommand)){
