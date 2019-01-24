@@ -153,7 +153,7 @@ public class ConfigurationManager
         HashMap<Long, DiscordRank> empty = new HashMap<>();
         empty.put(157740521039724544L, DiscordRank.ADMIN); //This is Ch33z's UID.
 		defaultDiscordConfig.setAdminMap(empty);
-		defaultDiscordConfig.setPatronRanks(new ArrayList<>());
+		defaultDiscordConfig.setPatronRanks(new HashMap<>());
 		defaultDiscordConfig.setPatronGlobalRank("");
 		return defaultDiscordConfig;
 	}
