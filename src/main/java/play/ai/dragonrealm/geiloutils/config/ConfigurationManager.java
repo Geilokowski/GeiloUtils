@@ -18,7 +18,7 @@ import com.google.gson.GsonBuilder;
 import net.minecraftforge.fml.common.Loader;
 import play.ai.dragonrealm.geiloutils.config.discord.ConfigDiscord;
 import play.ai.dragonrealm.geiloutils.config.economy.ConfigEconomy;
-import play.ai.dragonrealm.geiloutils.config.ftbutils.ConfigFTBUtilsInter;
+//import play.ai.dragonrealm.geiloutils.config.ftbutils.ConfigFTBUtilsInter;
 import play.ai.dragonrealm.geiloutils.config.geiloban.BannedBlock;
 import play.ai.dragonrealm.geiloutils.config.geiloban.BannedBlocks;
 import play.ai.dragonrealm.geiloutils.config.general.ConfigGeneral;
