@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import com.google.gson.GsonBuilder;
 import net.minecraftforge.fml.common.Loader;
 import play.ai.dragonrealm.geiloutils.config.discord.ConfigDiscord;
 import play.ai.dragonrealm.geiloutils.config.economy.ConfigEconomy;
+import play.ai.dragonrealm.geiloutils.config.ftbutils.ConfigFTBUtilsInter;
 import play.ai.dragonrealm.geiloutils.config.geiloban.BannedBlock;
 import play.ai.dragonrealm.geiloutils.config.geiloban.BannedBlocks;
 import play.ai.dragonrealm.geiloutils.config.general.ConfigGeneral;
@@ -31,6 +33,7 @@ import play.ai.dragonrealm.geiloutils.discord.utils.DiscordRank;
 
 public class ConfigurationManager
 {
+	//public static String configLocation = Loader.instance().getConfigDir() + "/GeiloUtils";
 	static private File fileBannedBlocks = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "BannedBlocks.json");
 	static private File fileGenral = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "General.json");
 	static private File fileKits = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "Kits.json");
@@ -40,6 +43,7 @@ public class ConfigurationManager
 	static private File fileRTP = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "rtp.json");
 	static private File fileDiscord = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "Discord.json");
 	static private File fileEconomy = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "economy.json");
+	//static private File fileFTBUtils = new File(configLocation, "ftbutilities.json");
 	
 	private static BannedBlocks bannedBlocksConfig;
 	private static Kits kitsConfig;
@@ -50,6 +54,7 @@ public class ConfigurationManager
 	private static ConfigDiscord discordConfig;
 	private static ConfigEconomy economyConfig;
 	private static ConfigGeneral generalConfig;
+	//private static ConfigFTBUtilsInter ftbUtilsInter;
   
 	private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	
@@ -67,6 +72,12 @@ public class ConfigurationManager
 			fileRTP.createNewFile();
 			fileDiscord.createNewFile();
 			fileEconomy.createNewFile();
+
+			/*if(fileFTBUtils.createNewFile() || fileFTBUtils.length() == 0) {
+				writeToFile(fileFTBUtils, gson.toJson(ConfigFTBUtilsInter.getDefaultConfig()));
+			}*/
+
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -99,6 +110,7 @@ public class ConfigurationManager
 		discordConfig = gson.fromJson(readFromFile(fileDiscord), ConfigDiscord.class);
 		economyConfig  = gson.fromJson(readFromFile(fileEconomy), ConfigEconomy.class);
 		generalConfig = gson.fromJson(readFromFile(fileGenral), ConfigGeneral.class);
+		//ftbUtilsInter = gson.fromJson(readFromFile(fileFTBUtils), ConfigFTBUtilsInter.class);
 	}
 	  
 	public static void syncFromFields()
@@ -112,6 +124,7 @@ public class ConfigurationManager
 		writeToFile(fileDiscord, gson.toJson(discordConfig));
 		writeToFile(fileEconomy, gson.toJson(economyConfig));
 		writeToFile(fileGenral, gson.toJson(generalConfig));
+		//writeToFile(fileFTBUtils, gson.toJson(ftbUtilsInter));
 	}
 	
 	private static ConfigGeneral defaultGeneralConfig() {
@@ -298,4 +311,12 @@ public class ConfigurationManager
 	public static void setGeneralConfig(ConfigGeneral generalConfig) {
 		ConfigurationManager.generalConfig = generalConfig;
 	}
+
+	/*public static ConfigFTBUtilsInter getFtbUtilsInter() {
+		return ftbUtilsInter;
+	}
+
+	public static void setFtbUtilsInter(ConfigFTBUtilsInter ftbUtilsInter){
+		ConfigurationManager.ftbUtilsInter = ftbUtilsInter;
+	}*/
 }

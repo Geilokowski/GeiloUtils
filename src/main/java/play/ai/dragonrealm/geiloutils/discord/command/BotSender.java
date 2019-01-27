@@ -13,13 +13,20 @@ public class BotSender implements ICommandSender {
 
     public static BotSender INSTANCE = new BotSender();
     public static BotSender BLOCK_INSTANCE = new BotSender(true);
+    public static BotSender SILENT_BOT = new BotSender(false, true);
 
 
 
     private boolean useBlockResp = false;
+    private boolean isSilent = false;
 
     public BotSender(boolean useBlockResp) {
         this.useBlockResp = useBlockResp;
+    }
+
+    public BotSender(boolean useBlockResp, boolean isSilent){
+        this.useBlockResp = useBlockResp;
+        this.isSilent = isSilent;
     }
 
     public BotSender(){}
@@ -47,10 +54,12 @@ public class BotSender implements ICommandSender {
 
     @Override
     public void sendMessage(ITextComponent component){
-        if(useBlockResp){
-            GeiloBot.channelIRC.sendMessage("```" + component.getUnformattedText() + "```").queue();
-            return;
+        if(!isSilent) {
+            if (useBlockResp) {
+                GeiloBot.channelIRC.sendMessage("```" + component.getUnformattedText() + "```").queue();
+                return;
+            }
+            GeiloBot.channelIRC.sendMessage(component.getUnformattedText()).queue();
         }
-        GeiloBot.channelIRC.sendMessage(component.getUnformattedText()).queue();
     }
 }

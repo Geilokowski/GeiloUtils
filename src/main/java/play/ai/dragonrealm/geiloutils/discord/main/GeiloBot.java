@@ -103,7 +103,7 @@ public class GeiloBot {
 							public Object call() throws Exception {
 								for (String command : commands) {
 									String entry = String.format(command, userName);
-									FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(BotSender.INSTANCE, entry);
+									FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(BotSender.SILENT_BOT, entry);
 								}
 								return null;
 							}
