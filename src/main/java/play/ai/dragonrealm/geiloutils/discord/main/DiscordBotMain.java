@@ -20,14 +20,12 @@ public class DiscordBotMain {
 
     private String textChannelID;
     private String commandChannelID;
-    private JDA jda;
+    private JDA jda; //TODO: Make this optional?
 
 
-    private DiscordBotMain(){
+    private DiscordBotMain() {
         textChannelID = ConfigurationManager.getDiscordConfig().getChannelIDRelay();
         commandChannelID = ConfigurationManager.getDiscordConfig().getChannelIDCommands();
-
-
     }
 
     public void initializeBot() {
@@ -40,7 +38,7 @@ public class DiscordBotMain {
         try {
             jda = builder.build();
         } catch (LoginException e) {
-            e.printStackTrace();
+            e.printStackTrace();//TODO: Make the bot init fix here!
         }
     }
 
@@ -72,7 +70,7 @@ public class DiscordBotMain {
     }
 
 
-
+    //This is the lazy way to do it.
     public static DiscordBotMain getInstance() {
         if(INSTANCE == null){
             INSTANCE = new DiscordBotMain();

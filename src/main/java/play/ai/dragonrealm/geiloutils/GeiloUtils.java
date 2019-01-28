@@ -1,6 +1,5 @@
 package play.ai.dragonrealm.geiloutils;
 
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -29,7 +28,6 @@ import play.ai.dragonrealm.geiloutils.commands.rtp.CommandRTP;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.discord.command.CommandProcessor;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
-import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
 import play.ai.dragonrealm.geiloutils.economy.MoneyDistribution;
 import play.ai.dragonrealm.geiloutils.events.ChatEvent;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerBlocks;
@@ -42,7 +40,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid=GeiloUtils.MODID, name=GeiloUtils.NAME, version=GeiloUtils.VERSION, acceptableRemoteVersions="*", acceptedMinecraftVersions="[1.12.2]")
 public class GeiloUtils
 {
-	 public static final String MODID = "geiloutils";
+	  public static final String MODID = "geiloutils";
 	  public static final String NAME = "GeiloUtils";
 	  public static final String VERSION = "1.3.3";
 	  private static Logger logger;

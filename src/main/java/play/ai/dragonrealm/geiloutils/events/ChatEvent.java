@@ -6,6 +6,7 @@ import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
 
 public class ChatEvent {
@@ -20,7 +21,7 @@ public class ChatEvent {
 				finMsg += prefix + " " + event.getUsername() + " ";
 			}
 			finMsg += event.getMessage();
-			GeiloBot.channelIRC.sendMessage(finMsg).queue();
+			DiscordBotMain.getInstance().sendMessageDiscord(finMsg);
 			//GeiloUtils.getLogger().info("MSG: " + event.getMessage());
 		}
 	}
