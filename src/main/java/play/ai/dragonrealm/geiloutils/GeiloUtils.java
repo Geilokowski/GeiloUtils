@@ -17,6 +17,8 @@ import play.ai.dragonrealm.geiloutils.commands.economy.CommandGeiloEconomy;
 import play.ai.dragonrealm.geiloutils.commands.economy.CommandPay;
 import play.ai.dragonrealm.geiloutils.commands.economy.CommandSell;
 import play.ai.dragonrealm.geiloutils.commands.economy.CommandWithdraw;
+import play.ai.dragonrealm.geiloutils.commands.ftblib.FTBServerClaim;
+import play.ai.dragonrealm.geiloutils.commands.ftblib.FTBTempTeam;
 import play.ai.dragonrealm.geiloutils.commands.geilokill.GeiloKill;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandGeiloKit;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandKit;
@@ -26,6 +28,7 @@ import play.ai.dragonrealm.geiloutils.commands.ranks.CommandUniRank;
 import play.ai.dragonrealm.geiloutils.commands.rtp.CommandRTP;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.discord.command.CommandProcessor;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
 import play.ai.dragonrealm.geiloutils.economy.MoneyDistribution;
 import play.ai.dragonrealm.geiloutils.events.ChatEvent;
@@ -36,7 +39,7 @@ import play.ai.dragonrealm.geiloutils.utils.MoneyUtils;
 
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid="geiloutils", name="GeiloUtils", version="1.3.3", acceptableRemoteVersions="*", acceptedMinecraftVersions="[1.12.2]")
+@Mod(modid=GeiloUtils.MODID, name=GeiloUtils.NAME, version=GeiloUtils.VERSION, acceptableRemoteVersions="*", acceptedMinecraftVersions="[1.12.2]")
 public class GeiloUtils
 {
 	 public static final String MODID = "geiloutils";
@@ -54,7 +57,7 @@ public class GeiloUtils
 	  @EventHandler
 	  public void init(FMLInitializationEvent event) {
 		  if(ConfigurationManager.getDiscordConfig().isEnabled()) {
-			  GeiloBot.initBot();
+			  DiscordBotMain.getInstance().initializeBot();
 		  }
 	  }
 	  
@@ -90,6 +93,9 @@ public class GeiloUtils
 	    	event.registerServerCommand(new CommandVerify());
 			CommandProcessor.registerCommands();
 		}
+
+		//event.registerServerCommand(new FTBServerClaim());
+	    //event.registerServerCommand(new FTBTempTeam());
 	  }
 	  
 	  @EventHandler
@@ -107,7 +113,7 @@ public class GeiloUtils
 	  @EventHandler
 	  public void serverStop(FMLServerStoppedEvent event){
 	  	if(ConfigurationManager.getDiscordConfig().isEnabled()) {
-			GeiloBot.channelIRC.sendMessage("Server stopped").queue();
+	  		DiscordBotMain.getInstance().sendMessageDiscord("Server Stopped");
 		}
 	  }
 	  

@@ -61,6 +61,15 @@ public class PlayerUtils {
 		  
 		  return null;
 	  }
+
+	  public static Playerstat getPlayerstatByDiscordID(Long id) {
+		  for(Playerstat ps : ConfigurationManager.getPlayerstats().getPlayerstats()) {
+			  if(ps.getDiscordID().equals(id)) {
+				  return ps;
+			  }
+		  }
+		  return null;
+	  }
 	  
 	  public static void updatePlayerstat(Playerstat ps) {
 		  for(Playerstat oldPlayerstats : ConfigurationManager.getPlayerstats().getPlayerstats()) {

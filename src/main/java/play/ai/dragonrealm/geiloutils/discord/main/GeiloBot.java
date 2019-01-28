@@ -21,11 +21,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
+@Deprecated
 public class GeiloBot {
 	public static JDA jda;
 	public static TextChannel channelCommands;
 	public static TextChannel channelIRC;
-	public static void initBot() {
+	private static Long patron = null;
+
+	/*public static void initBot() {
 		JDABuilder builder = new JDABuilder(AccountType.BOT);
 		builder.setToken(ConfigurationManager.getDiscordConfig().getToken());
 		builder.setAutoReconnect(true);
@@ -37,7 +40,7 @@ public class GeiloBot {
 		  } catch (LoginException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	public static ArrayList<String> getBotsInGuild() {
 		List<Member> memberList = jda.getTextChannelById(ConfigurationManager.getDiscordConfig().getChannelIDRelay()).getMembers();
@@ -66,6 +69,21 @@ public class GeiloBot {
 
 		return bots;
 	}
+
+	public static Role getPatronRole() {
+	    if(patron != null) {
+	        return jda.getRoleById(patron);
+        } else {
+            String patronGlobal = ConfigurationManager.getDiscordConfig().getPatronGlobalRank();
+            Guild guild = jda.getTextChannelById(ConfigurationManager.getDiscordConfig().getChannelIDRelay()).getGuild();
+            List<Role> roles = guild.getRolesByName(patronGlobal, true);
+            if(!roles.isEmpty()) {
+                patron = roles.get(0).getIdLong();
+                return jda.getRoleById(patron);
+            }
+        }
+        return null;
+    }
 
 	public static void getRankFromDiscord(Long discordVerifiedID, String userName){
 		String patronGlobal = ConfigurationManager.getDiscordConfig().getPatronGlobalRank();

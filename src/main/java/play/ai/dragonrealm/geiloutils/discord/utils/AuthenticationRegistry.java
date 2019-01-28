@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
@@ -18,21 +19,11 @@ public class AuthenticationRegistry {
     private Map<String, String> nameMap = new HashMap<>();
     private Map<String, User> userMap = new HashMap<>();
 
-    public User getUserFromPlayerUUID(String mcUID) {
-        Playerstat stat = PlayerUtils.getPlayerstatByUUID(mcUID);
-        if(stat != null) {
-            Long id = stat.getDiscordID();
-            if(id != null){
-                return GeiloBot.jda.getUserById(id);
-            }
-        }
-        return null;
-    }
 
     public void updateOnlineUsers() {
         List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
         for(EntityPlayerMP player : players) {
-            User discordAcc = getUserFromPlayerUUID(player.getCachedUniqueIdString());
+            User discordAcc = DiscordBotMain.getInstance().getUserFromPlayerUUID(player.getCachedUniqueIdString());
             if(discordAcc != null) {
                 //GeiloBot.jda.getRoles()
             }
