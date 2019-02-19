@@ -24,6 +24,9 @@ public class CommandProcessor {
         register(new RolesCommand());
         register(new SetRolesCommand());
         register(new TpsCommand());
+
+        register(new DeclareAllCommand());
+        register(new MiraCommand());
     }
 
     public static boolean processCommand(User discordAgent, String input){

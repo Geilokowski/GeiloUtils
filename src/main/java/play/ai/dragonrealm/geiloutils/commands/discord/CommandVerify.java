@@ -74,7 +74,8 @@ public class CommandVerify extends CommandBase {
                     break;
                 case COMPLETED:
                     sendMessageToPlayer(sender,  "[DiscordVerify]: Account successfully linked!");
-                    GeiloBot.getRankFromDiscord(PlayerUtils.getPlayerstatByUUID(uuid).getDiscordID(), PlayerUtils.getPlayerstatByUUID(uuid).getName());
+                    //TODO: READD THIS!
+                    //GeiloBot.getRankFromDiscord(PlayerUtils.getPlayerstatByUUID(uuid).getDiscordID(), PlayerUtils.getPlayerstatByUUID(uuid).getName());
                     notifyCommandListener(sender, this, "The user: %s has authed with discord.", PlayerUtils.getPlayerstatByUUID(uuid).getName());
                     break;
             }

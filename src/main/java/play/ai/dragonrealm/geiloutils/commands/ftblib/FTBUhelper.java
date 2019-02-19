@@ -11,19 +11,20 @@ public class FTBUhelper {
 
 
     public static void addPlayerToTeamMemory(String playerUID, String playerTeam){
-        HashMap<String, String> fromConfig = ConfigurationManager.getFtbUtilsInter().inLocoBigas;
+        /*HashMap<String, String> fromConfig = ConfigurationManager.getFtbUtilsInter().inLocoBigas;
         fromConfig.put(playerUID, playerTeam);
         ConfigurationManager.getFtbUtilsInter().inLocoBigas = fromConfig;
-        ConfigurationManager.syncFromFields();
+        ConfigurationManager.syncFromFields();*/
     }
 
     public static ForgeTeam getPlayerTeamFromConfig(String playerUID) {
-        ForgeTeam returnTeam = Universe.get().getTeam("");
+        /*ForgeTeam returnTeam = Universe.get().getTeam("");
 
         HashMap<String, String> fromConfig = ConfigurationManager.getFtbUtilsInter().inLocoBigas;
         if(fromConfig.containsKey(playerUID)){
             returnTeam = Universe.get().getTeam(fromConfig.get(playerUID));
         }
-        return returnTeam;
+        return returnTeam;*/
+        return null;
     }
 }

@@ -24,24 +24,7 @@ import java.util.concurrent.Callable;
 @Deprecated
 public class GeiloBot {
 	public static JDA jda;
-	private static Long patron = null;
 
-
-
-	public static Role getPatronRole() {
-	    if(patron != null) {
-	        return jda.getRoleById(patron);
-        } else {
-            String patronGlobal = ConfigurationManager.getDiscordConfig().getPatronGlobalRank();
-            Guild guild = jda.getTextChannelById(ConfigurationManager.getDiscordConfig().getChannelIDRelay()).getGuild();
-            List<Role> roles = guild.getRolesByName(patronGlobal, true);
-            if(!roles.isEmpty()) {
-                patron = roles.get(0).getIdLong();
-                return jda.getRoleById(patron);
-            }
-        }
-        return null;
-    }
 
 	public static void getRankFromDiscord(Long discordVerifiedID, String userName){
 		String patronGlobal = ConfigurationManager.getDiscordConfig().getPatronGlobalRank();

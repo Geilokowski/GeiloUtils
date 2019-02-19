@@ -8,10 +8,12 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
 import play.ai.dragonrealm.geiloutils.discord.command.BotSender;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -19,11 +21,11 @@ public class RankChangedListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberRoleAdd(GuildMemberRoleAddEvent event) {
-        Role patronRole = GeiloBot.getPatronRole();
+        Optional<Role> patronRole = DiscordBotMain.getInstance().getSupporterRole();
         Playerstat stat = PlayerUtils.getPlayerstatByDiscordID(event.getMember().getUser().getIdLong());
-        if(patronRole != null && stat != null) {
+        if(patronRole.isPresent() && stat != null) {
             List<Role> roles = event.getMember().getRoles();
-            if(roles.contains(patronRole)) {
+            if(roles.contains(patronRole.get())) {
                 Set<String> teiredRoles = ConfigurationManager.getDiscordConfig().getPatronRanks().keySet();
                 for(Role role: event.getRoles()) {
                     if(teiredRoles.contains(role.getName().toLowerCase().replace(" ", "_"))) {
@@ -48,9 +50,6 @@ public class RankChangedListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent event) {
-        Role patronRole = GeiloBot.getPatronRole();
-        if(patronRole != null) {
-            event.getRoles().contains(patronRole);
-        }
+
     }
 }

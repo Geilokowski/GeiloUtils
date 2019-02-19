@@ -28,5 +28,9 @@ public class DiscordUtils {
         ConfigurationManager.syncFromFields();
     }
 
+    public static void autoModRankUser() {
+
+    }
+
 
 }

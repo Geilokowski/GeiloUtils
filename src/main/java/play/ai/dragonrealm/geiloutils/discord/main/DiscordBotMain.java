@@ -4,9 +4,7 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.*;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
@@ -27,6 +25,7 @@ public class DiscordBotMain {
     private String commandChannelID;
     private JDA jda;
     private boolean botActive = false;
+    private Long supporterRank;
 
 
     private DiscordBotMain() {
@@ -104,6 +103,26 @@ public class DiscordBotMain {
         return bots;
     }
 
+    public Optional<Role> getSupporterRole() {
+        if(supporterRank != null) {
+            return Optional.ofNullable(jda.getRoleById(supporterRank));
+        } else {
+            String patronGlobal = ConfigurationManager.getDiscordConfig().getPatronGlobalRank();
+            Guild guild = jda.getTextChannelById(ConfigurationManager.getDiscordConfig().getChannelIDRelay()).getGuild();
+            List<Role> roles = guild.getRolesByName(patronGlobal, true);
+            if(!roles.isEmpty()) {
+                supporterRank = roles.get(0).getIdLong();
+                return Optional.ofNullable(jda.getRoleById(supporterRank));
+            }
+        }
+        return Optional.empty();
+    }
+
+    public List<Role> getRolesOnUser(String userName){
+        User user = jda.getUsersByName(userName, true).get(0);
+        Member member = jda.getTextChannelById(textChannelID).getGuild().getMember(user);
+        return member.getRoles();
+    }
 
     //This is the lazy way to do it.
     public static DiscordBotMain getInstance() {
