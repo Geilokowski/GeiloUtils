@@ -24,51 +24,9 @@ import java.util.concurrent.Callable;
 @Deprecated
 public class GeiloBot {
 	public static JDA jda;
-	public static TextChannel channelCommands;
-	public static TextChannel channelIRC;
 	private static Long patron = null;
 
-	/*public static void initBot() {
-		JDABuilder builder = new JDABuilder(AccountType.BOT);
-		builder.setToken(ConfigurationManager.getDiscordConfig().getToken());
-		builder.setAutoReconnect(true);
-		builder.setStatus(OnlineStatus.ONLINE);
-		builder.addEventListener(new ReadyListener());
-		builder.addEventListener(new MessageListener());
-		try {
-			jda = builder.build();
-		  } catch (LoginException e) {
-			e.printStackTrace();
-		}
-	}*/
 
-	public static ArrayList<String> getBotsInGuild() {
-		List<Member> memberList = jda.getTextChannelById(ConfigurationManager.getDiscordConfig().getChannelIDRelay()).getMembers();
-
-		ArrayList<String> bots = new ArrayList<>();
-
-		for(Member member: memberList) {
-			if(member.getUser().isBot()){
-				bots.add(member.getUser().getName());
-			}
-		}
-
-		return bots;
-	}
-
-	public static ArrayList<String> getBotsInGuildSingle() {
-		List<Member> memberList = jda.getTextChannelById(ConfigurationManager.getDiscordConfig().getChannelIDRelay()).getMembers();
-
-		ArrayList<String> bots = new ArrayList<>();
-
-		for(Member member: memberList) {
-			if(member.getUser().isBot()){
-				bots.add(member.getUser().getName().replace(" ", "_"));
-			}
-		}
-
-		return bots;
-	}
 
 	public static Role getPatronRole() {
 	    if(patron != null) {

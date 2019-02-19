@@ -12,6 +12,7 @@ public class Playerstat {
 	private List<String> mutedChats = new ArrayList<>();
 	private boolean directDeposit;
 	private Long discordID;
+	private boolean mutePaymentMsg = false;
 	
 	public String getName() {
 		return name;
@@ -60,7 +61,15 @@ public class Playerstat {
 		this.directDeposit = directDeposit;
 	}
 
-	public boolean isDiscordVerified(){
+    public void setMutePaymentMsg(boolean mutePaymentMsg) {
+        this.mutePaymentMsg = mutePaymentMsg;
+    }
+
+    public boolean isPaymentMsgMuted() {
+        return mutePaymentMsg;
+    }
+
+    public boolean isDiscordVerified(){
 		return discordID != null;
 	}
 

@@ -5,6 +5,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
 
 import javax.annotation.Nullable;
@@ -56,10 +57,10 @@ public class BotSender implements ICommandSender {
     public void sendMessage(ITextComponent component){
         if(!isSilent) {
             if (useBlockResp) {
-                GeiloBot.channelIRC.sendMessage("```" + component.getUnformattedText() + "```").queue();
+                DiscordBotMain.getInstance().sendMessageDiscord("```" + component.getUnformattedText() + "```");
                 return;
             }
-            GeiloBot.channelIRC.sendMessage(component.getUnformattedText()).queue();
+            DiscordBotMain.getInstance().sendMessageDiscord(component.getUnformattedText());
         }
     }
 }

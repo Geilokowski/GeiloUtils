@@ -23,6 +23,7 @@ public class CommandProcessor {
         register(new TellCommand());
         register(new RolesCommand());
         register(new SetRolesCommand());
+        register(new TpsCommand());
     }
 
     public static boolean processCommand(User discordAgent, String input){
@@ -56,7 +57,7 @@ public class CommandProcessor {
      */
     private static void register(ICommand base){
         // Register Commands
-        commandMap.put(base.getCommand(), base);
+        commandMap.put(base.getCommand().toLowerCase(), base);
     }
 
     public static String listCommandsForUser(User discordUser) {

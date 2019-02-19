@@ -4,8 +4,10 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
+import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
 import play.ai.dragonrealm.geiloutils.discord.listener.MessageListener;
@@ -13,6 +15,9 @@ import play.ai.dragonrealm.geiloutils.discord.listener.ReadyListener;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 import javax.security.auth.login.LoginException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class DiscordBotMain {
 
@@ -20,7 +25,8 @@ public class DiscordBotMain {
 
     private String textChannelID;
     private String commandChannelID;
-    private JDA jda; //TODO: Make this optional?
+    private JDA jda;
+    private boolean botActive = false;
 
 
     private DiscordBotMain() {
@@ -35,38 +41,67 @@ public class DiscordBotMain {
         builder.setStatus(OnlineStatus.ONLINE);
         builder.addEventListener(new ReadyListener());
         builder.addEventListener(new MessageListener());
+        botActive = true;
         try {
             jda = builder.build();
         } catch (LoginException e) {
-            e.printStackTrace();//TODO: Make the bot init fix here!
+            GeiloUtils.getLogger().error("Login Exception thrown by DiscordBot. Disabled until next reload!");
         }
     }
 
-    private TextChannel getTextChannel() {
-        return jda.getTextChannelById(textChannelID);
+
+    private Optional<TextChannel> getTextChannel(){
+        if(botActive)
+            return Optional.ofNullable(jda.getTextChannelById(textChannelID));
+        return Optional.empty();
     }
 
     private TextChannel getCommandChannel() {
-        return jda.getTextChannelById(commandChannelID);
+        if(botActive)
+            return jda.getTextChannelById(commandChannelID);
+        return null;
     }
 
     public String getBotID(){
-        return jda.getSelfUser().getId();
+        if(botActive)
+            return jda.getSelfUser().getId();
+        return "";
     }
 
     public void sendMessageDiscord(String message) {
-        getTextChannel().sendMessage(message).queue();
+        if(botActive)
+            getTextChannel().ifPresent(tx -> tx.sendMessage(message).queue());
     }
 
     public User getUserFromPlayerUUID(String mcUUID) {
-        Playerstat stat = PlayerUtils.getPlayerstatByUUID(mcUUID);
-        if(stat != null) {
-            Long id = stat.getDiscordID();
-            if(id != null){
-                return jda.getUserById(id);
+        if(botActive) {
+            Playerstat stat = PlayerUtils.getPlayerstatByUUID(mcUUID);
+            if (stat != null) {
+                Long id = stat.getDiscordID();
+                if (id != null) {
+                    return jda.getUserById(id);
+                }
             }
         }
         return null;
+    }
+
+    public ArrayList<String> getBotsInGuild(boolean underscoreSeparated) {
+        ArrayList < String > bots = new ArrayList<>();
+
+        if(getTextChannel().isPresent()) {
+            List<Member> memberList = getTextChannel().get().getMembers();
+
+            for (Member member : memberList) {
+                if (member.getUser().isBot()) {
+                    String name = member.getUser().getName();
+                    String botName = underscoreSeparated ? name.replace(" ", "_") : name;
+                    bots.add(botName);
+                }
+            }
+        }
+
+        return bots;
     }
 
 

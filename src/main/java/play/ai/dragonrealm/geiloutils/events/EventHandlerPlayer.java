@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.registries.IForgeRegistryModifiable;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
 import play.ai.dragonrealm.geiloutils.utils.ArrayUtils;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
@@ -15,6 +16,7 @@ import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 public class EventHandlerPlayer {
 	@SubscribeEvent
 	public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event){
+		boolean firstJoin = false;
 		if (PlayerUtils.isFirstJoin(event.player)){
 			Playerstat ps = new Playerstat();
 			ps.setName(event.player.getDisplayNameString());
@@ -22,19 +24,22 @@ public class EventHandlerPlayer {
 			ps.setUuid(event.player.getCachedUniqueIdString());
 			ps.setRank(ConfigurationManager.getGeneralConfig().getStandartRank());
 			ps.setDirectDeposit(true);
+			ps.setMutePaymentMsg(false);
 			ConfigurationManager.getPlayerstats().getPlayerstats().add(ps);
 			ConfigurationManager.syncFromFields();
+			firstJoin = true;
 		}
 
 		if(ConfigurationManager.getDiscordConfig().isEnabled()){
-			GeiloBot.channelIRC.sendMessage(event.player.getDisplayNameString() + " joined the game").queue();
+			String message = firstJoin ? " joined for the first time!" : " joined the game";
+			DiscordBotMain.getInstance().sendMessageDiscord(event.player.getDisplayNameString() + message);
 		}
 	}
 
 	@SubscribeEvent
 	public void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event){
 		if(ConfigurationManager.getDiscordConfig().isEnabled()){
-			GeiloBot.channelIRC.sendMessage(event.player.getDisplayNameString() + " left the game").queue();
+			DiscordBotMain.getInstance().sendMessageDiscord(event.player.getDisplayNameString() + " left the game");
 		}
 	}
 }

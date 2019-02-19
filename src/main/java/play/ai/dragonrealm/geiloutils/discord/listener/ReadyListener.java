@@ -15,7 +15,7 @@ public class ReadyListener extends ListenerAdapter{
 		for (Guild g : event.getJDA().getGuilds()) {
 			GeiloUtils.getLogger().info(("Name: " + g.getName() + " ID: " + g.getId()));
 
-			DiscordBotMain.getInstance().sendMessageDiscord("Server Online!");
+			DiscordBotMain.getInstance().sendMessageDiscord("Server Starting!");
 		}
 	}
 }

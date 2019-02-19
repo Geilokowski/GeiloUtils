@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
@@ -43,7 +44,7 @@ public class CommandUnmute extends CommandBase {
             EntityPlayer player = (EntityPlayer) sender;
             String botName = args[0].replace("_", " ");
 
-            if (GeiloBot.getBotsInGuild().contains(botName)) {
+            if (DiscordBotMain.getInstance().getBotsInGuild(false).contains(botName)) {
                 if(PlayerUtils.removeFromMuteList(player, botName)) {
                     sender.sendMessage(new TextComponentString("[GeiloBot] Unmuted " + botName + " chat."));
                 } else {
@@ -59,7 +60,7 @@ public class CommandUnmute extends CommandBase {
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
     {
         if (args.length >= 1 && sender instanceof EntityPlayer) {
-            return getListOfStringsMatchingLastWord(args, GeiloBot.getBotsInGuildSingle());
+            return getListOfStringsMatchingLastWord(args, DiscordBotMain.getInstance().getBotsInGuild(true));
         }
         return Collections.<String>emptyList();
     }

@@ -25,7 +25,8 @@ public interface ICommand {
     public String getCommandUsage();
 
     /**
-     * Called to execute the command.
+     * Called to execute the command. Return true to delete the
+     * the !command that called this.
      */
     public boolean executeCommand(ICommandSender sender, User discordUser, String[] commandFeatures);
 

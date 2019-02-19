@@ -10,14 +10,7 @@ import play.ai.dragonrealm.geiloutils.commands.ban.CommandGeiloBan;
 import play.ai.dragonrealm.geiloutils.commands.discord.CommandMute;
 import play.ai.dragonrealm.geiloutils.commands.discord.CommandUnmute;
 import play.ai.dragonrealm.geiloutils.commands.discord.CommandVerify;
-import play.ai.dragonrealm.geiloutils.commands.economy.CommandBalance;
-import play.ai.dragonrealm.geiloutils.commands.economy.CommandDeposit;
-import play.ai.dragonrealm.geiloutils.commands.economy.CommandGeiloEconomy;
-import play.ai.dragonrealm.geiloutils.commands.economy.CommandPay;
-import play.ai.dragonrealm.geiloutils.commands.economy.CommandSell;
-import play.ai.dragonrealm.geiloutils.commands.economy.CommandWithdraw;
-import play.ai.dragonrealm.geiloutils.commands.ftblib.FTBServerClaim;
-import play.ai.dragonrealm.geiloutils.commands.ftblib.FTBTempTeam;
+import play.ai.dragonrealm.geiloutils.commands.economy.*;
 import play.ai.dragonrealm.geiloutils.commands.geilokill.GeiloKill;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandGeiloKit;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandKit;
@@ -92,8 +85,10 @@ public class GeiloUtils
 			CommandProcessor.registerCommands();
 		}
 
-		//event.registerServerCommand(new FTBServerClaim());
-	    //event.registerServerCommand(new FTBTempTeam());
+		if(ConfigurationManager.getEconomyConfig().isPaymentTimerEnabled()) {
+			event.registerServerCommand(new MuteDepositMessageCommand());
+		}
+
 	  }
 	  
 	  @EventHandler
@@ -109,9 +104,16 @@ public class GeiloUtils
 	  }
 
 	  @EventHandler
-	  public void serverStop(FMLServerStoppedEvent event){
+	  public void serverStarted(FMLServerStartedEvent event) {
+	  	if(ConfigurationManager.getDiscordConfig().isEnabled()){
+	  		DiscordBotMain.getInstance().sendMessageDiscord("Server Online!");
+		}
+	  }
+
+	  @EventHandler
+	  public void serverStop(FMLServerStoppingEvent event){
 	  	if(ConfigurationManager.getDiscordConfig().isEnabled()) {
-	  		DiscordBotMain.getInstance().sendMessageDiscord("Server Stopped");
+	  		DiscordBotMain.getInstance().sendMessageDiscord("Server Stopping!");
 		}
 	  }
 	  

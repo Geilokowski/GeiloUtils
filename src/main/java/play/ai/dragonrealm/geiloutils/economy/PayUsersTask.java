@@ -42,7 +42,9 @@ public class PayUsersTask extends TimerTask {
 
                 if(shouldDirectDeposit(stat)) {
                     PlayerUtils.addPlayerMoney(player, totalIncome);
-                    player.sendMessage(new TextComponentString("$" + totalIncome + " has been deposited to your bank account. You can check total amount with /balance"));
+                    if(!stat.isPaymentMsgMuted()) {
+                        player.sendMessage(new TextComponentString("$" + totalIncome + " has been deposited to your bank account. You can check total amount with /balance"));
+                    }
                 }else {
                     payment(player, totalIncome);
                 }

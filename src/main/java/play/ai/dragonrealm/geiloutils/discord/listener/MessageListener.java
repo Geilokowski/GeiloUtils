@@ -6,8 +6,10 @@ import net.dv8tion.jda.core.entities.impl.EmoteImpl;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.world.NoteBlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
@@ -47,18 +49,18 @@ public class MessageListener extends ListenerAdapter{
 
 
 			String output = getPrefix(msg.getAuthor().isBot(), msg.getAuthor().getName()) + " " + "\u00A76" + "\u00BB " + "\u00A7r" +msg.getContentDisplay();
-
+			ITextComponent formattedMessage = ForgeHooks.newChatWithLinks(output);
 			// Multi-server chat clogs up the readers view. This allows us to mute any chat network we don't like
 			if (ConfigurationManager.getDiscordConfig().isSingleToMulti()){
 				for (EntityPlayerMP ep : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers()) {
 					Playerstat ps = PlayerUtils.getPlayerstatByUUID(ep.getCachedUniqueIdString());
 					if(ps != null && !ps.getMutedChats().contains(msg.getAuthor().getName())) {
-						ep.sendMessage(new TextComponentString(output));
+						ep.sendMessage(formattedMessage);
 					}
 				}
 				// But if not in multi-mode, eh, just launch it server wide!
 			} else {
-				FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendMessage(new TextComponentString(output));
+				FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendMessage(formattedMessage);
 			}
 
 			checkIfUserNeedsSpaming(event);
