@@ -205,6 +205,7 @@ public class ConfigurationManager
 		configRTP.setMinY(60);
 		configRTP.setEnabled(true);
 		configRTP.setRadius(10000);
+		configRTP.setMaxTries(-1);
 		
 		return configRTP;
 	}

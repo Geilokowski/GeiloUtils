@@ -3,6 +3,7 @@ package play.ai.dragonrealm.geiloutils.config.rtp;
 public class ConfigRTP {
 	private int radius;
 	private int minY;
+	private int maxTries = -1;
 	private boolean enabled;
 	
 	public int getRadius() {
@@ -23,5 +24,12 @@ public class ConfigRTP {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	
+
+	public int getMaxTries() {
+		return maxTries;
+	}
+
+	public void setMaxTries(int maxTries) {
+		this.maxTries = maxTries;
+	}
 }

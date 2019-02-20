@@ -43,7 +43,8 @@ public class CommandRTP extends CommandBase{
 	      int newX = this.r.nextInt(ConfigurationManager.getRtpConfig().getRadius() * 2) - ConfigurationManager.getRtpConfig().getRadius();
 	      int newY = ConfigurationManager.getRtpConfig().getMinY();
 	      int newZ = this.r.nextInt(ConfigurationManager.getRtpConfig().getRadius() * 2) - ConfigurationManager.getRtpConfig().getRadius();
-	      while (!isSafe(player, newX, newY, newZ))
+	      int maxTries = ConfigurationManager.getRtpConfig().getMaxTries();
+	      while (!isSafe(player, newX, newY, newZ) && (maxTries == -1 || maxTries > 0))
 	      {
 	        newY++;
 	        if (newY > 120)
@@ -52,6 +53,14 @@ public class CommandRTP extends CommandBase{
 	          newY = ConfigurationManager.getRtpConfig().getMinY();
 	          newZ = this.r.nextInt(ConfigurationManager.getRtpConfig().getRadius() * 2) - ConfigurationManager.getRtpConfig().getRadius();
 	        }
+	        if(maxTries > 0){
+	        	maxTries--;
+			}
+			if(maxTries == 0) {
+				ITextComponent msg = new TextComponentString("[GeiloRTP] Could not find a safe space to RTP, please try again!");
+				player.sendMessage(msg);
+				return;
+			}
 	      }
 	      player.setPositionAndUpdate(newX, newY, newZ);
 	      
