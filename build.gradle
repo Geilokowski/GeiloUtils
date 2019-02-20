@@ -14,8 +14,8 @@ plugins {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-
-version = "1.4.${System.getenv("BUILD_NUMBER") ?: 0}"
+def build_version = "1.4.${System.getenv("BUILD_NUMBER") ?: 0}"
+version = build_version
 group = "play.ai.dragonrealm.geiloutils" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "geiloutils"
 
@@ -28,6 +28,9 @@ minecraft {
     version = "1.12.2-14.23.4.2765"
     runDir = "run"
     mappings = "snapshot_20171003"
+
+    replaceIn "play/ai/dragonrealm/geiloutils/GeiloUtils.java"
+    replace "@VERSION@", "${build_version}"
 }
 
 dependencies {
@@ -69,10 +72,10 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
+
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
