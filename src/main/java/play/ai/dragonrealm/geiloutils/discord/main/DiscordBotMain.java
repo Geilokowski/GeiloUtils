@@ -44,11 +44,13 @@ public class DiscordBotMain {
         builder.addEventListener(new ReadyListener());
         builder.addEventListener(new MessageListener());
         builder.addEventListener(new RankChangedListener());
-        botActive = true;
+
         try {
             jda = builder.build();
+            botActive = true;
         } catch (LoginException e) {
             GeiloUtils.getLogger().error("Login Exception thrown by DiscordBot. Disabled until next reload!");
+            botActive = false;
         }
     }
 
