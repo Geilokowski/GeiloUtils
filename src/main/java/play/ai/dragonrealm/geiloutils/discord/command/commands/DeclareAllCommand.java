@@ -27,7 +27,7 @@ public class DeclareAllCommand implements ICommand {
 
     @Override
     public boolean executeCommand(ICommandSender sender, User discordUser, String[] commandFeatures) {
-        List<Role> roleList = DiscordBotMain.getInstance().getRolesOnUser(commandFeatures[0]);
+        List<Role> roleList = DiscordBotMain.getInstance().getRolesOnUser(Long.parseLong(commandFeatures[0]));
         for(Role role: roleList) {
             sender.sendMessage(new TextComponentString("ROLE: " + role.getName() + "|| ID:" + role.getId()));
         }

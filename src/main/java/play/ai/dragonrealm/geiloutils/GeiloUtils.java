@@ -89,6 +89,8 @@ public class GeiloUtils
 			event.registerServerCommand(new MuteDepositMessageCommand());
 		}
 
+		//event.registerServerCommand(new FTBServerClaim());
+	    //event.registerServerCommand(new FTBTempTeam());
 	  }
 	  
 	  @EventHandler

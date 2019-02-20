@@ -1,6 +1,7 @@
 package play.ai.dragonrealm.geiloutils.config.discord;
 
 import play.ai.dragonrealm.geiloutils.discord.utils.DiscordRank;
+import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
 
 import java.util.List;
 import java.util.Map;
@@ -17,8 +18,8 @@ public class ConfigDiscord {
 	private List<String> validColors;
 	private String serverIP;
 	private Map<Long, DiscordRank> adminMap;
-	private Map<String, List<String>> patronRanks;
-	private String patronGlobalRank;
+	private List<UserRanks> discordRankIntegration;
+	private String supporterRank;
 
 	public boolean isEnabled() {
 		return enabled;
@@ -63,16 +64,12 @@ public class ConfigDiscord {
 		this.discordCommandPrefix = discordCommandPrefix;
 	}
 
-	public void setPatronRanks(Map<String, List<String>> patronRanks) {
-		this.patronRanks = patronRanks;
+	public void setDiscordRankIntegration(List<UserRanks> r) {
+		this.discordRankIntegration = r;
 	}
-	public Map<String, List<String>> getPatronRanks() {
-		return patronRanks;
-	}
-	public String getPatronGlobalRank(){return patronGlobalRank;}
 
-	public void setPatronGlobalRank(String patronGlobalRank) {
-		this.patronGlobalRank = patronGlobalRank;
+	public List<UserRanks> getDiscordRankIntegration() {
+		return discordRankIntegration;
 	}
 
 	public boolean isSingleToMulti() {
@@ -105,5 +102,13 @@ public class ConfigDiscord {
 
 	public Map<Long, DiscordRank> getAdminMap() {
 		return adminMap;
+	}
+
+    public String getPatronGlobalRank() {
+		return supporterRank;
+    }
+
+    public void setSupporterRank(String supporterRank){
+		this.supporterRank = supporterRank;
 	}
 }

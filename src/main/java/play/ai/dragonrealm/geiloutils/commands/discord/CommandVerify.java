@@ -8,9 +8,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.discord.utils.AuthenticationRegistry;
-import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
+import play.ai.dragonrealm.geiloutils.discord.utils.DiscordUtils;
+import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class CommandVerify extends CommandBase {
         if(args.length == 1){
             String[] names = args[0].split("#");
             if(names.length == 2) {
-                List<User> users = GeiloBot.jda.getUsersByName(names[0], true);
+                List<User> users = DiscordBotMain.getInstance().getUsersByName(names[0]);
                 User target = null;
                 for (User player : users) {
                     if (player.getDiscriminator().equals(names[1])) {
@@ -74,8 +75,10 @@ public class CommandVerify extends CommandBase {
                     break;
                 case COMPLETED:
                     sendMessageToPlayer(sender,  "[DiscordVerify]: Account successfully linked!");
-                    //TODO: READD THIS!
-                    //GeiloBot.getRankFromDiscord(PlayerUtils.getPlayerstatByUUID(uuid).getDiscordID(), PlayerUtils.getPlayerstatByUUID(uuid).getName());
+                    UserRanks rank = DiscordBotMain.getInstance().getHighestRankForUser(PlayerUtils.getPlayerstatByUUID(uuid).getDiscordID());
+                    if(rank != null) {
+                        DiscordUtils.autoModRankUser(rank, PlayerUtils.getPlayerstatByUUID(uuid).getName());
+                    }
                     notifyCommandListener(sender, this, "The user: %s has authed with discord.", PlayerUtils.getPlayerstatByUUID(uuid).getName());
                     break;
             }

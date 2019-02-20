@@ -4,7 +4,7 @@ import net.dv8tion.jda.core.entities.User;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.text.TextComponentString;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
-import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.discord.utils.DiscordRank;
 import play.ai.dragonrealm.geiloutils.discord.utils.DiscordUtils;
 
@@ -32,7 +32,7 @@ public class SetRolesCommand implements ICommand {
         if(commandFeatures.length == 2){
             String[] splited = commandFeatures[0].split("#");
             if(splited.length == 2) {
-                List<User> users = GeiloBot.jda.getUsersByName(splited[0], true);
+                List<User> users = DiscordBotMain.getInstance().getUsersByName(splited[0]);
                 User actualUser = null;
                 for(User user: users) {
                     if(user.getDiscriminator().equals(splited[1])){

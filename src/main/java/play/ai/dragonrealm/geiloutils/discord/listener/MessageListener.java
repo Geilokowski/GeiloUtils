@@ -1,33 +1,23 @@
 package play.ai.dragonrealm.geiloutils.discord.listener;
 
 import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.entities.impl.EmoteImpl;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.event.world.NoteBlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
 import play.ai.dragonrealm.geiloutils.discord.command.CommandProcessor;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
-import play.ai.dragonrealm.geiloutils.discord.main.GeiloBot;
 import play.ai.dragonrealm.geiloutils.discord.utils.DiscordRank;
 import play.ai.dragonrealm.geiloutils.discord.utils.DiscordUtils;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
-import scala.actors.threadpool.Arrays;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MessageListener extends ListenerAdapter{
 

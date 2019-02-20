@@ -9,7 +9,10 @@ import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
 import play.ai.dragonrealm.geiloutils.discord.listener.MessageListener;
+import play.ai.dragonrealm.geiloutils.discord.listener.RankChangedListener;
 import play.ai.dragonrealm.geiloutils.discord.listener.ReadyListener;
+import play.ai.dragonrealm.geiloutils.discord.utils.DiscordUtils;
+import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 import javax.security.auth.login.LoginException;
@@ -25,7 +28,7 @@ public class DiscordBotMain {
     private String commandChannelID;
     private JDA jda;
     private boolean botActive = false;
-    private Long supporterRank;
+    private String supporterRank;
 
 
     private DiscordBotMain() {
@@ -40,6 +43,7 @@ public class DiscordBotMain {
         builder.setStatus(OnlineStatus.ONLINE);
         builder.addEventListener(new ReadyListener());
         builder.addEventListener(new MessageListener());
+        builder.addEventListener(new RankChangedListener());
         botActive = true;
         try {
             jda = builder.build();
@@ -108,20 +112,56 @@ public class DiscordBotMain {
             return Optional.ofNullable(jda.getRoleById(supporterRank));
         } else {
             String patronGlobal = ConfigurationManager.getDiscordConfig().getPatronGlobalRank();
-            Guild guild = jda.getTextChannelById(ConfigurationManager.getDiscordConfig().getChannelIDRelay()).getGuild();
-            List<Role> roles = guild.getRolesByName(patronGlobal, true);
-            if(!roles.isEmpty()) {
-                supporterRank = roles.get(0).getIdLong();
-                return Optional.ofNullable(jda.getRoleById(supporterRank));
+            if(patronGlobal.isEmpty()) {
+                return Optional.empty();
+            } else {
+                if(getTextChannel().isPresent()) {
+                    Guild guild = getTextChannel().get().getGuild();
+                    supporterRank = patronGlobal;
+                    return Optional.ofNullable(guild.getRoleById(patronGlobal));
+                }
             }
         }
         return Optional.empty();
     }
 
-    public List<Role> getRolesOnUser(String userName){
-        User user = jda.getUsersByName(userName, true).get(0);
+    public List<Role> getRolesOnUser(long userId){
+        User user = jda.getUserById(userId);
         Member member = jda.getTextChannelById(textChannelID).getGuild().getMember(user);
         return member.getRoles();
+    }
+
+    public UserRanks getHighestRankForUser(Long discordUserId){
+        List<UserRanks> userRanks = ConfigurationManager.getDiscordConfig().getDiscordRankIntegration();
+        if(userRanks.isEmpty()) {
+            return null;
+        }
+
+        List<Role> rolesOnUser = getRolesOnUser(discordUserId);
+        List<String> possibleRoleIDs = DiscordUtils.getRoleIDList(userRanks);
+        UserRanks validRankForUser = null;
+
+        for(Role role : rolesOnUser) {
+            if(possibleRoleIDs.contains(role.getId())) {
+                if(validRankForUser == null) {
+                    validRankForUser = DiscordUtils.getUserRanksFromId(userRanks, role.getId());
+                } else {
+                    UserRanks foundRank = DiscordUtils.getUserRanksFromId(userRanks, role.getId());
+                    if(foundRank != null && foundRank.getPriority() > validRankForUser.getPriority()) {
+                        validRankForUser = foundRank;
+                    }
+                }
+            }
+        }
+        return validRankForUser;
+    }
+
+    public List<User> getUsersByName(String name) {
+        if(botActive) {
+            return jda.getUsersByName(name, true);
+        } else {
+            return new ArrayList<User>();
+        }
     }
 
     //This is the lazy way to do it.

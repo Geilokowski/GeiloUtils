@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.Loader;
 import play.ai.dragonrealm.geiloutils.config.discord.ConfigDiscord;
 import play.ai.dragonrealm.geiloutils.config.economy.ConfigEconomy;
 //import play.ai.dragonrealm.geiloutils.config.ftbutils.ConfigFTBUtilsInter;
+import play.ai.dragonrealm.geiloutils.config.ftbutils.ConfigFTBUtilsInter;
 import play.ai.dragonrealm.geiloutils.config.geiloban.BannedBlock;
 import play.ai.dragonrealm.geiloutils.config.geiloban.BannedBlocks;
 import play.ai.dragonrealm.geiloutils.config.general.ConfigGeneral;
@@ -30,10 +31,11 @@ import play.ai.dragonrealm.geiloutils.config.ranks.Rank;
 import play.ai.dragonrealm.geiloutils.config.ranks.Ranks;
 import play.ai.dragonrealm.geiloutils.config.rtp.ConfigRTP;
 import play.ai.dragonrealm.geiloutils.discord.utils.DiscordRank;
+import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
 
 public class ConfigurationManager
 {
-	//public static String configLocation = Loader.instance().getConfigDir() + "/GeiloUtils";
+	public static String configLocation = Loader.instance().getConfigDir() + "/GeiloUtils";
 	static private File fileBannedBlocks = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "BannedBlocks.json");
 	static private File fileGenral = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "General.json");
 	static private File fileKits = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "Kits.json");
@@ -43,7 +45,7 @@ public class ConfigurationManager
 	static private File fileRTP = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "rtp.json");
 	static private File fileDiscord = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "Discord.json");
 	static private File fileEconomy = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "economy.json");
-	//static private File fileFTBUtils = new File(configLocation, "ftbutilities.json");
+	static private File fileFTBUtils = new File(configLocation, "ftbutilities.json");
 	
 	private static BannedBlocks bannedBlocksConfig;
 	private static Kits kitsConfig;
@@ -54,7 +56,7 @@ public class ConfigurationManager
 	private static ConfigDiscord discordConfig;
 	private static ConfigEconomy economyConfig;
 	private static ConfigGeneral generalConfig;
-	//private static ConfigFTBUtilsInter ftbUtilsInter;
+	private static ConfigFTBUtilsInter ftbUtilsInter;
   
 	private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	
@@ -73,9 +75,9 @@ public class ConfigurationManager
 			fileDiscord.createNewFile();
 			fileEconomy.createNewFile();
 
-			/*if(fileFTBUtils.createNewFile() || fileFTBUtils.length() == 0) {
+			if(fileFTBUtils.createNewFile() || fileFTBUtils.length() == 0) {
 				writeToFile(fileFTBUtils, gson.toJson(ConfigFTBUtilsInter.getDefaultConfig()));
-			}*/
+			}
 
 
 		} catch (IOException e) {
@@ -110,7 +112,7 @@ public class ConfigurationManager
 		discordConfig = gson.fromJson(readFromFile(fileDiscord), ConfigDiscord.class);
 		economyConfig  = gson.fromJson(readFromFile(fileEconomy), ConfigEconomy.class);
 		generalConfig = gson.fromJson(readFromFile(fileGenral), ConfigGeneral.class);
-		//ftbUtilsInter = gson.fromJson(readFromFile(fileFTBUtils), ConfigFTBUtilsInter.class);
+		ftbUtilsInter = gson.fromJson(readFromFile(fileFTBUtils), ConfigFTBUtilsInter.class);
 	}
 	  
 	public static void syncFromFields()
@@ -164,10 +166,10 @@ public class ConfigurationManager
 		defaultDiscordConfig.setValidColors(color);
 		defaultDiscordConfig.setServerIP("dragonrealm.me");
         HashMap<Long, DiscordRank> empty = new HashMap<>();
-        empty.put(157740521039724544L, DiscordRank.ADMIN); //This is Ch33z's UID.
 		defaultDiscordConfig.setAdminMap(empty);
-		defaultDiscordConfig.setPatronRanks(new HashMap<>());
-		defaultDiscordConfig.setPatronGlobalRank("");
+		ArrayList<UserRanks> ranks = new ArrayList<>();
+		defaultDiscordConfig.setDiscordRankIntegration(ranks);
+		defaultDiscordConfig.setSupporterRank("");
 		return defaultDiscordConfig;
 	}
 	
@@ -312,11 +314,11 @@ public class ConfigurationManager
 		ConfigurationManager.generalConfig = generalConfig;
 	}
 
-	/*public static ConfigFTBUtilsInter getFtbUtilsInter() {
+	public static ConfigFTBUtilsInter getFtbUtilsInter() {
 		return ftbUtilsInter;
 	}
 
 	public static void setFtbUtilsInter(ConfigFTBUtilsInter ftbUtilsInter){
 		ConfigurationManager.ftbUtilsInter = ftbUtilsInter;
-	}*/
+	}
 }
