@@ -3,6 +3,7 @@ package play.ai.dragonrealm.geiloutils.discord.command.commands;
 import net.dv8tion.jda.core.entities.User;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.text.TextComponentString;
+import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.discord.command.CommandProcessor;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
 
@@ -28,6 +29,11 @@ public class HelpCommand implements ICommand {
             String res = getCommand() + ": " + getCommandDesc() + "\nUsage: " + getCommandUsage();
             sender.sendMessage(new TextComponentString(res));
         } else {
+            if(commandFeatures[0].equals("-v")){
+                sender.sendMessage(new TextComponentString("Running " + GeiloUtils.NAME + " VERSION: " + GeiloUtils.VERSION));
+                return false;
+            }
+
             ICommand cmd = CommandProcessor.getCommand(commandFeatures[0]);
 
             if(cmd == null) {

@@ -24,6 +24,7 @@ public class CommandProcessor {
         register(new RolesCommand());
         register(new SetRolesCommand());
         register(new TpsCommand());
+        register(new KillEntitiesCommand());
 
         register(new DeclareAllCommand());
         register(new MiraCommand());
