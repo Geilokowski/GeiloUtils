@@ -30,7 +30,7 @@ public class HelpCommand implements ICommand {
             sender.sendMessage(new TextComponentString(res));
         } else {
             if(commandFeatures[0].equals("-v")){
-                sender.sendMessage(new TextComponentString("Running " + GeiloUtils.NAME + " VERSION: " + GeiloUtils.VERSION));
+                sender.sendMessage(new TextComponentString("Running " + GeiloUtils.NAME + " -version: " + GeiloUtils.VERSION));
                 return false;
             }
 

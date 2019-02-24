@@ -61,6 +61,6 @@ public class KillEntitiesCommand implements ICommand {
     @Override
     public boolean doesUserHavePermission(User discordUser) {
         DiscordRank rank = DiscordUtils.getAuthForUser(discordUser);
-        return rank == DiscordRank.MOD;
+        return rank.getLevel() >= DiscordRank.MOD.getLevel();
     }
 }
