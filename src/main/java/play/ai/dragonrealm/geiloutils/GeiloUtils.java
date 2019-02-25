@@ -25,6 +25,7 @@ import play.ai.dragonrealm.geiloutils.economy.MoneyDistribution;
 import play.ai.dragonrealm.geiloutils.events.ChatEvent;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerBlocks;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerPlayer;
+import play.ai.dragonrealm.geiloutils.new_configs.JsonManager;
 import play.ai.dragonrealm.geiloutils.utils.CraftingUtils;
 import play.ai.dragonrealm.geiloutils.utils.MoneyUtils;
 
@@ -40,8 +41,11 @@ public class GeiloUtils
 	  
 	  @EventHandler
 	  public void preInit(FMLPreInitializationEvent event) {
-		  ConfigurationManager.init();
 		  logger = event.getModLog();
+
+		  ConfigurationManager.init();
+		  JsonManager.initializeConfigs();
+		  System.exit(0);
 		  MoneyUtils.init();
 	  }
 	  

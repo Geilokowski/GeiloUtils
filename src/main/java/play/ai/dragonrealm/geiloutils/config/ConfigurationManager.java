@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.minecraftforge.fml.common.Loader;
+import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.config.discord.ConfigDiscord;
 import play.ai.dragonrealm.geiloutils.config.economy.ConfigEconomy;
 //import play.ai.dragonrealm.geiloutils.config.ftbutils.ConfigFTBUtilsInter;
@@ -35,7 +36,7 @@ import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
 
 public class ConfigurationManager
 {
-	public static String configLocation = Loader.instance().getConfigDir() + "/GeiloUtils";
+	public static String configLocation = Loader.instance().getConfigDir() + File.separator + GeiloUtils.MODID;
 	static private File fileBannedBlocks = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "BannedBlocks.json");
 	static private File fileGenral = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "General.json");
 	static private File fileKits = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "Kits.json");
