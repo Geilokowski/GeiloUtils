@@ -38,13 +38,15 @@ public class GeiloUtils
 	  public static final String NAME = "GeiloUtils";
 	  public static final String VERSION = "@VERSION@";
 	  private static Logger logger;
+	  private static JsonManager manager;
 	  
 	  @EventHandler
 	  public void preInit(FMLPreInitializationEvent event) {
 		  logger = event.getModLog();
 
-		  ConfigurationManager.init();
-		  JsonManager.initializeConfigs();
+		  //ConfigurationManager.init();
+		  manager = new JsonManager();
+		  manager.initializeConfigs();
 		  System.exit(0);
 		  MoneyUtils.init();
 	  }
@@ -127,4 +129,8 @@ public class GeiloUtils
 	  {
 	    return logger;
 	  }
+
+	public static JsonManager getManager() {
+		return manager;
+	}
 }

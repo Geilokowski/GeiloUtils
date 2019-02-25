@@ -8,6 +8,7 @@ import play.ai.dragonrealm.geiloutils.new_configs.discord.DiscordConfig;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.Optional;
 
 public class JsonManager {
@@ -15,10 +16,11 @@ public class JsonManager {
     private static File configLocation = new File(Loader.instance().getConfigDir() + File.separator + GeiloUtils.MODID);
     private static Gson json = new GsonBuilder().setPrettyPrinting().create();
 
-    public static DiscordConfig discordConfig;
+    private static HashMap<String, IJsonFile> fileTable = new HashMap<>();
 
 
-    public static void initializeConfigs(){
+    public void initializeConfigs(){
+        loadAllConfigs();
 
         if(!configLocation.exists()) {
             configLocation.mkdirs();
@@ -27,59 +29,50 @@ public class JsonManager {
         readFilesToRuntime();
     }
 
+    private void loadAllConfigs() {
+        this.addToManager(DiscordConfig.MANAGER_NAME, new DiscordConfig());
+    }
 
-    public static void writeToFiles() {
-        Field[] fields;
 
-        try {
-            fields = JsonManager.class.getDeclaredFields();
-        }catch (SecurityException e) {
-            GeiloUtils.getLogger().fatal("Unable to reflect config files. Aborting load!");
-            return;
-        }
-
-        for(Field field : fields){
-            try {
-                if (IJsonFile.class.isAssignableFrom(field.getType())) {
-                    IJsonFile file = (IJsonFile) field.getType().newInstance();
-                    File configFile = getFileFromString(file.getFileName());
-                    writeFile(configFile, file);
-
-                }
-            } catch (IllegalAccessException | InstantiationException e){
-                GeiloUtils.getLogger().fatal("Unable to load field reflection for: " + field.toString());
-            }
+    public void writeToFiles() {
+        for(String fileTypes : fileTable.keySet()) {
+            writeToFile(fileTypes);
         }
     }
 
-    public static void readFilesToRuntime(){
-        Field[] fields;
+    public void readFilesToRuntime(){
 
-        try {
-            fields = JsonManager.class.getDeclaredFields();
-        }catch (SecurityException e) {
-            GeiloUtils.getLogger().fatal("Unable to reflect config files. Aborting load!");
-            return;
-        }
+        for(String fileTypes : fileTable.keySet()) {
+            IJsonFile file = fileTable.get(fileTypes);
+            File configFile = getFileFromString(file.getFileName());
 
-        for(Field field : fields){
             try {
-                if (IJsonFile.class.isAssignableFrom(field.getType())) {
-                    IJsonFile file = (IJsonFile) field.getType().newInstance();
-                    File configFile = getFileFromString(file.getFileName());
-
-                    if(configFile.createNewFile() || configFile.length() == 0) {
-                        writeFile(configFile, file.getDefaultJson());
-                        field.set(null, file.getDefaultJson());
-                    } else {
-                        IJsonFile loadFile = loadFile(configFile, file.getClass());
-                        field.set(null, loadFile);
-                    }
+                if(configFile.createNewFile() || configFile.length() == 0) {
+                    writeFile(configFile, file.getDefaultJson());
+                    fileTable.replace(fileTypes, file.getDefaultJson());
+                } else {
+                    IJsonFile loadFile = loadFile(configFile, file.getClass());
+                    fileTable.replace(fileTypes, loadFile);
                 }
-            } catch (IllegalAccessException | InstantiationException | IOException e){
-                GeiloUtils.getLogger().fatal("Unable to load field reflection for: " + field.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
         }
+    }
+
+    public void writeToFile(String localName) {
+        IJsonFile file = fileTable.get(localName);
+        File configFile = getFileFromString(file.getFileName());
+        writeFile(configFile, file);
+    }
+
+    private void addToManager(String name, IJsonFile manager){
+        fileTable.put(name, manager);
+    }
+
+    public IJsonFile getConfig(String name) {
+        return fileTable.get(name);
     }
 
 
@@ -98,7 +91,7 @@ public class JsonManager {
      * @param <T> Type for GSON to load from
      * @return Object of type T, or null on any IOException
      */
-    public static <T extends IJsonFile> T loadFile(File file, Class<T> type) {
+    private static <T extends IJsonFile> T loadFile(File file, Class<T> type) {
         Reader reader;
 
         try {
@@ -117,7 +110,7 @@ public class JsonManager {
      * @param file the file that's to be written.
      * @param object the IJsonData object to write to the file.
      */
-    public static void writeFile(File file, IJsonFile object) {
+    private static void writeFile(File file, IJsonFile object) {
         String fileText = json.toJson(object, object.getClass());
         try (PrintWriter out = new PrintWriter(file)) {
             out.println(fileText);

@@ -1,11 +1,13 @@
 package play.ai.dragonrealm.geiloutils.config.economy;
 
+import play.ai.dragonrealm.geiloutils.new_configs.economy.IEcononmyConfig;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ConfigEconomy {
+public class ConfigEconomy implements IEcononmyConfig {
 	private boolean enabled;
 	private double startingMoney;
 	private boolean goodOlCurrencyIntegration;

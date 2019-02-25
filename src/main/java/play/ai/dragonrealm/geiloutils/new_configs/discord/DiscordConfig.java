@@ -10,7 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DiscordConfig implements IJsonFile {
+public class DiscordConfig implements IJsonFile, IDiscordConfigs {
+
+    public static final String MANAGER_NAME = "discordGeneral";
 
     private boolean enabled;
     private boolean enableMultipleServersOnOneChannel;
