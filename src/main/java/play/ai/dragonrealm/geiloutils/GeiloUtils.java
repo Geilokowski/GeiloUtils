@@ -25,7 +25,9 @@ import play.ai.dragonrealm.geiloutils.economy.MoneyDistribution;
 import play.ai.dragonrealm.geiloutils.events.ChatEvent;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerBlocks;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerPlayer;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
 import play.ai.dragonrealm.geiloutils.new_configs.JsonManager;
+import play.ai.dragonrealm.geiloutils.new_configs.discord.DiscordCommandConfig;
 import play.ai.dragonrealm.geiloutils.utils.CraftingUtils;
 import play.ai.dragonrealm.geiloutils.utils.MoneyUtils;
 
@@ -44,16 +46,16 @@ public class GeiloUtils
 	  public void preInit(FMLPreInitializationEvent event) {
 		  logger = event.getModLog();
 
-		  //ConfigurationManager.init();
+		  ConfigurationManager.init();
 		  manager = new JsonManager();
 		  manager.initializeConfigs();
-		  System.exit(0);
+
 		  MoneyUtils.init();
 	  }
 	  
 	  @EventHandler
 	  public void init(FMLInitializationEvent event) {
-		  if(ConfigurationManager.getDiscordConfig().isEnabled()) {
+		  if(ConfigManager.getDiscordConfig().isEnabled()) {
 			  DiscordBotMain.getInstance().initializeBot();
 		  }
 	  }
@@ -81,14 +83,16 @@ public class GeiloUtils
 	    event.registerServerCommand(new CommandKit());
 	    event.registerServerCommand(new GeiloKill());
 
-	    if(ConfigurationManager.getDiscordConfig().isSingleToMulti()) {
+	    if(ConfigManager.getDiscordConfig().isSingleToMulti()) {
 	    	event.registerServerCommand(new CommandMute());
 	    	event.registerServerCommand(new CommandUnmute());
 		}
 
-		if(ConfigurationManager.getDiscordConfig().isEnabled()) {
+		if(ConfigManager.getDiscordConfig().isEnabled()) {
 	    	event.registerServerCommand(new CommandVerify());
 			CommandProcessor.registerCommands();
+			getManager().addToManager(DiscordCommandConfig.DISCORD_COMMAND_NAME, new DiscordCommandConfig());
+			getManager().readFileToRuntime(DiscordCommandConfig.DISCORD_COMMAND_NAME);
 		}
 
 		if(ConfigurationManager.getEconomyConfig().isPaymentTimerEnabled()) {
@@ -113,14 +117,14 @@ public class GeiloUtils
 
 	  @EventHandler
 	  public void serverStarted(FMLServerStartedEvent event) {
-	  	if(ConfigurationManager.getDiscordConfig().isEnabled()){
+	  	if(ConfigManager.getDiscordConfig().isEnabled()){
 	  		DiscordBotMain.getInstance().sendMessageDiscord("Server Online!");
 		}
 	  }
 
 	  @EventHandler
 	  public void serverStop(FMLServerStoppingEvent event){
-	  	if(ConfigurationManager.getDiscordConfig().isEnabled()) {
+	  	if(ConfigManager.getDiscordConfig().isEnabled()) {
 	  		DiscordBotMain.getInstance().sendMessageDiscord("Server Stopping!");
 		}
 	  }

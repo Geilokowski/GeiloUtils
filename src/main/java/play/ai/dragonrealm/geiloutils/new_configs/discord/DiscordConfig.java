@@ -1,14 +1,10 @@
 package play.ai.dragonrealm.geiloutils.new_configs.discord;
 
-import play.ai.dragonrealm.geiloutils.config.discord.ConfigDiscord;
-import play.ai.dragonrealm.geiloutils.discord.utils.DiscordRank;
 import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
 import play.ai.dragonrealm.geiloutils.new_configs.IJsonFile;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DiscordConfig implements IJsonFile, IDiscordConfigs {
 

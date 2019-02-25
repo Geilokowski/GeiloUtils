@@ -5,6 +5,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 public class EventHandlerPlayer {
@@ -24,7 +25,7 @@ public class EventHandlerPlayer {
 			firstJoin = true;
 		}
 
-		if(ConfigurationManager.getDiscordConfig().isEnabled()){
+		if(ConfigManager.getDiscordConfig().isEnabled()){
 			String message = firstJoin ? " joined for the first time!" : " joined the game";
 			DiscordBotMain.getInstance().sendMessageDiscord(event.player.getDisplayNameString() + message);
 		}
@@ -32,7 +33,7 @@ public class EventHandlerPlayer {
 
 	@SubscribeEvent
 	public void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event){
-		if(ConfigurationManager.getDiscordConfig().isEnabled()){
+		if(ConfigManager.getDiscordConfig().isEnabled()){
 			DiscordBotMain.getInstance().sendMessageDiscord(event.player.getDisplayNameString() + " left the game");
 		}
 	}

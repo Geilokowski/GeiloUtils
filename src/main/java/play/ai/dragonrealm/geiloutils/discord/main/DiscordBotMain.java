@@ -13,6 +13,7 @@ import play.ai.dragonrealm.geiloutils.discord.listener.RankChangedListener;
 import play.ai.dragonrealm.geiloutils.discord.listener.ReadyListener;
 import play.ai.dragonrealm.geiloutils.discord.utils.DiscordUtils;
 import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 import javax.security.auth.login.LoginException;
@@ -32,13 +33,13 @@ public class DiscordBotMain {
 
 
     private DiscordBotMain() {
-        textChannelID = ConfigurationManager.getDiscordConfig().getChannelIDRelay();
-        commandChannelID = ConfigurationManager.getDiscordConfig().getChannelIDCommands();
+        textChannelID = ConfigManager.getDiscordConfig().getChannelIDRelay();
+        commandChannelID = ConfigManager.getDiscordConfig().getChannelIDCommands();
     }
 
     public void initializeBot() {
         JDABuilder builder = new JDABuilder(AccountType.BOT);
-        builder.setToken(ConfigurationManager.getDiscordConfig().getToken());
+        builder.setToken(ConfigManager.getDiscordConfig().getToken());
         builder.setAutoReconnect(true);
         builder.setStatus(OnlineStatus.ONLINE);
         builder.addEventListener(new ReadyListener());
@@ -113,7 +114,7 @@ public class DiscordBotMain {
         if(supporterRank != null) {
             return Optional.ofNullable(jda.getRoleById(supporterRank));
         } else {
-            String patronGlobal = ConfigurationManager.getDiscordConfig().getPatronGlobalRank();
+            String patronGlobal = ConfigManager.getDiscordConfig().getPatronGlobalRank();
             if(patronGlobal.isEmpty()) {
                 return Optional.empty();
             } else {
@@ -134,7 +135,7 @@ public class DiscordBotMain {
     }
 
     public UserRanks getHighestRankForUser(Long discordUserId){
-        List<UserRanks> userRanks = ConfigurationManager.getDiscordConfig().getDiscordRankIntegration();
+        List<UserRanks> userRanks = ConfigManager.getDiscordConfig().getDiscordRankIntegration();
         if(userRanks.isEmpty()) {
             return null;
         }

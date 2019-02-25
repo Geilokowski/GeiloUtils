@@ -4,6 +4,7 @@ import net.dv8tion.jda.core.entities.User;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.discord.command.BotSender;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -16,23 +17,23 @@ public class DiscordUtils {
 
 
     public static DiscordRank getAuthForUser(User user) {
-        Map<Long, DiscordRank> adminMap = ConfigurationManager.getDiscordConfig().getAdminMap();
+        /*Map<Long, DiscordRank> adminMap = ConfigManager.getDiscordConfig().getAdminMap();
         if(adminMap != null && adminMap.size() > 0) {
             for (Long userId : adminMap.keySet()) {
                 if (user.getIdLong() == userId) {
                     return adminMap.get(userId);
                 }
             }
-        }
+        }*/
         return DiscordRank.COMMONER;
     }
 
     public static void setRankForDiscordUser(long userId, DiscordRank rank) {
-        Map<Long, DiscordRank> adminMap = ConfigurationManager.getDiscordConfig().getAdminMap();
+        /*Map<Long, DiscordRank> adminMap = ConfigManager.getDiscordConfig().getAdminMap();
         adminMap.put(userId, rank);
-        ConfigurationManager.getDiscordConfig().setAdminMap(adminMap);
+        ConfigManager.getDiscordConfig().setAdminMap(adminMap);
 
-        ConfigurationManager.syncFromFields();
+        ConfigurationManager.syncFromFields();*/
     }
 
     public static void autoModRankUser(@Nonnull UserRanks rank, String playerUsername) {

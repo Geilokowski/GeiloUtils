@@ -43,21 +43,24 @@ public class JsonManager {
     public void readFilesToRuntime(){
 
         for(String fileTypes : fileTable.keySet()) {
-            IJsonFile file = fileTable.get(fileTypes);
-            File configFile = getFileFromString(file.getFileName());
+            readFileToRuntime(fileTypes);
+        }
+    }
 
-            try {
-                if(configFile.createNewFile() || configFile.length() == 0) {
-                    writeFile(configFile, file.getDefaultJson());
-                    fileTable.replace(fileTypes, file.getDefaultJson());
-                } else {
-                    IJsonFile loadFile = loadFile(configFile, file.getClass());
-                    fileTable.replace(fileTypes, loadFile);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+    public void readFileToRuntime(String localName) {
+        IJsonFile file = fileTable.get(localName);
+        File configFile = getFileFromString(file.getFileName());
+
+        try {
+            if(configFile.createNewFile() || configFile.length() == 0) {
+                writeFile(configFile, file.getDefaultJson());
+                fileTable.replace(localName, file.getDefaultJson());
+            } else {
+                IJsonFile loadFile = loadFile(configFile, file.getClass());
+                fileTable.replace(localName, loadFile);
             }
-
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -67,8 +70,8 @@ public class JsonManager {
         writeFile(configFile, file);
     }
 
-    private void addToManager(String name, IJsonFile manager){
-        fileTable.put(name, manager);
+    public void addToManager(String name, IJsonFile jsonContainer){
+        fileTable.put(name, jsonContainer);
     }
 
     public IJsonFile getConfig(String name) {

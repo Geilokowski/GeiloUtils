@@ -9,6 +9,7 @@ import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.discord.utils.DiscordUtils;
 import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 import java.util.List;
@@ -52,7 +53,7 @@ public class RankChangedListener extends ListenerAdapter {
     }
 
     private UserRanks getPrevRole(List<Role> rolesOnUser){
-        List<UserRanks> userRanks = ConfigurationManager.getDiscordConfig().getDiscordRankIntegration();
+        List<UserRanks> userRanks = ConfigManager.getDiscordConfig().getDiscordRankIntegration();
         if(userRanks.isEmpty()) {
             return null;
         }

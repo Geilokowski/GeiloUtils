@@ -44,7 +44,6 @@ public class ConfigurationManager
 	static private File fileRanks = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "Ranks.json");
 	static private File filePlayerstats = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "Playerstats.json");
 	static private File fileRTP = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "rtp.json");
-	static private File fileDiscord = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "Discord.json");
 	static private File fileEconomy = new File(Loader.instance().getConfigDir() + "/GeiloUtils", "economy.json");
 	static private File fileFTBUtils = new File(configLocation, "ftbutilities.json");
 	
@@ -54,7 +53,6 @@ public class ConfigurationManager
 	private static Playerstats playerstats;
 	private static Ranks rankConfig;
 	private static ConfigRTP rtpConfig;
-	private static ConfigDiscord discordConfig;
 	private static ConfigEconomy economyConfig;
 	private static ConfigGeneral generalConfig;
 	private static ConfigFTBUtilsInter ftbUtilsInter;
@@ -73,7 +71,6 @@ public class ConfigurationManager
 			filePlayerstats.createNewFile();
 			fileGenral.createNewFile();
 			fileRTP.createNewFile();
-			fileDiscord.createNewFile();
 			fileEconomy.createNewFile();
 
 			if(fileFTBUtils.createNewFile() || fileFTBUtils.length() == 0) {
@@ -92,7 +89,6 @@ public class ConfigurationManager
 			writeToFile(filePermissions, gson.toJson(defaultPermissions()));
 			writeToFile(filePlayerstats, gson.toJson(defaultPlayerstats()));
 			writeToFile(fileKits, gson.toJson(defaultKits()));
-			writeToFile(fileDiscord, gson.toJson(defaultDiscordConfig()));
 			writeToFile(fileEconomy, gson.toJson(defaultEconomyConfig()));
 			writeToFile(fileGenral, gson.toJson(defaultGeneralConfig()));
 			
@@ -110,7 +106,6 @@ public class ConfigurationManager
 		playerstats= gson.fromJson(readFromFile(filePlayerstats), Playerstats.class);
 		rankConfig = gson.fromJson(readFromFile(fileRanks), Ranks.class);
 		rtpConfig = gson.fromJson(readFromFile(fileRTP), ConfigRTP.class);
-		discordConfig = gson.fromJson(readFromFile(fileDiscord), ConfigDiscord.class);
 		economyConfig  = gson.fromJson(readFromFile(fileEconomy), ConfigEconomy.class);
 		generalConfig = gson.fromJson(readFromFile(fileGenral), ConfigGeneral.class);
 		ftbUtilsInter = gson.fromJson(readFromFile(fileFTBUtils), ConfigFTBUtilsInter.class);
@@ -124,7 +119,6 @@ public class ConfigurationManager
 		writeToFile(filePermissions, gson.toJson(permissionsConfig));
 		writeToFile(filePlayerstats, gson.toJson(playerstats));
 		writeToFile(fileKits, gson.toJson(kitsConfig));
-		writeToFile(fileDiscord, gson.toJson(discordConfig));
 		writeToFile(fileEconomy, gson.toJson(economyConfig));
 		writeToFile(fileGenral, gson.toJson(generalConfig));
 		//writeToFile(fileFTBUtils, gson.toJson(ftbUtilsInter));
@@ -145,34 +139,7 @@ public class ConfigurationManager
 		defaultEconomyConfig.setPermPaymentMap(payements);
 		return defaultEconomyConfig;
 	}
-	
-	private static ConfigDiscord defaultDiscordConfig() {
-		ConfigDiscord defaultDiscordConfig = new ConfigDiscord();
-		defaultDiscordConfig.setEnabled(false);
-		defaultDiscordConfig.setSingleToMulti(false);
-		defaultDiscordConfig.setMinecraftChatPrefix("§3[§6Discord§3] §r");
-		defaultDiscordConfig.setChannelIDCommands("");
-		defaultDiscordConfig.setChannelIDRelay("");
-		defaultDiscordConfig.setToken("");
-		defaultDiscordConfig.setDiscordCommandPrefix("!");
-		defaultDiscordConfig.setDiscordChatPrefix("[%s] >> ");
-		ArrayList<String> color = new ArrayList<>();
-		color.add("§c");
-		color.add("§e");
-		color.add("§2");
-		color.add("§a");
-		color.add("§b");
-		color.add("§3");
-		color.add("§9");
-		defaultDiscordConfig.setValidColors(color);
-		defaultDiscordConfig.setServerIP("dragonrealm.me");
-        HashMap<Long, DiscordRank> empty = new HashMap<>();
-		defaultDiscordConfig.setAdminMap(empty);
-		ArrayList<UserRanks> ranks = new ArrayList<>();
-		defaultDiscordConfig.setDiscordRankIntegration(ranks);
-		defaultDiscordConfig.setSupporterRank("");
-		return defaultDiscordConfig;
-	}
+
 	
 	private static Kits defaultKits() {
 		Kits kits = new Kits();
@@ -291,14 +258,7 @@ public class ConfigurationManager
 	public static void setRtpConfig(ConfigRTP rtpConfig) {
 		ConfigurationManager.rtpConfig = rtpConfig;
 	}
-	
-	public static ConfigDiscord getDiscordConfig() {
-		return discordConfig;
-	}
-	
-	public static void setDiscordConfig(ConfigDiscord discordConfig) {
-		ConfigurationManager.discordConfig = discordConfig;
-	}
+
 	
 	public static ConfigEconomy getEconomyConfig() {
 		return economyConfig;
