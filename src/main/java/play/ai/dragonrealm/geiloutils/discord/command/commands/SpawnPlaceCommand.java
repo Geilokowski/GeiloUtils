@@ -15,8 +15,6 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.discord.command.GeiloPorter;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
-import play.ai.dragonrealm.geiloutils.discord.utils.DiscordRank;
-import play.ai.dragonrealm.geiloutils.discord.utils.DiscordUtils;
 
 public class SpawnPlaceCommand implements ICommand {
     @Override
@@ -96,7 +94,8 @@ public class SpawnPlaceCommand implements ICommand {
 
     @Override
     public boolean doesUserHavePermission(User discordUser) {
-        DiscordRank rank = DiscordUtils.getAuthForUser(discordUser);
-        return rank.getLevel() >= DiscordRank.MOD.getLevel();
+        /*DiscordRank rank = DiscordUtils.getAuthForUser(discordUser);
+        return rank.getLevel() >= DiscordRank.MOD.getLevel();*/
+        return true;
     }
 }

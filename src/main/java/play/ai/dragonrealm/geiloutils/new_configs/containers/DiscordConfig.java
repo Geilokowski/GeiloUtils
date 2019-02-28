@@ -1,7 +1,8 @@
-package play.ai.dragonrealm.geiloutils.new_configs.discord;
+package play.ai.dragonrealm.geiloutils.new_configs.containers;
 
 import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
 import play.ai.dragonrealm.geiloutils.new_configs.IJsonFile;
+import play.ai.dragonrealm.geiloutils.new_configs.interfaces.IDiscordConfigs;
 
 import java.util.ArrayList;
 import java.util.List;

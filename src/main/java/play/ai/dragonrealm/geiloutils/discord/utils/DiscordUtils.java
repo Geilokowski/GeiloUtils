@@ -16,26 +16,6 @@ import java.util.concurrent.Callable;
 public class DiscordUtils {
 
 
-    public static DiscordRank getAuthForUser(User user) {
-        /*Map<Long, DiscordRank> adminMap = ConfigManager.getDiscordConfig().getAdminMap();
-        if(adminMap != null && adminMap.size() > 0) {
-            for (Long userId : adminMap.keySet()) {
-                if (user.getIdLong() == userId) {
-                    return adminMap.get(userId);
-                }
-            }
-        }*/
-        return DiscordRank.COMMONER;
-    }
-
-    public static void setRankForDiscordUser(long userId, DiscordRank rank) {
-        /*Map<Long, DiscordRank> adminMap = ConfigManager.getDiscordConfig().getAdminMap();
-        adminMap.put(userId, rank);
-        ConfigManager.getDiscordConfig().setAdminMap(adminMap);
-
-        ConfigurationManager.syncFromFields();*/
-    }
-
     public static void autoModRankUser(@Nonnull UserRanks rank, String playerUsername) {
         String[] commands = rank.getRawRankCommands();
         FMLCommonHandler.instance().getMinecraftServerInstance().callFromMainThread(new Callable<Object>() {

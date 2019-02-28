@@ -26,7 +26,7 @@ public class CommandProcessor {
         register(new InternetProtocolCommand());
         register(new TellCommand());
         register(new RolesCommand());
-        register(new SetRolesCommand());
+        //register(new SetRolesCommand());
         register(new TpsCommand());
         register(new KillEntitiesCommand());
 
@@ -87,10 +87,12 @@ public class CommandProcessor {
     public static String listCommandsForUser(User discordUser) {
         StringBuilder response = new StringBuilder("Commands (you can run **bolded** ones):\n");
         for (ICommand command: commandMap.values()) {
-            if(doesUserHavePermission(discordUser, command.getCommand()) && ConfigManager.getCommandConfig().isCommandEnabled(command.getCommand())) {
-                response.append("**").append(command.getCommand()).append("**,");
-            } else {
-                response.append(command.getCommand()).append(",");
+            if(ConfigManager.getCommandConfig().isCommandEnabled(command.getCommand().toLowerCase())) {
+                if (doesUserHavePermission(discordUser, command.getCommand().toLowerCase())) {
+                    response.append("**").append(command.getCommand()).append("**,");
+                } else {
+                    response.append(command.getCommand()).append(",");
+                }
             }
         }
         int len = response.length();

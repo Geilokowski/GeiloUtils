@@ -11,8 +11,6 @@ import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
 import play.ai.dragonrealm.geiloutils.discord.command.CommandProcessor;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
-import play.ai.dragonrealm.geiloutils.discord.utils.DiscordRank;
-import play.ai.dragonrealm.geiloutils.discord.utils.DiscordUtils;
 import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
@@ -54,7 +52,7 @@ public class MessageListener extends ListenerAdapter{
 				FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendMessage(formattedMessage);
 			}
 
-			checkIfUserNeedsSpaming(event);
+			//checkIfUserNeedsSpaming(event);
 		}
 	}
 
@@ -79,10 +77,10 @@ public class MessageListener extends ListenerAdapter{
 		return "[" + color + botName + "§r]";
 	}
 
-	public static void checkIfUserNeedsSpaming(GuildMessageReceivedEvent event){
+	/*public static void checkIfUserNeedsSpaming(GuildMessageReceivedEvent event){
 		DiscordRank rank = DiscordUtils.getAuthForUser(event.getAuthor());
 		if(rank == DiscordRank.UNUSED) {
 			event.getMessage().addReaction("\uD83D\uDEAF").queue();
 		}
-	}
+	}*/
 }

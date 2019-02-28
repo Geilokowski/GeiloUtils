@@ -4,12 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraftforge.fml.common.Loader;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
-import play.ai.dragonrealm.geiloutils.new_configs.discord.DiscordConfig;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.DiscordConfig;
 
 import java.io.*;
-import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.Optional;
 
 public class JsonManager {
 

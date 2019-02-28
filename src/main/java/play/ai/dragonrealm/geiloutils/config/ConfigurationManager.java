@@ -26,13 +26,10 @@ import play.ai.dragonrealm.geiloutils.config.geiloban.BannedBlocks;
 import play.ai.dragonrealm.geiloutils.config.general.ConfigGeneral;
 import play.ai.dragonrealm.geiloutils.config.kits.Kits;
 import play.ai.dragonrealm.geiloutils.config.permissions.Permissions;
-import play.ai.dragonrealm.geiloutils.config.playerstats.KitLastUsed;
 import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstats;
 import play.ai.dragonrealm.geiloutils.config.ranks.Rank;
 import play.ai.dragonrealm.geiloutils.config.ranks.Ranks;
 import play.ai.dragonrealm.geiloutils.config.rtp.ConfigRTP;
-import play.ai.dragonrealm.geiloutils.discord.utils.DiscordRank;
-import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
 
 public class ConfigurationManager
 {
@@ -214,25 +211,13 @@ public class ConfigurationManager
 	public static BannedBlocks getBannedBlocksConfig() {
 		return bannedBlocksConfig;
 	}
-	
-	public static void setBannedBlocksConfig(BannedBlocks bannedBlocksConfig) {
-		ConfigurationManager.bannedBlocksConfig = bannedBlocksConfig;
-	}
-	
+
 	public static Kits getKitsConfig() {
 		return kitsConfig;
 	}
 	
-	public static void setKitsConfig(Kits kitsConfig) {
-		ConfigurationManager.kitsConfig = kitsConfig;
-	}
-	
 	public static Permissions getPermissionsConfig() {
 		return permissionsConfig;
-	}
-	
-	public static void setPermissionsConfig(Permissions permissionsConfig) {
-		ConfigurationManager.permissionsConfig = permissionsConfig;
 	}
 	
 	public static Playerstats getPlayerstats() {
@@ -247,40 +232,14 @@ public class ConfigurationManager
 		return rankConfig;
 	}
 	
-	public static void setRankConfig(Ranks rankConfig) {
-		ConfigurationManager.rankConfig = rankConfig;
-	}
-	
-	public static ConfigRTP getRtpConfig() {
-		return rtpConfig;
-	}
-	
-	public static void setRtpConfig(ConfigRTP rtpConfig) {
-		ConfigurationManager.rtpConfig = rtpConfig;
-	}
+	public static ConfigRTP getRtpConfig() { return rtpConfig; }
 
-	
 	public static ConfigEconomy getEconomyConfig() {
 		return economyConfig;
-	}
-	
-	public static void setEconomyConfig(ConfigEconomy economyConfig) {
-		ConfigurationManager.economyConfig = economyConfig;
 	}
 
 	public static ConfigGeneral getGeneralConfig() {
 		return generalConfig;
 	}
 
-	public static void setGeneralConfig(ConfigGeneral generalConfig) {
-		ConfigurationManager.generalConfig = generalConfig;
-	}
-
-	public static ConfigFTBUtilsInter getFtbUtilsInter() {
-		return ftbUtilsInter;
-	}
-
-	public static void setFtbUtilsInter(ConfigFTBUtilsInter ftbUtilsInter){
-		ConfigurationManager.ftbUtilsInter = ftbUtilsInter;
-	}
 }

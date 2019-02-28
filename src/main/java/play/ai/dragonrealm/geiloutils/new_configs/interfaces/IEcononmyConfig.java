@@ -1,4 +1,4 @@
-package play.ai.dragonrealm.geiloutils.new_configs.economy;
+package play.ai.dragonrealm.geiloutils.new_configs.interfaces;
 
 import play.ai.dragonrealm.geiloutils.config.economy.EcoItem;
 

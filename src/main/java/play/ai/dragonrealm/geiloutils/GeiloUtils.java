@@ -27,7 +27,7 @@ import play.ai.dragonrealm.geiloutils.events.EventHandlerBlocks;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerPlayer;
 import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
 import play.ai.dragonrealm.geiloutils.new_configs.JsonManager;
-import play.ai.dragonrealm.geiloutils.new_configs.discord.DiscordCommandConfig;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.DiscordCommandConfig;
 import play.ai.dragonrealm.geiloutils.utils.CraftingUtils;
 import play.ai.dragonrealm.geiloutils.utils.MoneyUtils;
 
@@ -69,7 +69,7 @@ public class GeiloUtils
 	    event.registerServerCommand(new CommandSell());
 	    event.registerServerCommand(new CommandBalance());
 	    event.registerServerCommand(new CommandPay());
-	    if (ConfigurationManager.getEconomyConfig().isEnabled())
+	    if (ConfigManager.getEconomyConfig().isEnabled())
 	    {
 	      event.registerServerCommand(new CommandDeposit());
 	      event.registerServerCommand(new CommandWithdraw());
@@ -95,7 +95,7 @@ public class GeiloUtils
 			getManager().readFileToRuntime(DiscordCommandConfig.DISCORD_COMMAND_NAME);
 		}
 
-		if(ConfigurationManager.getEconomyConfig().isPaymentTimerEnabled()) {
+		if(ConfigManager.getEconomyConfig().isPaymentTimerEnabled()) {
 			event.registerServerCommand(new MuteDepositMessageCommand());
 		}
 

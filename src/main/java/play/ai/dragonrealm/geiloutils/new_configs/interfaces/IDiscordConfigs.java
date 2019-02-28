@@ -1,4 +1,4 @@
-package play.ai.dragonrealm.geiloutils.new_configs.discord;
+package play.ai.dragonrealm.geiloutils.new_configs.interfaces;
 
 import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
 

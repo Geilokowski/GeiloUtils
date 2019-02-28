@@ -2,10 +2,10 @@ package play.ai.dragonrealm.geiloutils.new_configs;
 
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.new_configs.discord.DiscordCommandConfig;
-import play.ai.dragonrealm.geiloutils.new_configs.discord.DiscordConfig;
-import play.ai.dragonrealm.geiloutils.new_configs.discord.IDiscordConfigs;
-import play.ai.dragonrealm.geiloutils.new_configs.economy.IEcononmyConfig;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.DiscordCommandConfig;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.DiscordConfig;
+import play.ai.dragonrealm.geiloutils.new_configs.interfaces.IDiscordConfigs;
+import play.ai.dragonrealm.geiloutils.new_configs.interfaces.IEcononmyConfig;
 
 public class ConfigManager {
 
@@ -25,6 +25,9 @@ public class ConfigManager {
         return (DiscordCommandConfig) GeiloUtils.getManager().getConfig(DiscordCommandConfig.DISCORD_COMMAND_NAME);
     }
 
+    public static void writeDiscordCommandFile(){
+        GeiloUtils.getManager().writeToFile(DiscordCommandConfig.DISCORD_COMMAND_NAME);
+    }
 
 
 

@@ -1,6 +1,6 @@
 package play.ai.dragonrealm.geiloutils.config.discord;
 
-import play.ai.dragonrealm.geiloutils.discord.utils.DiscordRank;
+
 import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
 
 import java.util.List;
@@ -17,7 +17,6 @@ public class ConfigDiscord {
 	private String discordCommandPrefix;
 	private List<String> validColors;
 	private String serverIP;
-	private Map<Long, DiscordRank> adminMap;
 	private List<UserRanks> discordRankIntegration;
 	private String supporterRank;
 
@@ -94,14 +93,6 @@ public class ConfigDiscord {
 
 	public String getServerIP() {
 		return serverIP;
-	}
-
-	public void setAdminMap(Map<Long, DiscordRank> adminMap) {
-		this.adminMap = adminMap;
-	}
-
-	public Map<Long, DiscordRank> getAdminMap() {
-		return adminMap;
 	}
 
     public String getPatronGlobalRank() {

@@ -8,6 +8,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
 
 public class CommandGeiloEconomy extends CommandBase{
 
@@ -54,13 +55,13 @@ public class CommandGeiloEconomy extends CommandBase{
 	            boolean enable = Boolean.parseBoolean(args[2]);
 	            if (enable)
 	            {
-	            	ConfigurationManager.getEconomyConfig().setGoodOlCurrencyIntegration(true);
+	              ConfigManager.getEconomyConfig().setGoodOlCurrencyIntegration(true);
 	              ConfigurationManager.syncFromFields();
 	              ITextComponent msg = new TextComponentString("[GeiloEconomy] Enabled Good ol' Currency Integration");
 	              sender.sendMessage(msg);
 	              return;
 	            }
-	            ConfigurationManager.getEconomyConfig().setGoodOlCurrencyIntegration(false);
+	            ConfigManager.getEconomyConfig().setGoodOlCurrencyIntegration(false);
 	            ConfigurationManager.syncFromFields();
 	            ITextComponent msg = new TextComponentString("[GeiloEconomy] Disabled Good ol' Currency Integration");
 	            sender.sendMessage(msg);

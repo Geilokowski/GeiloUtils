@@ -15,7 +15,7 @@ public class EventHandlerPlayer {
 		if (PlayerUtils.isFirstJoin(event.player)){
 			Playerstat ps = new Playerstat();
 			ps.setName(event.player.getDisplayNameString());
-			ps.setMoney(ConfigurationManager.getEconomyConfig().getStartingMoney());
+			ps.setMoney(ConfigManager.getEconomyConfig().getStartingMoney());
 			ps.setUuid(event.player.getCachedUniqueIdString());
 			ps.setRank(ConfigurationManager.getGeneralConfig().getStandartRank());
 			ps.setDirectDeposit(true);

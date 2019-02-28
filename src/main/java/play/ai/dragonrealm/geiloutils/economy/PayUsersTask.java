@@ -8,6 +8,7 @@ import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.config.permissions.Permission;
 import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
 import play.ai.dragonrealm.geiloutils.config.ranks.Rank;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
 import play.ai.dragonrealm.geiloutils.utils.PermissionUtils;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
@@ -22,7 +23,7 @@ public class PayUsersTask extends TimerTask {
         GeiloUtils.getLogger().info("Payments Starting");
         if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList() != null) { //DON'T TRUST INTELLIJ HERE, THIS IS NULL ON LOADING GAME!
             for (EntityPlayerMP player : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers()) {
-                double baseIncome = ConfigurationManager.getEconomyConfig().getBaseTierIncome() * ConfigurationManager.getEconomyConfig().getBaseMultiplier();
+                double baseIncome = ConfigManager.getEconomyConfig().getBaseTierIncome() * ConfigManager.getEconomyConfig().getBaseMultiplier();
                 double rankIncome = 0;
                 Playerstat stat = PlayerUtils.getPlayerstatByUUID(player.getUniqueID().toString());
                 if(stat != null) {
@@ -31,8 +32,8 @@ public class PayUsersTask extends TimerTask {
                     if(rank != null){
                         List<Permission> p = rank.getPermList();
                         for(Permission perm: p){
-                            if(ConfigurationManager.getEconomyConfig().getPermPaymentMap().containsKey(perm.getName())) {
-                                rankIncome = ConfigurationManager.getEconomyConfig().getPermPaymentMap().get(perm.getName());
+                            if(ConfigManager.getEconomyConfig().getPermPaymentMap().containsKey(perm.getName())) {
+                                rankIncome = ConfigManager.getEconomyConfig().getPermPaymentMap().get(perm.getName());
                                 break;
                             }
                         }
