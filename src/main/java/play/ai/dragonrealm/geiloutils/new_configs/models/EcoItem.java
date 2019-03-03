@@ -1,4 +1,4 @@
-package play.ai.dragonrealm.geiloutils.config.economy;
+package play.ai.dragonrealm.geiloutils.new_configs.models;
 
 public class EcoItem {
 	private String registryName;

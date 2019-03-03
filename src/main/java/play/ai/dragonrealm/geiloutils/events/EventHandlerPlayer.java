@@ -17,7 +17,7 @@ public class EventHandlerPlayer {
 			ps.setName(event.player.getDisplayNameString());
 			ps.setMoney(ConfigManager.getEconomyConfig().getStartingMoney());
 			ps.setUuid(event.player.getCachedUniqueIdString());
-			ps.setRank(ConfigurationManager.getGeneralConfig().getStandartRank());
+			ps.setRank(ConfigManager.getGeneralConfig().getStandardRank());
 			ps.setDirectDeposit(true);
 			ps.setMutePaymentMsg(false);
 			ConfigurationManager.getPlayerstats().getPlayerstats().add(ps);

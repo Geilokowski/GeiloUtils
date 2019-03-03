@@ -1,8 +1,7 @@
 package play.ai.dragonrealm.geiloutils.new_configs.interfaces;
 
-import play.ai.dragonrealm.geiloutils.config.economy.EcoItem;
+import play.ai.dragonrealm.geiloutils.new_configs.models.EcoItem;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 

@@ -9,7 +9,6 @@ import javax.annotation.Nonnull;
 import java.util.HashMap;
 
 public class DiscordCommandConfig implements IJsonFile {
-    public static final String DISCORD_COMMAND_NAME = "discordCommands";
 
     HashMap<String, CommandsData> commandMeta;
 

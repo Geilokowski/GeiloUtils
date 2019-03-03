@@ -9,8 +9,6 @@ import java.util.List;
 
 public class DiscordConfig implements IJsonFile, IDiscordConfigs {
 
-    public static final String MANAGER_NAME = "discordGeneral";
-
     private boolean enabled;
     private boolean enableMultipleServersOnOneChannel;
     private String token;

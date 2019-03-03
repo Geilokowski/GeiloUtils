@@ -5,6 +5,9 @@ import com.google.gson.GsonBuilder;
 import net.minecraftforge.fml.common.Loader;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.new_configs.containers.DiscordConfig;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.EconomyConfig;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.FTBUtilsConfig;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.GeneralConfig;
 
 import java.io.*;
 import java.util.HashMap;
@@ -28,7 +31,11 @@ public class JsonManager {
     }
 
     private void loadAllConfigs() {
-        this.addToManager(DiscordConfig.MANAGER_NAME, new DiscordConfig());
+        this.addToManager(FileEnum.DISCORD_GENERAL, new DiscordConfig());
+        this.addToManager(FileEnum.GENERAL, new GeneralConfig());
+        this.addToManager(FileEnum.ECONOMY, new EconomyConfig());
+        this.addToManager(FileEnum.GENERAL, new GeneralConfig());
+        this.addToManager(FileEnum.FTB_UTILITIES, new FTBUtilsConfig());
     }
 
 
@@ -62,18 +69,22 @@ public class JsonManager {
         }
     }
 
-    public void writeToFile(String localName) {
+    public void writeToFile(FileEnum fileEnum) {
+        writeToFile(fileEnum.name());
+    }
+
+    private void writeToFile(String localName) {
         IJsonFile file = fileTable.get(localName);
         File configFile = getFileFromString(file.getFileName());
         writeFile(configFile, file);
     }
 
-    public void addToManager(String name, IJsonFile jsonContainer){
-        fileTable.put(name, jsonContainer);
+    public void addToManager(FileEnum fileType, IJsonFile jsonContainer){
+        fileTable.put(fileType.name(), jsonContainer);
     }
 
-    public IJsonFile getConfig(String name) {
-        return fileTable.get(name);
+    public IJsonFile getConfig(FileEnum fileEnum) {
+        return fileTable.get(fileEnum.name());
     }
 
 
