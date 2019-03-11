@@ -3,8 +3,10 @@ pipeline {
   stages {
     stage('Setup CI Environment') {
       steps {
-        sh 'mvn clean'
-        sh 'mvn compile'
+        withMaven(mavenSettingsConfig: 'pom', mavenSettingsFilePath: './') {
+          sh 'mvn clean package'
+        }
+
       }
     }
     stage('Artifact') {
