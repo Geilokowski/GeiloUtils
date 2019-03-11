@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Setup CI Environment') {
       steps {
-        withMaven(mavenSettingsConfig: 'pom', mavenSettingsFilePath: './') {
+        withMaven(mavenSettingsConfig: 'pom', mavenSettingsFilePath: './', maven: 'M3') {
           sh 'mvn clean package'
         }
 
