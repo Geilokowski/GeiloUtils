@@ -4,14 +4,9 @@ pipeline {
     stage('Setup CI Environment') {
       steps {
         withMaven(maven: 'm3') {
-          sh 'mvn clean package'
+          sh 'mvn clean package -Dv=${BUILD_NUMBER}'
         }
 
-      }
-    }
-    stage('Artifact') {
-      steps {
-        archiveArtifacts '**/target/*.jar'
       }
     }
   }
