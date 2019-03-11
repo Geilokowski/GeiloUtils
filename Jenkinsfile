@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Setup CI Environment') {
       steps {
-        withMaven(maven: 'M3') {
+        withMaven(maven: 'm2') {
           sh 'mvn clean package'
         }
 
