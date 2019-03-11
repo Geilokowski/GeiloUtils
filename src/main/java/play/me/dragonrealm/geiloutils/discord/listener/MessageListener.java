@@ -1,0 +1,82 @@
+package play.me.dragonrealm.geiloutils.discord.listener;
+
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import org.bukkit.entity.Player;
+import play.me.dragonrealm.geiloutils.GeiloUtils;
+import play.me.dragonrealm.geiloutils.configs.models.PlayerStats;
+import play.me.dragonrealm.geiloutils.discord.command.CommandProcessor;
+import play.me.dragonrealm.geiloutils.discord.main.DiscordBotMain;
+import play.me.dragonrealm.geiloutils.configs.ConfigManager;
+import play.me.dragonrealm.geiloutils.utils.PlayerUtils;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class MessageListener extends ListenerAdapter{
+
+	private static Map<String, String> colorMap = new HashMap<>();
+	private static List<String> colors = ConfigManager.getDiscordConfig().getValidColors();
+
+	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+		if(event.getChannel().getId().equals(ConfigManager.getDiscordConfig().getChannelIDRelay()) && !(event.getAuthor().getId().equals(DiscordBotMain.getInstance().getBotID()))) {
+
+			Message msg = event.getMessage();
+
+			if(msg.getContentDisplay().startsWith(ConfigManager.getDiscordConfig().getDiscordCommandPrefix())){
+				boolean deleteMessage = CommandProcessor.processCommand(event.getAuthor(), msg.getContentDisplay());
+				if(deleteMessage){
+					msg.delete().queue();
+				}
+				return;
+            }
+
+
+			String output = getPrefix(msg.getAuthor().isBot(), msg.getAuthor().getName()) + " " + "\u00A76" + "\u00BB " + "\u00A7r" +msg.getContentDisplay();
+			// Multi-server chat clogs up the readers view. This allows us to mute any chat network we don't like
+			if (ConfigManager.getDiscordConfig().isSingleToMulti()){
+				for (Player player : GeiloUtils.getInstanceServer().getOnlinePlayers()) {
+					PlayerStats ps = PlayerUtils.getPlayerstatByUUID(player.getUniqueId().toString());
+					if(ps != null && !ps.getMutedChats().contains(msg.getAuthor().getName())) {
+						player.sendMessage(output);
+					}
+				}
+				// But if not in multi-mode, eh, just launch it server wide!
+			} else {
+				GeiloUtils.getInstanceServer().broadcastMessage(output);
+			}
+
+			//checkIfUserNeedsSpaming(event);
+		}
+	}
+
+	private static String getPrefix(boolean isBot, String authorName) {
+		if(isBot){
+			// If the message is coming from a bot, make it look prettier -> [SERVER] >> <Player> message
+			return getBotPrefix(authorName);
+		} else {
+			// Not a bot, this is from a discord user, so [DISCORD] <User> >> msg
+			return ConfigManager.getDiscordConfig().getMinecraftChatPrefix() + authorName;
+		}
+	}
+
+	public static String getBotPrefix(String botName) {
+		String color;
+		if(colorMap.containsKey(botName)){
+			color = colorMap.get(botName);
+		} else {
+			colorMap.put(botName, colors.get(colorMap.size() % colors.size()));
+			color = colorMap.get(botName);
+		}
+		return "[" + color + botName + "§r]";
+	}
+
+	/*public static void checkIfUserNeedsSpaming(GuildMessageReceivedEvent event){
+		DiscordRank rank = DiscordUtils.getAuthForUser(event.getAuthor());
+		if(rank == DiscordRank.UNUSED) {
+			event.getMessage().addReaction("\uD83D\uDEAF").queue();
+		}
+	}*/
+}

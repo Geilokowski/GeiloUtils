@@ -1,0 +1,19 @@
+package play.me.dragonrealm.geiloutils.discord.listener;
+
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.events.ReadyEvent;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import play.me.dragonrealm.geiloutils.GeiloUtils;
+import play.me.dragonrealm.geiloutils.discord.main.DiscordBotMain;
+
+public class ReadyListener extends ListenerAdapter{
+
+	public void onReady(ReadyEvent event) {
+		GeiloUtils.getLog().info("The bot is running on the following servers: ");
+		for (Guild g : event.getJDA().getGuilds()) {
+			GeiloUtils.getLog().info(("Name: " + g.getName() + " ID: " + g.getId()));
+
+			DiscordBotMain.getInstance().sendMessageDiscord("Server Starting!");
+		}
+	}
+}

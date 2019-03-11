@@ -1,0 +1,6 @@
+name: GeiloUtils
+version: ${project.version}
+main: play.me.dragonrealm.geiloutils.GeiloUtils
+prefix: GEILOUTILS
+authors: [dmf444, geilo, tesca]
+description: A plugin for DragonRealm, doing discord and all the things
