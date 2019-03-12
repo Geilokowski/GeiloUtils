@@ -7,7 +7,7 @@ import play.ai.dragonrealm.geiloutils.discord.command.BotSender;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
-import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 
 import java.util.concurrent.Callable;
 
@@ -58,7 +58,7 @@ public class ExecCommand implements ICommand {
     @Override
     public boolean doesUserHavePermission(User discordUser) {
         UserRanks rank = DiscordBotMain.getInstance().getHighestRankForUser(discordUser.getIdLong());
-        int priority = ConfigManager.getCommandConfig().getPriorityLevel(getCommand());
+        int priority = ConfigAccess.getCommandConfig().getPriorityLevel(getCommand());
         if(rank == null || (rank.getPriority() < priority && priority != -1)) {
             return false;
         }

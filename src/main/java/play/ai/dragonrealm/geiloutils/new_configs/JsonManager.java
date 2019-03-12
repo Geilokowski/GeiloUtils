@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraftforge.fml.common.Loader;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
-import play.ai.dragonrealm.geiloutils.new_configs.containers.DiscordConfig;
-import play.ai.dragonrealm.geiloutils.new_configs.containers.EconomyConfig;
-import play.ai.dragonrealm.geiloutils.new_configs.containers.FTBUtilsConfig;
-import play.ai.dragonrealm.geiloutils.new_configs.containers.GeneralConfig;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.*;
 
 import java.io.*;
 import java.util.HashMap;
@@ -31,11 +28,16 @@ public class JsonManager {
     }
 
     private void loadAllConfigs() {
+        this.addToManager(FileEnum.PLAYER_STATS, new PlayerStatsConfig());
         this.addToManager(FileEnum.DISCORD_GENERAL, new DiscordConfig());
         this.addToManager(FileEnum.GENERAL, new GeneralConfig());
         this.addToManager(FileEnum.ECONOMY, new EconomyConfig());
         this.addToManager(FileEnum.GENERAL, new GeneralConfig());
         this.addToManager(FileEnum.FTB_UTILITIES, new FTBUtilsConfig());
+        this.addToManager(FileEnum.RANKS, new RanksConfig());
+        this.addToManager(FileEnum.BLOCK_BANS, new BannedBlockConfig());
+        this.addToManager(FileEnum.PERMISSIONS, new PermissionConfig());
+        this.addToManager(FileEnum.KIT, new KitConfig());
     }
 
 
@@ -52,7 +54,11 @@ public class JsonManager {
         }
     }
 
-    public void readFileToRuntime(String localName) {
+    public void readFileToRuntime(FileEnum fileEnum) {
+        readFileToRuntime(fileEnum.name());
+    }
+
+    private void readFileToRuntime(String localName) {
         IJsonFile file = fileTable.get(localName);
         File configFile = getFileFromString(file.getFileName());
 

@@ -1,14 +1,7 @@
-package play.ai.dragonrealm.geiloutils.config.kits;
+package play.ai.dragonrealm.geiloutils.new_configs.models;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.item.Item;
-import net.minecraft.util.text.TextComponentString;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.config.permissions.Permission;
-import play.ai.dragonrealm.geiloutils.internals.Statics;
-import play.ai.dragonrealm.geiloutils.utils.KitUtils;
 
 public class Kit {
 	private String name;

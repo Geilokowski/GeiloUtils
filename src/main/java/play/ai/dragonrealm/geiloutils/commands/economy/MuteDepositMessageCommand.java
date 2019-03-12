@@ -6,7 +6,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
-import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 public class MuteDepositMessageCommand extends CommandBase {

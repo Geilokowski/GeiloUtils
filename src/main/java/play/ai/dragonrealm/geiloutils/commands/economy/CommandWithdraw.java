@@ -1,7 +1,5 @@
 package play.ai.dragonrealm.geiloutils.commands.economy;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.utils.MathUtils;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 

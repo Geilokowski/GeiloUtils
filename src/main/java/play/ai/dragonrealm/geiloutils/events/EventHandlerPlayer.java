@@ -2,10 +2,9 @@ package play.ai.dragonrealm.geiloutils.events;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
-import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 public class EventHandlerPlayer {
@@ -15,17 +14,17 @@ public class EventHandlerPlayer {
 		if (PlayerUtils.isFirstJoin(event.player)){
 			Playerstat ps = new Playerstat();
 			ps.setName(event.player.getDisplayNameString());
-			ps.setMoney(ConfigManager.getEconomyConfig().getStartingMoney());
+			ps.setMoney(ConfigAccess.getEconomyConfig().getStartingMoney());
 			ps.setUuid(event.player.getCachedUniqueIdString());
-			ps.setRank(ConfigManager.getGeneralConfig().getStandardRank());
+			ps.setRank(ConfigAccess.getGeneralConfig().getStandardRank());
 			ps.setDirectDeposit(true);
 			ps.setMutePaymentMsg(false);
-			ConfigurationManager.getPlayerstats().getPlayerstats().add(ps);
-			ConfigurationManager.syncFromFields();
+			ConfigAccess.getPlayerStatsConfig().getPlayerstats().add(ps);
+			ConfigAccess.writePlayerStatsFile();
 			firstJoin = true;
 		}
 
-		if(ConfigManager.getDiscordConfig().isEnabled()){
+		if(ConfigAccess.getDiscordConfig().isEnabled()){
 			String message = firstJoin ? " joined for the first time!" : " joined the game";
 			DiscordBotMain.getInstance().sendMessageDiscord(event.player.getDisplayNameString() + message);
 		}
@@ -33,7 +32,7 @@ public class EventHandlerPlayer {
 
 	@SubscribeEvent
 	public void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event){
-		if(ConfigManager.getDiscordConfig().isEnabled()){
+		if(ConfigAccess.getDiscordConfig().isEnabled()){
 			DiscordBotMain.getInstance().sendMessageDiscord(event.player.getDisplayNameString() + " left the game");
 		}
 	}

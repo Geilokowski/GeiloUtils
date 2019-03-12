@@ -8,15 +8,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.config.kits.Kit;
-import play.ai.dragonrealm.geiloutils.config.kits.KitItem;
-import play.ai.dragonrealm.geiloutils.config.permissions.Permission;
-import play.ai.dragonrealm.geiloutils.config.ranks.Rank;
-import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Kit;
+import play.ai.dragonrealm.geiloutils.new_configs.models.KitItem;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Permission;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 import play.ai.dragonrealm.geiloutils.utils.ArrayUtils;
 import play.ai.dragonrealm.geiloutils.utils.KitUtils;
-import play.ai.dragonrealm.geiloutils.utils.PermissionUtils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -68,28 +65,28 @@ public class CommandKit extends CommandBase {
             if(args.length == 0){
                 List<String> kitNames = KitUtils.getKitNameList();
                 int count = 0;
-                msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "You have access to the following kits. Use /kit <kit_name> to receive them.");
+                msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "You have access to the following kits. Use /kit <kit_name> to receive them.");
                 sender.sendMessage(msg);
                 for (String name : kitNames) {
                     Kit kit = KitUtils.getKitByName(name);
                     if (kit != null && KitUtils.canPlayerUseKit(player, kit)) {
-                        msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Kit: " + name);
+                        msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Kit: " + name);
                         sender.sendMessage(msg);
                         count++;
                     }
                 }
                 if(count == 0) {
-                    msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "No kits available!");
+                    msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "No kits available!");
                     sender.sendMessage(msg);
                 }
                 return;
             }
 
             if (args.length == 1 && args[0].equals("list")) {
-                msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Found " + KitUtils.getKitCount() + " kits. Use /kit info <kit> to gte more detailed information about a kit");
+                msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Found " + KitUtils.getKitCount() + " kits. Use /kit info <kit> to gte more detailed information about a kit");
                 sender.sendMessage(msg);
                 for (String s : KitUtils.getKitNameList()) {
-                    msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Kit '" + s + "' found");
+                    msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Kit '" + s + "' found");
                     sender.sendMessage(msg);
                 }
             }
@@ -100,17 +97,17 @@ public class CommandKit extends CommandBase {
                     if(KitUtils.canPlayerUseKit(player, kit)){
                         boolean completed = KitUtils.deliverKit(player, kit);
                         if(completed) {
-                            msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Kit delivered!");
+                            msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Kit delivered!");
                         } else {
-                            msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Not enough inventory space to deliver kit!");
+                            msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Not enough inventory space to deliver kit!");
                         }
                         sender.sendMessage(msg);
                     }else{
-                        msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Error: No permission, kit already used or cooldown still active");
+                        msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Error: No permission, kit already used or cooldown still active");
                         sender.sendMessage(msg);
                     }
                 } else {
-                    msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Kit not found");
+                    msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Kit not found");
                     sender.sendMessage(msg);
                 }
             }
@@ -119,51 +116,51 @@ public class CommandKit extends CommandBase {
                 if(KitUtils.doesKitExist(args[1])) {
                     Kit kit = KitUtils.getKitByName(args[1]);
                     // Beginning
-                    msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Kit found! ");
+                    msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Kit found! ");
                     sender.sendMessage(msg);
                     // Name
-                    msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Name: " + kit.getName());
+                    msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Name: " + kit.getName());
                     sender.sendMessage(msg);
                     // Cooldown
                     if (kit.getCooldown() < 0) {
-                        msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Cooldown: One time kit");
+                        msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Cooldown: One time kit");
                         sender.sendMessage(msg);
                     }else {
-                        msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Cooldown: " + (kit.getCooldown() / 1000) + "s");
+                        msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Cooldown: " + (kit.getCooldown() / 1000) + "s");
                         sender.sendMessage(msg);
                     }
                     // Permission
                     if(kit.getPermissionList().isEmpty()) {
-                        msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Permission needed: This kit is available to everyone");
+                        msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Permission needed: This kit is available to everyone");
                         sender.sendMessage(msg);
                     }else {
                         String tmp = "";
                         for(Permission perm : kit.getPermissionList()) {
                             tmp = tmp + perm.getName() + ", ";
                         }
-                        msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Permission needed: " + tmp.substring(0, tmp.length() - 2));
+                        msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Permission needed: " + tmp.substring(0, tmp.length() - 2));
                         sender.sendMessage(msg);
                     }
                     // Items
                     if(kit.getItems().isEmpty()) {
-                        msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Items: No items added yet. Add one with /kit addItem <kit> <registryname> <metadata>");
+                        msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Items: No items added yet. Add one with /kit addItem <kit> <registryname> <metadata>");
                         sender.sendMessage(msg);
                     }else {
                         String tmp = "";
                         for(KitItem kitItem : kit.getItems()) {
                             tmp = tmp + kitItem.getRegistryName() + "[M:" + kitItem.getMetadata() + "]" + "[C:" + kitItem.getCount() + "]" + ", ";
                         }
-                        msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Items: " + tmp.substring(0, tmp.length() - 2));
+                        msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Items: " + tmp.substring(0, tmp.length() - 2));
                         sender.sendMessage(msg);
                     }
                 }else{
-                    msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Couldn't find kit");
+                    msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Couldn't find kit");
                     sender.sendMessage(msg);
                 }
             }
 
         }else{
-            msg = new TextComponentString(ConfigManager.getGeneralConfig().getCommandPrefix() + "Sorry, this is a play only command");
+            msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Sorry, this is a play only command");
             sender.sendMessage(msg);
         }
     }

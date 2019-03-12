@@ -1,20 +1,17 @@
 package play.ai.dragonrealm.geiloutils.utils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import net.minecraft.entity.player.EntityPlayer;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.config.permissions.Permission;
-import play.ai.dragonrealm.geiloutils.config.permissions.Permissions;
-import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
-import play.ai.dragonrealm.geiloutils.config.ranks.Rank;
-import play.ai.dragonrealm.geiloutils.internals.Statics;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Permission;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Rank;
 
 public class PermissionUtils {
 	public static Rank getRankFromPlayer(EntityPlayer player){
-		for(Playerstat ps : ConfigurationManager.getPlayerstats().getPlayerstats()){
+		for(Playerstat ps : ConfigAccess.getPlayerStatsConfig().getPlayerstats()){
 			if(ps.getUuid().equals(player.getCachedUniqueIdString())){
 				return getRankFromName(ps.getRank());
 			}
@@ -24,7 +21,7 @@ public class PermissionUtils {
 	}
 
 	public static Rank getRankFromPlayer(String playerName){
-		for(Playerstat ps : ConfigurationManager.getPlayerstats().getPlayerstats()){
+		for(Playerstat ps : ConfigAccess.getPlayerStatsConfig().getPlayerstats()){
 			if(ps.getName().equals(playerName)){
 				return getRankFromName(ps.getRank());
 			}
@@ -42,14 +39,15 @@ public class PermissionUtils {
     }
 
     public static List<String> getPermissionNames(){
-        return ConfigurationManager.getPermissionsConfig().getPermissions().stream().map(Permission::getName).collect(Collectors.toList());
+        return ConfigAccess.getPermissionConfig().getPermissions().stream().map(Permission::getName).collect(Collectors.toList());
     }
 
 	public static String removePermission(String permName) {
-		for(int i = 0; i < ConfigurationManager.getPermissionsConfig().getPermissions().size(); i++) {
-			if(ConfigurationManager.getPermissionsConfig().getPermissions().get(i).getName().equals(permName)) {
-				ConfigurationManager.syncFromFields();
-				return ConfigurationManager.getPermissionsConfig().getPermissions().remove(i).getName();
+		for(int i = 0; i < ConfigAccess.getPermissionConfig().getPermissions().size(); i++) {
+			if(ConfigAccess.getPermissionConfig().getPermissions().get(i).getName().equals(permName)) {
+				String removedPerm = ConfigAccess.getPermissionConfig().getPermissions().remove(i).getName();
+				ConfigAccess.writePermissionFile();
+				return removedPerm;
 			}
 		}
 
@@ -61,10 +59,10 @@ public class PermissionUtils {
 	}
 	
 	public static String removePermission(Permission perm) {
-		for(int i = 0; i < ConfigurationManager.getPermissionsConfig().getPermissions().size(); i++) {
-			if(ConfigurationManager.getPermissionsConfig().getPermissions().get(i).getName().equals(perm.getName())) {
-				String tmp =  ConfigurationManager.getPermissionsConfig().getPermissions().remove(i).getName();
-				ConfigurationManager.syncFromFields();
+		for(int i = 0; i < ConfigAccess.getPermissionConfig().getPermissions().size(); i++) {
+			if(ConfigAccess.getPermissionConfig().getPermissions().get(i).getName().equals(perm.getName())) {
+				String tmp =  ConfigAccess.getPermissionConfig().getPermissions().remove(i).getName();
+				ConfigAccess.writePermissionFile();
 				return tmp;
 			}
 		}
@@ -73,22 +71,22 @@ public class PermissionUtils {
 	}
 	
 	public static boolean doesPermissionExist(String permName) {
-        return ConfigurationManager.getPermissionsConfig().getPermissions().stream().anyMatch(s -> s.getName().equals(permName));
+        return ConfigAccess.getPermissionConfig().getPermissions().stream().anyMatch(s -> s.getName().equals(permName));
 	}
 	
 	public static boolean doesPermissionExist(Permission perm) {
-        return ConfigurationManager.getPermissionsConfig().getPermissions().stream().anyMatch(s -> s.getName().equals(perm.getName()));
+        return ConfigAccess.getPermissionConfig().getPermissions().stream().anyMatch(s -> s.getName().equals(perm.getName()));
 	}
 	
 	public static boolean doesRankExist(String rankName) {
-        return ConfigurationManager.getRankConfig().getRanks().stream().anyMatch(s -> s.getName().equals(rankName));
+        return ConfigAccess.getRanksConfig().getRanks().stream().anyMatch(s -> s.getName().equals(rankName));
 	}
 	
 	public static String removeRank(String name) {
-		for(int i = 0; i < ConfigurationManager.getRankConfig().getRanks().size(); i++) {
-			if(ConfigurationManager.getRankConfig().getRanks().get(i).getName().equals(name)) {
-				String tmp = ConfigurationManager.getRankConfig().getRanks().remove(i).getName();
-				ConfigurationManager.syncFromFields();
+		for(int i = 0; i < ConfigAccess.getRanksConfig().getRanks().size(); i++) {
+			if(ConfigAccess.getRanksConfig().getRanks().get(i).getName().equals(name)) {
+				String tmp = ConfigAccess.getRanksConfig().getRanks().remove(i).getName();
+				ConfigAccess.writeRanksFile();
 				return tmp;
 			}
 		}
@@ -97,14 +95,14 @@ public class PermissionUtils {
 	}
 	
 	public static List<String> getRankNameList(){
-		return ConfigurationManager.getRankConfig().getRanks().stream().map(Rank::getName).collect(Collectors.toList());
+		return ConfigAccess.getRanksConfig().getRanks().stream().map(Rank::getName).collect(Collectors.toList());
 	}
 	
 	public static Rank getRankFromName(String name) {
-        return ConfigurationManager.getRankConfig().getRanks().stream().filter(r -> r.getName().equals(name)).findFirst().orElse(null);
+        return ConfigAccess.getRanksConfig().getRanks().stream().filter(r -> r.getName().equals(name)).findFirst().orElse(null);
     }
 
 	public static List<String> getUsersWithRank(Rank rank){
-		return ConfigurationManager.getPlayerstats().getPlayerstats().stream().filter(ps -> ps.getRank().equals(rank.getName())).map(Playerstat::getName).collect(Collectors.toList());
+		return ConfigAccess.getPlayerStatsConfig().getPlayerstats().stream().filter(ps -> ps.getRank().equals(rank.getName())).map(Playerstat::getName).collect(Collectors.toList());
 	}
 }

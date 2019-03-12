@@ -3,8 +3,8 @@ package play.ai.dragonrealm.geiloutils.discord.utils;
 import net.dv8tion.jda.core.entities.User;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
+
+import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
@@ -52,7 +52,7 @@ public class AuthenticationRegistry {
             Playerstat stat = PlayerUtils.getPlayerstatByUUID(mcUID);
             if(stat != null) {
                 stat.setDiscordID(userMap.get(mcUID).getIdLong());
-                ConfigurationManager.syncFromFields();
+                PlayerUtils.updatePlayerstat(stat);
 
                 userMap.remove(mcUID);
                 nameMap.remove(mcUID);

@@ -6,9 +6,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import play.ai.dragonrealm.geiloutils.GeiloUtils;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.config.geiloban.BannedBlock;
+import play.ai.dragonrealm.geiloutils.new_configs.models.BannedBlock;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 
 public class EventHandlerBlocks {
 	@SubscribeEvent(priority=EventPriority.NORMAL)
@@ -24,7 +23,7 @@ public class EventHandlerBlocks {
 	  
 	  public static boolean isBannedBlock(String checkName, int checkMetadata, EntityPlayer player)
 	  {
-	    for (BannedBlock bannedBlock : ConfigurationManager.getBannedBlocksConfig().getBannedBlocks()) {
+	    for (BannedBlock bannedBlock : ConfigAccess.getBannedBlocksConfig().getBannedBlocks()) {
 	      if (bannedBlock.getDimension().equals("all")){
 		      if (checkName.equals(bannedBlock.getRegistryName()) && (bannedBlock.getMetadata().equals("all") || Integer.parseInt(bannedBlock.getMetadata()) == checkMetadata)) {
 		    	  return true;

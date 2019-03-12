@@ -3,15 +3,12 @@ package play.ai.dragonrealm.geiloutils.utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class PlayerUtils {
 	public static String[] getOnlinePlayerNames() {
@@ -19,7 +16,7 @@ public class PlayerUtils {
 	}
 	
 	public static boolean isFirstJoin(EntityPlayer player) {
-		for(Playerstat ps : ConfigurationManager.getPlayerstats().getPlayerstats()) {
+		for(Playerstat ps : ConfigAccess.getPlayerStatsConfig().getPlayerstats()) {
 			if(ps.getUuid().equals(player.getCachedUniqueIdString())) {
 				return false;
 			}
@@ -53,7 +50,7 @@ public class PlayerUtils {
 	  }
 	  
 	  public static Playerstat getPlayerstatByUUID(String uuid) {
-		  for(Playerstat ps : ConfigurationManager.getPlayerstats().getPlayerstats()) {
+		  for(Playerstat ps : ConfigAccess.getPlayerStatsConfig().getPlayerstats()) {
 			  if(ps.getUuid().equals(uuid)) {
 				  return ps;
 			  }
@@ -63,7 +60,7 @@ public class PlayerUtils {
 	  }
 
 	  public static Playerstat getPlayerstatByDiscordID(Long id) {
-		  for(Playerstat ps : ConfigurationManager.getPlayerstats().getPlayerstats()) {
+		  for(Playerstat ps : ConfigAccess.getPlayerStatsConfig().getPlayerstats()) {
 			  if(ps.getDiscordID().equals(id)) {
 				  return ps;
 			  }
@@ -72,11 +69,11 @@ public class PlayerUtils {
 	  }
 	  
 	  public static void updatePlayerstat(Playerstat ps) {
-		  for(Playerstat oldPlayerstats : ConfigurationManager.getPlayerstats().getPlayerstats()) {
+		  for(Playerstat oldPlayerstats : ConfigAccess.getPlayerStatsConfig().getPlayerstats()) {
 			  if(oldPlayerstats.getUuid().equals(ps.getUuid())) {
-				  ConfigurationManager.getPlayerstats().getPlayerstats().remove(oldPlayerstats);
-				  ConfigurationManager.getPlayerstats().getPlayerstats().add(ps);
-				  ConfigurationManager.syncFromFields();
+				  ConfigAccess.getPlayerStatsConfig().getPlayerstats().remove(oldPlayerstats);
+				  ConfigAccess.getPlayerStatsConfig().getPlayerstats().add(ps);
+				  ConfigAccess.writePlayerStatsFile();
 				  return;
 			  }
 		  }
@@ -89,7 +86,7 @@ public class PlayerUtils {
 		  
 		  ps.setMoney(newMoney);
 		  updatePlayerstat(ps);
-		  ConfigurationManager.syncFromFields();
+		  ConfigAccess.writePlayerStatsFile();
 	  }
 	  
 	  public static void addPlayerMoney(EntityPlayer player, double amount)
@@ -104,7 +101,7 @@ public class PlayerUtils {
 	    
 		  ps.setMoney(newMoney);
 		  updatePlayerstat(ps);
-		  ConfigurationManager.syncFromFields();
+		  ConfigAccess.writePlayerStatsFile();
 	  }
 
 	  public static void addToMuteList(EntityPlayer player, String addition) {
@@ -118,7 +115,7 @@ public class PlayerUtils {
 		ps.setMutedChats(muted);
 
 		updatePlayerstat(ps);
-		ConfigurationManager.syncFromFields();
+		ConfigAccess.writePlayerStatsFile();
 	  }
 
 	public static boolean removeFromMuteList(EntityPlayer player, String removal) {
@@ -132,7 +129,7 @@ public class PlayerUtils {
 		if(muted.contains(removal)) {
 			muted.remove(removal);
 			updatePlayerstat(ps);
-			ConfigurationManager.syncFromFields();
+			ConfigAccess.writePlayerStatsFile();
 			return true;
 		}
 

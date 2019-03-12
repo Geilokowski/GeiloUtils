@@ -18,14 +18,14 @@ import play.ai.dragonrealm.geiloutils.commands.permissions.CommandGeiloPerm;
 import play.ai.dragonrealm.geiloutils.commands.ranks.CommandGeiloRank;
 import play.ai.dragonrealm.geiloutils.commands.ranks.CommandUniRank;
 import play.ai.dragonrealm.geiloutils.commands.rtp.CommandRTP;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.discord.command.CommandProcessor;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.economy.MoneyDistribution;
 import play.ai.dragonrealm.geiloutils.events.ChatEvent;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerBlocks;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerPlayer;
-import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
+import play.ai.dragonrealm.geiloutils.new_configs.FileEnum;
 import play.ai.dragonrealm.geiloutils.new_configs.JsonManager;
 import play.ai.dragonrealm.geiloutils.new_configs.containers.DiscordCommandConfig;
 import play.ai.dragonrealm.geiloutils.utils.CraftingUtils;
@@ -46,7 +46,6 @@ public class GeiloUtils
 	  public void preInit(FMLPreInitializationEvent event) {
 		  logger = event.getModLog();
 
-		  ConfigurationManager.init();
 		  manager = new JsonManager();
 		  manager.initializeConfigs();
 
@@ -55,7 +54,7 @@ public class GeiloUtils
 	  
 	  @EventHandler
 	  public void init(FMLInitializationEvent event) {
-		  if(ConfigManager.getDiscordConfig().isEnabled()) {
+		  if(ConfigAccess.getDiscordConfig().isEnabled()) {
 			  DiscordBotMain.getInstance().initializeBot();
 		  }
 	  }
@@ -69,7 +68,7 @@ public class GeiloUtils
 	    event.registerServerCommand(new CommandSell());
 	    event.registerServerCommand(new CommandBalance());
 	    event.registerServerCommand(new CommandPay());
-	    if (ConfigManager.getEconomyConfig().isEnabled())
+	    if (ConfigAccess.getEconomyConfig().isEnabled())
 	    {
 	      event.registerServerCommand(new CommandDeposit());
 	      event.registerServerCommand(new CommandWithdraw());
@@ -83,19 +82,19 @@ public class GeiloUtils
 	    event.registerServerCommand(new CommandKit());
 	    event.registerServerCommand(new GeiloKill());
 
-	    if(ConfigManager.getDiscordConfig().isSingleToMulti()) {
+	    if(ConfigAccess.getDiscordConfig().isSingleToMulti()) {
 	    	event.registerServerCommand(new CommandMute());
 	    	event.registerServerCommand(new CommandUnmute());
 		}
 
-		if(ConfigManager.getDiscordConfig().isEnabled()) {
+		if(ConfigAccess.getDiscordConfig().isEnabled()) {
 	    	event.registerServerCommand(new CommandVerify());
 			CommandProcessor.registerCommands();
-			getManager().addToManager(DiscordCommandConfig.DISCORD_COMMAND_NAME, new DiscordCommandConfig());
-			getManager().readFileToRuntime(DiscordCommandConfig.DISCORD_COMMAND_NAME);
+			getManager().addToManager(FileEnum.DISCORD_COMMANDS, new DiscordCommandConfig());
+			getManager().readFileToRuntime(FileEnum.DISCORD_COMMANDS);
 		}
 
-		if(ConfigManager.getEconomyConfig().isPaymentTimerEnabled()) {
+		if(ConfigAccess.getEconomyConfig().isPaymentTimerEnabled()) {
 			event.registerServerCommand(new MuteDepositMessageCommand());
 		}
 
@@ -117,14 +116,14 @@ public class GeiloUtils
 
 	  @EventHandler
 	  public void serverStarted(FMLServerStartedEvent event) {
-	  	if(ConfigManager.getDiscordConfig().isEnabled()){
+	  	if(ConfigAccess.getDiscordConfig().isEnabled()){
 	  		DiscordBotMain.getInstance().sendMessageDiscord("Server Online!");
 		}
 	  }
 
 	  @EventHandler
 	  public void serverStop(FMLServerStoppingEvent event){
-	  	if(ConfigManager.getDiscordConfig().isEnabled()) {
+	  	if(ConfigAccess.getDiscordConfig().isEnabled()) {
 	  		DiscordBotMain.getInstance().sendMessageDiscord("Server Stopping!");
 		}
 	  }

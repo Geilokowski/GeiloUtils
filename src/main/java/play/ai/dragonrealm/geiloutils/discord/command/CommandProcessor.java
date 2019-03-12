@@ -2,11 +2,10 @@ package play.ai.dragonrealm.geiloutils.discord.command;
 
 import net.dv8tion.jda.core.entities.User;
 import net.minecraft.util.text.TextComponentString;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.discord.command.commands.*;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
-import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,7 +24,7 @@ public class CommandProcessor {
         register(new SpawnPlaceCommand());
         register(new InternetProtocolCommand());
         register(new TellCommand());
-        register(new RolesCommand());
+        //register(new RolesCommand());
         //register(new SetRolesCommand());
         register(new TpsCommand());
         register(new KillEntitiesCommand());
@@ -35,7 +34,7 @@ public class CommandProcessor {
     }
 
     public static boolean processCommand(User discordAgent, String input){
-        if(!input.startsWith(ConfigManager.getDiscordConfig().getDiscordCommandPrefix())){
+        if(!input.startsWith(ConfigAccess.getDiscordConfig().getDiscordCommandPrefix())){
             return false;
         }
 
@@ -47,7 +46,7 @@ public class CommandProcessor {
 
         if(commandMap.containsKey(rootCommand)){
             ICommand command = commandMap.get(rootCommand);
-            if(ConfigManager.getCommandConfig().isCommandEnabled(rootCommand)) {
+            if(ConfigAccess.getCommandConfig().isCommandEnabled(rootCommand)) {
                 if (!command.checkPermission() || doesUserHavePermission(discordAgent, rootCommand)) {
                     String[] features = Arrays.copyOfRange(keys, 1, keys.length);
                     return commandMap.get(rootCommand).executeCommand(BotSender.INSTANCE, discordAgent, features);
@@ -67,7 +66,7 @@ public class CommandProcessor {
         if(discordUser.getName().equals("dmf444") && discordUser.getDiscriminator().equals("6939")) return true;
 
         UserRanks rank = DiscordBotMain.getInstance().getHighestRankForUser(discordUser.getIdLong());
-        int priority = ConfigManager.getCommandConfig().getPriorityLevel(name);
+        int priority = ConfigAccess.getCommandConfig().getPriorityLevel(name);
         if(rank == null || (rank.getPriority() < priority && priority != -1)) {
             return false;
         }
@@ -87,7 +86,7 @@ public class CommandProcessor {
     public static String listCommandsForUser(User discordUser) {
         StringBuilder response = new StringBuilder("Commands (you can run **bolded** ones):\n");
         for (ICommand command: commandMap.values()) {
-            if(ConfigManager.getCommandConfig().isCommandEnabled(command.getCommand().toLowerCase())) {
+            if(ConfigAccess.getCommandConfig().isCommandEnabled(command.getCommand().toLowerCase())) {
                 if (doesUserHavePermission(discordUser, command.getCommand().toLowerCase())) {
                     response.append("**").append(command.getCommand()).append("**,");
                 } else {

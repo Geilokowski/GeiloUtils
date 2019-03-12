@@ -1,4 +1,4 @@
-package play.ai.dragonrealm.geiloutils.config.kits;
+package play.ai.dragonrealm.geiloutils.new_configs.models;
 
 import net.minecraft.nbt.NBTTagCompound;
 

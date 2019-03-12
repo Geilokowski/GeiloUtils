@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistry;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.config.geiloban.BannedBlock;
+import play.ai.dragonrealm.geiloutils.new_configs.models.BannedBlock;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 
 public class CraftingUtils {
 	private static void removeRecipe(String registryName)
@@ -29,7 +29,7 @@ public class CraftingUtils {
 	  
 	  public static void removeAllRecipes()
 	  {
-		  for (BannedBlock bannedBlock : ConfigurationManager.getBannedBlocksConfig().getBannedBlocks())
+		  for (BannedBlock bannedBlock : ConfigAccess.getBannedBlocksConfig().getBannedBlocks())
 		    {
 		      if (bannedBlock.getDimension().equals("all")) {
 		        removeRecipe(bannedBlock.getRegistryName());

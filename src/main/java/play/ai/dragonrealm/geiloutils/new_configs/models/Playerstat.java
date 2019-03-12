@@ -1,4 +1,4 @@
-package play.ai.dragonrealm.geiloutils.config.playerstats;
+package play.ai.dragonrealm.geiloutils.new_configs.models;
 
 import java.util.ArrayList;
 import java.util.List;

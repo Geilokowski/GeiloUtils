@@ -1,15 +1,11 @@
 package play.ai.dragonrealm.geiloutils.discord.utils;
 
-import net.dv8tion.jda.core.entities.User;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.discord.command.BotSender;
-import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 

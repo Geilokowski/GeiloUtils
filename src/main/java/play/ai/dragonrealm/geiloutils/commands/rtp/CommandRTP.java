@@ -13,8 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 
 public class CommandRTP extends CommandBase{
 
@@ -41,18 +40,18 @@ public class CommandRTP extends CommandBase{
 		if ((sender instanceof EntityPlayer))
 	    {
 	      EntityPlayer player = (EntityPlayer)sender;
-	      int newX = this.r.nextInt(ConfigManager.getRTPConfig().getRadius() * 2) - ConfigManager.getRTPConfig().getRadius();
-	      int newY = ConfigManager.getRTPConfig().getMinY();
-	      int newZ = this.r.nextInt(ConfigManager.getRTPConfig().getRadius() * 2) - ConfigManager.getRTPConfig().getRadius();
-	      int maxTries = ConfigManager.getRTPConfig().getMaxTries();
+	      int newX = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
+	      int newY = ConfigAccess.getRTPConfig().getMinY();
+	      int newZ = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
+	      int maxTries = ConfigAccess.getRTPConfig().getMaxTries();
 	      while (!isSafe(player, newX, newY, newZ) && (maxTries == -1 || maxTries > 0))
 	      {
 	        newY++;
 	        if (newY > 120)
 	        {
-	          newX = this.r.nextInt(ConfigManager.getRTPConfig().getRadius() * 2) - ConfigManager.getRTPConfig().getRadius();
-	          newY = ConfigManager.getRTPConfig().getMinY();
-	          newZ = this.r.nextInt(ConfigManager.getRTPConfig().getRadius() * 2) - ConfigManager.getRTPConfig().getRadius();
+	          newX = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
+	          newY = ConfigAccess.getRTPConfig().getMinY();
+	          newZ = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
 	        }
 	        if(maxTries > 0){
 	        	maxTries--;

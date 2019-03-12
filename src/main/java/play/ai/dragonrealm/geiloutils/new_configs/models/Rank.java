@@ -1,10 +1,7 @@
-package play.ai.dragonrealm.geiloutils.config.ranks;
+package play.ai.dragonrealm.geiloutils.new_configs.models;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import play.ai.dragonrealm.geiloutils.config.permissions.Permission;
-import play.ai.dragonrealm.geiloutils.internals.Statics;
 
 public class Rank {
 	public Rank(String name){

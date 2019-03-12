@@ -1,4 +1,4 @@
-package play.ai.dragonrealm.geiloutils.config.permissions;
+package play.ai.dragonrealm.geiloutils.new_configs.models;
 
 public class Permission {
 	private String name;

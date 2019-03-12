@@ -1,7 +1,7 @@
 package play.ai.dragonrealm.geiloutils.new_configs.containers;
 
 import play.ai.dragonrealm.geiloutils.discord.command.CommandProcessor;
-import play.ai.dragonrealm.geiloutils.new_configs.ConfigManager;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 import play.ai.dragonrealm.geiloutils.new_configs.IJsonFile;
 import play.ai.dragonrealm.geiloutils.new_configs.models.CommandsData;
 
@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class DiscordCommandConfig implements IJsonFile {
 
-    HashMap<String, CommandsData> commandMeta;
+    private HashMap<String, CommandsData> commandMeta;
 
     @Nonnull
     @Override
@@ -45,7 +45,7 @@ public class DiscordCommandConfig implements IJsonFile {
             CommandsData newData = config.commandMeta.get(commandName);
             if(newData != null){
                 commandMeta.put(commandName, newData);
-                ConfigManager.writeDiscordCommandFile();
+                ConfigAccess.writeDiscordCommandFile();
                 return newData.isEnabled();
             } else {
                 return false;
@@ -62,7 +62,7 @@ public class DiscordCommandConfig implements IJsonFile {
             CommandsData newData = config.commandMeta.get(commandName);
             if(newData != null){
                 commandMeta.put(commandName, newData);
-                ConfigManager.writeDiscordFile();
+                ConfigAccess.writeDiscordFile();
                 return newData.getMinPriorityLvl();
             } else {
                 return -1;
