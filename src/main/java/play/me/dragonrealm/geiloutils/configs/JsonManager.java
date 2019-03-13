@@ -31,6 +31,7 @@ public class JsonManager {
         this.addToManager(FileEnum.GENERAL, new GeneralConfig());
         this.addToManager(FileEnum.PLAYER_STATS, new PlayerStatsConfig());
         this.addToManager(FileEnum.ECONOMY, new EconomyConfig());
+        this.addToManager(FileEnum.RTP, new RandomTPConfig());
         //this.addToManager(FileEnum.GENERAL, new GeneralConfig());
         //this.addToManager(FileEnum.FTB_UTILITIES, new FTBUtilsConfig());
     }
@@ -87,7 +88,7 @@ public class JsonManager {
 
 
     private static File getFileFromString(String fileName){
-        return new File(configLocation + File.separator + "new_" + fileName);
+        return new File(configLocation + File.separator + fileName);
     }
 
 

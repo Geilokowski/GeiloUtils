@@ -5,7 +5,11 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 import play.me.dragonrealm.geiloutils.commands.CommandBase;
+import play.me.dragonrealm.geiloutils.commands.administration.ReloadConfigsCommand;
+import play.me.dragonrealm.geiloutils.commands.discord.MuteCommand;
+import play.me.dragonrealm.geiloutils.commands.discord.UnMuteCommand;
 import play.me.dragonrealm.geiloutils.commands.discord.VerifyCommand;
+import play.me.dragonrealm.geiloutils.commands.other.RandomTPCommand;
 import play.me.dragonrealm.geiloutils.configs.ConfigManager;
 import play.me.dragonrealm.geiloutils.configs.FileEnum;
 import play.me.dragonrealm.geiloutils.configs.JsonManager;
@@ -38,6 +42,9 @@ public final class GeiloUtils extends JavaPlugin {
         manager = new JsonManager();
         manager.initializeConfigs();
 
+        registerCommandDynamically(new ReloadConfigsCommand());
+        registerCommandDynamically(new RandomTPCommand());
+
         if(ConfigManager.getDiscordConfig().isEnabled()) {
             getServer().getPluginManager().registerEvents(new ChatEvent(), this);
             getServer().getPluginManager().registerEvents(new LoginEvent(), this);
@@ -46,6 +53,11 @@ public final class GeiloUtils extends JavaPlugin {
             getManager().addToManager(FileEnum.DISCORD_COMMANDS, new DiscordCommandConfig());
             getManager().readFileToRuntime(FileEnum.DISCORD_COMMANDS.name());
             registerCommandDynamically(new VerifyCommand());
+
+            if(ConfigManager.getDiscordConfig().isSingleToMulti()) {
+                registerCommandDynamically(new MuteCommand());
+                registerCommandDynamically(new UnMuteCommand());
+            }
         }
 
     }
