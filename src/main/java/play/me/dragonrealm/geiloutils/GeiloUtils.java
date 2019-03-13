@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 import play.me.dragonrealm.geiloutils.commands.CommandBase;
 import play.me.dragonrealm.geiloutils.commands.administration.ReloadConfigsCommand;
 import play.me.dragonrealm.geiloutils.commands.discord.MuteCommand;
@@ -16,6 +17,7 @@ import play.me.dragonrealm.geiloutils.configs.JsonManager;
 import play.me.dragonrealm.geiloutils.configs.containers.DiscordCommandConfig;
 import play.me.dragonrealm.geiloutils.discord.command.CommandProcessor;
 import play.me.dragonrealm.geiloutils.discord.main.DiscordBotMain;
+import play.me.dragonrealm.geiloutils.economy.PayUsers;
 import play.me.dragonrealm.geiloutils.events.ChatEvent;
 import play.me.dragonrealm.geiloutils.events.LoginEvent;
 
@@ -31,14 +33,13 @@ public final class GeiloUtils extends JavaPlugin {
     private static File configDataFolder;
     private static JsonManager manager;
     private static Logger logger;
-    //private static Server server;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
         configDataFolder = getDataFolder();
         logger = getLogger();
-        //server = getServer();
+
         manager = new JsonManager();
         manager.initializeConfigs();
 
@@ -60,11 +61,17 @@ public final class GeiloUtils extends JavaPlugin {
             }
         }
 
+        if(ConfigManager.getEconomyConfig().isEnabled()) {
+            if(ConfigManager.getEconomyConfig().isPaymentTimerEnabled()) {
+                getServer().getScheduler().runTaskTimer(this, new PayUsers(), 0, ConfigManager.getEconomyConfig().getPaymentTimeInSeconds() * 20);
+            }
+        }
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        manager.writeToFiles();
     }
 
     public static File getConfigDataFolder() {
