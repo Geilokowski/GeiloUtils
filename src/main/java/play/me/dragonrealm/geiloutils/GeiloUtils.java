@@ -48,7 +48,6 @@ public final class GeiloUtils extends JavaPlugin {
         manager = new JsonManager();
         manager.initializeConfigs();
 
-        permissionAdd();
 
         registerCommandDynamically(new ReloadConfigsCommand());
         registerCommandDynamically(new RandomTPCommand());
@@ -110,18 +109,5 @@ public final class GeiloUtils extends JavaPlugin {
         } catch(IllegalAccessException | NoSuchFieldException e) {
             getLog().info("Unable to register command -" + base.getName());
         }
-    }
-
-    void permissionAdd() {
-
-        PluginManager pm = getServer().getPluginManager();
-        Set<Permission> permissions = pm.getPermissions();
-
-        if (!permissions.contains(adminPerms)) {
-
-            pm.addPermission(adminPerms);
-
-        }
-
     }
 }

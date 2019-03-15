@@ -23,7 +23,7 @@ public class ReloadConfigsCommand extends CommandBase {
 
     @Override
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        if(sender instanceof Player && ((Player)sender).hasPermission(GeiloUtils.adminPerms)) {
+        if(sender instanceof Player && ((Player)sender).hasPermission("geiloutils.admin_perms")) {
             GeiloUtils.getManager().readFilesToRuntime();
             sender.sendMessage("GeiloUtils Reloaded Configs.");
             return true;

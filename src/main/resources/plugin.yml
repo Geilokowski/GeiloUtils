@@ -4,3 +4,8 @@ main: play.me.dragonrealm.geiloutils.GeiloUtils
 prefix: GEILOUTILS
 authors: [dmf444, geilo, tesca]
 description: A plugin for DragonRealm, doing discord and all the things
+
+
+permissions:
+  geiloutils.admin_perms:
+    description: Commands specifically for admins only
