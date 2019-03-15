@@ -3,6 +3,8 @@ package play.me.dragonrealm.geiloutils;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.CommandMap;
+import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import play.me.dragonrealm.geiloutils.commands.CommandBase;
@@ -23,6 +25,7 @@ import play.me.dragonrealm.geiloutils.events.LoginEvent;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public final class GeiloUtils extends JavaPlugin {
@@ -34,6 +37,8 @@ public final class GeiloUtils extends JavaPlugin {
     private static JsonManager manager;
     private static Logger logger;
 
+    public static Permission adminPerms = new Permission(NAME.toLowerCase() + "admin_perms");
+
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -42,6 +47,8 @@ public final class GeiloUtils extends JavaPlugin {
 
         manager = new JsonManager();
         manager.initializeConfigs();
+
+        permissionAdd();
 
         registerCommandDynamically(new ReloadConfigsCommand());
         registerCommandDynamically(new RandomTPCommand());
@@ -103,5 +110,18 @@ public final class GeiloUtils extends JavaPlugin {
         } catch(IllegalAccessException | NoSuchFieldException e) {
             getLog().info("Unable to register command -" + base.getName());
         }
+    }
+
+    void permissionAdd() {
+
+        PluginManager pm = getServer().getPluginManager();
+        Set<Permission> permissions = pm.getPermissions();
+
+        if (!permissions.contains(adminPerms)) {
+
+            pm.addPermission(adminPerms);
+
+        }
+
     }
 }
