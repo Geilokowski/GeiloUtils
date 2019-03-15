@@ -45,10 +45,10 @@ public final class GeiloUtils extends JavaPlugin {
 
         registerCommandDynamically(new ReloadConfigsCommand());
         registerCommandDynamically(new RandomTPCommand());
+        getServer().getPluginManager().registerEvents(new LoginEvent(), this);
 
         if(ConfigManager.getDiscordConfig().isEnabled()) {
             getServer().getPluginManager().registerEvents(new ChatEvent(), this);
-            getServer().getPluginManager().registerEvents(new LoginEvent(), this);
             DiscordBotMain.getInstance().initializeBot();
             CommandProcessor.registerCommands();
             getManager().addToManager(FileEnum.DISCORD_COMMANDS, new DiscordCommandConfig());
