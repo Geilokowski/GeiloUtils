@@ -37,7 +37,7 @@ public final class GeiloUtils extends JavaPlugin {
     private static JsonManager manager;
     private static Logger logger;
 
-    public static Permission adminPerms = new Permission(NAME.toLowerCase() + "admin_perms");
+
 
     @Override
     public void onEnable() {
@@ -78,6 +78,10 @@ public final class GeiloUtils extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         manager.writeToFiles();
+
+        if (ConfigManager.getDiscordConfig().isEnabled()){
+            DiscordBotMain.getInstance().shutdown();
+        }
     }
 
     public static File getConfigDataFolder() {
@@ -94,7 +98,6 @@ public final class GeiloUtils extends JavaPlugin {
 
     public static Server getInstanceServer() {
         return getPlugin(GeiloUtils.class).getServer();
-        //return server;
     }
 
     public void registerCommandDynamically(CommandBase base){

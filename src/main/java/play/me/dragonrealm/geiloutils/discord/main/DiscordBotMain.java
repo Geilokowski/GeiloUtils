@@ -55,6 +55,10 @@ public class DiscordBotMain {
         }
     }
 
+    public void shutdown() {
+        jda.shutdown();
+    }
+
 
     private Optional<TextChannel> getTextChannel(){
         if(botActive)
