@@ -24,6 +24,7 @@ import play.ai.dragonrealm.geiloutils.economy.MoneyDistribution;
 import play.ai.dragonrealm.geiloutils.events.ChatEvent;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerBlocks;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerPlayer;
+import play.ai.dragonrealm.geiloutils.events.RightClickSignEvent;
 import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 import play.ai.dragonrealm.geiloutils.new_configs.FileEnum;
 import play.ai.dragonrealm.geiloutils.new_configs.JsonManager;
@@ -108,6 +109,7 @@ public class GeiloUtils
 	    MinecraftForge.EVENT_BUS.register(new EventHandlerBlocks());
 	    MinecraftForge.EVENT_BUS.register(new EventHandlerPlayer());
 	    MinecraftForge.EVENT_BUS.register(new ChatEvent());
+	    MinecraftForge.EVENT_BUS.register(new RightClickSignEvent());
 
 	    MoneyDistribution.enablePaymentTimer();
 	    
