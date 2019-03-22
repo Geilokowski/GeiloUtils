@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Permission;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Rank;
@@ -41,7 +42,7 @@ public class PayUsersTask extends TimerTask {
                 double totalIncome = baseIncome + rankIncome;
 
                 if(shouldDirectDeposit(stat)) {
-                    PlayerUtils.addPlayerMoney(player, totalIncome);
+                    GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).addPlayerMoney(player.getCachedUniqueIdString(), totalIncome);
                     if(!stat.isPaymentMsgMuted()) {
                         player.sendMessage(new TextComponentString("$" + totalIncome + " has been deposited to your bank account. You can check total amount with /balance"));
                     }

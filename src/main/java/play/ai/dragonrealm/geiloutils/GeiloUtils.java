@@ -28,6 +28,7 @@ import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 import play.ai.dragonrealm.geiloutils.new_configs.FileEnum;
 import play.ai.dragonrealm.geiloutils.new_configs.JsonManager;
 import play.ai.dragonrealm.geiloutils.new_configs.containers.DiscordCommandConfig;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.utils.CraftingUtils;
 import play.ai.dragonrealm.geiloutils.utils.MoneyUtils;
 

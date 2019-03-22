@@ -80,4 +80,9 @@ public class Playerstat {
 	public void setDiscordID(Long discordID) {
 		this.discordID = discordID;
 	}
+
+	@Override
+	public String toString() {
+		return "Player: " + getName() + " (" + getUuid() + ")";
+	}
 }

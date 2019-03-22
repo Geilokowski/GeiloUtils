@@ -40,6 +40,15 @@ public class JsonManager {
         this.addToManager(FileEnum.KIT, new KitConfig());
     }
 
+    public <T> T getConfig(Class<T> configClass) {
+        for(IJsonFile fileTypes : fileTable.values()) {
+            if(fileTypes.getClass().equals(configClass)) {
+                return configClass.cast(fileTypes);
+            }
+        }
+        return null;
+    }
+
 
     public void writeToFiles() {
         for(String fileTypes : fileTable.keySet()) {
@@ -96,7 +105,7 @@ public class JsonManager {
 
 
     private static File getFileFromString(String fileName){
-        return new File(configLocation + File.separator + "new_" + fileName);
+        return new File(configLocation + File.separator + fileName);
     }
 
 

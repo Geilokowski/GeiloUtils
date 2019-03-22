@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.utils.ArrayUtils;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
-public class CommandPay extends CommandBase{
+public class CommandPay extends EconomyBaseCommand{
  
 	String usage = "/pay <username> <amount>";
 	@Override
@@ -28,7 +28,7 @@ public class CommandPay extends CommandBase{
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-	    return "With this command you can pay a user with the money you have on your bank account";
+	    return "/pay <username> <amount>";
 	}
 	
 	@Override
@@ -56,45 +56,35 @@ public class CommandPay extends CommandBase{
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if ((args.length == 2) && ((sender instanceof EntityPlayer))) {
-	      EntityPlayer player = (EntityPlayer)sender;
-	      if (PlayerUtils.getPlayerByName(args[0]) == null){
-	        ITextComponent msg = new TextComponentString("[GeiloEconomy] Player not found or not in the same dimension! Try to use tab-completion");
-	        player.sendMessage(msg);
-	      }
-	      else
-	      {
-	        try
-	        {
-	          double moneyToSend = Double.parseDouble(args[1]);
-	          if (moneyToSend < 0.0D)
-	          {
-	            ITextComponent msg = new TextComponentString("[GeiloEconomy] This is a super advanced mod xD That aint gonna work my friend");
-	            player.sendMessage(msg);
-	            return;
-	          }
-	          if (moneyToSend > PlayerUtils.getPlayerBalance(player)) {
-	            ITextComponent msg = new TextComponentString("[GeiloEconomy] You dont have enought money. Your balance is: " + PlayerUtils.getPlayerBalance(player) + "$");
-	            player.sendMessage(msg);
-	            return;
-	          }
-	          PlayerUtils.addPlayerMoney(PlayerUtils.getPlayerByName(args[0]), moneyToSend);
-	          
-	          PlayerUtils.removePlayerMoney(player, moneyToSend);
-	          
-	          ITextComponent msg = new TextComponentString("[GeiloEconomy] You send " + args[1] + "$ to " + args[0]);
-	          ITextComponent msg2 = new TextComponentString("[GeiloEconomy] " + player.getDisplayNameString() + " send you " + args[1] + "$");
-	          PlayerUtils.getPlayerByName(args[0]).sendMessage(msg2);
-	          player.sendMessage(msg);
-	        }
-	        catch (NumberFormatException e)
-	        {
-	          ITextComponent msg = new TextComponentString("[GeiloEconomy] " + args[1] + " is not a valid number. Please enter something like 50.0");
-	          player.sendMessage(msg);
-	        }
-	      }
-	    }else {
-	    	ITextComponent msg = new TextComponentString("[GeiloEconomy] Wrong sytanx. Usage: " + usage);
-	        sender.sendMessage(msg);
+			EntityPlayer player = (EntityPlayer)sender;
+			if (PlayerUtils.getPlayerByName(args[0]) == null){
+				messageSender(player, "Player not found or not in the same dimension! Try to use tab-completion");
+			} else {
+				try {
+					double moneyToSend = Double.parseDouble(args[1]);
+					String name = args[0];
+					if (moneyToSend < 0.0D) {
+						messageSender(player, "This is a super advanced mod xD That aint gonna work my friend");
+						return;
+					}
+					if (moneyToSend > getPlayerBalance(player)) {
+						messageSender(player, "You dont have enought money. Your balance is: %s", getPlayerBalance(player));
+						return;
+					}
+
+					addPlayerBalance(PlayerUtils.getPlayerByName(name), moneyToSend);
+					removePlayerBalance(player, moneyToSend);
+
+
+					messageSender(player, "You sent %s$ to %s", moneyToSend, name);
+					messageSender(PlayerUtils.getPlayerByName(name), "%s sent you %s$", player.getDisplayNameString(), moneyToSend);
+				}
+				catch (NumberFormatException e) {
+					messageSender(player, "%s is not a valid number! Please enter something like: 50.0", args[1]);
+				}
+			}
+		}else {
+			messageSender(sender,"Wrong syntax. Usage: %s", usage);
 	    }
 	}
 

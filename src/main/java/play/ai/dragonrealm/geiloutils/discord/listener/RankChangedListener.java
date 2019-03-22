@@ -4,6 +4,8 @@ import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberRoleAddEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import play.ai.dragonrealm.geiloutils.GeiloUtils;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.discord.utils.DiscordUtils;
@@ -18,11 +20,11 @@ public class RankChangedListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberRoleAdd(GuildMemberRoleAddEvent event) {
-        Playerstat stat = PlayerUtils.getPlayerstatByDiscordID(event.getUser().getIdLong());
-        if(stat != null) {
+        Optional<Playerstat> stat = GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).getPlayerstatByDiscordID(event.getUser().getIdLong());
+        if(stat.isPresent()) {
             UserRanks rank = DiscordBotMain.getInstance().getHighestRankForUser(event.getUser().getIdLong());
             if(rank != null) {
-                DiscordUtils.autoModRankUser(rank, stat.getName());
+                DiscordUtils.autoModRankUser(rank, stat.get().getName());
             }
         }
     }
@@ -30,12 +32,12 @@ public class RankChangedListener extends ListenerAdapter {
     @Override
     public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent event) {
         Optional<Role> opRole = DiscordBotMain.getInstance().getSupporterRole();
-        Playerstat stat = PlayerUtils.getPlayerstatByDiscordID(event.getUser().getIdLong());
-        if(stat != null) {
+        Optional<Playerstat> stat = GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).getPlayerstatByDiscordID(event.getUser().getIdLong());
+        if(stat.isPresent()) {
             if (opRole.isPresent()) {
                 if (event.getRoles().contains(opRole.get())) {
                     UserRanks rank = DiscordBotMain.getInstance().getHighestRankForUser(event.getUser().getIdLong());
-                    DiscordUtils.autoModRankUser(rank, stat.getName());
+                    DiscordUtils.autoModRankUser(rank, stat.get().getName());
                     return;
                 }
             }
@@ -45,7 +47,7 @@ public class RankChangedListener extends ListenerAdapter {
             if (prevRank != null) {
                 UserRanks rank = DiscordBotMain.getInstance().getHighestRankForUser(event.getUser().getIdLong());
                 if (prevRank.getPriority() > rank.getPriority()) {
-                    DiscordUtils.autoModRankUser(rank, stat.getName());
+                    DiscordUtils.autoModRankUser(rank, stat.get().getName());
                 }
             }
         }

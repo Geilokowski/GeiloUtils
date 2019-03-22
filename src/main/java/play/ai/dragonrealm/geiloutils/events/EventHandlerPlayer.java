@@ -2,6 +2,8 @@ package play.ai.dragonrealm.geiloutils.events;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import play.ai.dragonrealm.geiloutils.GeiloUtils;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
@@ -11,7 +13,7 @@ public class EventHandlerPlayer {
 	@SubscribeEvent
 	public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event){
 		boolean firstJoin = false;
-		if (PlayerUtils.isFirstJoin(event.player)){
+		if (GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).isFirstJoin(event.player.getCachedUniqueIdString())){
 			Playerstat ps = new Playerstat();
 			ps.setName(event.player.getDisplayNameString());
 			ps.setMoney(ConfigAccess.getEconomyConfig().getStartingMoney());

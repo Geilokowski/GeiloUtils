@@ -8,7 +8,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 import javax.annotation.Nullable;
@@ -44,7 +46,7 @@ public class CommandUnmute extends CommandBase {
             String botName = args[0].replace("_", " ");
 
             if (DiscordBotMain.getInstance().getBotsInGuild(false).contains(botName)) {
-                if(PlayerUtils.removeFromMuteList(player, botName)) {
+                if(GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).removeFromMuteList(player.getCachedUniqueIdString(), botName)) {
                     sender.sendMessage(new TextComponentString("[GeiloBot] Unmuted " + botName + " chat."));
                 } else {
                     sender.sendMessage(new TextComponentString("[GeiloBot] Channel was not muted!"));

@@ -13,6 +13,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import play.ai.dragonrealm.geiloutils.GeiloUtils;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Permission;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Rank;
@@ -88,7 +90,7 @@ public class CommandGeiloRank extends CommandBase{
 					Rank rank = PermissionUtils.getRankFromName(args[1]);
                     Playerstat ps = PlayerUtils.getPlayerstatByUUID(PlayerUtils.getPlayerByName(args[2]).getCachedUniqueIdString());
                     ps.setRank(rank.getName());
-                    PlayerUtils.updatePlayerstat(ps);
+					GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).updatePlayerstat(ps);
                     msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + " Set the rank " + rank.getName() + " for user " + ps.getName());
                     sender.sendMessage(msg);
 				}else{
@@ -105,7 +107,7 @@ public class CommandGeiloRank extends CommandBase{
                 if(PlayerUtils.getPlayerByName(args[1]) != null){
                     Playerstat ps = PlayerUtils.getPlayerstatByUUID(PlayerUtils.getPlayerByName(args[1]).getCachedUniqueIdString());
                     ps.setRank(ConfigAccess.getGeneralConfig().getStandardRank());
-                    PlayerUtils.updatePlayerstat(ps);
+					GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).updatePlayerstat(ps);
 
                     msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + " Removed all ranks the player " + ps.getName() + " had");
                     sender.sendMessage(msg);

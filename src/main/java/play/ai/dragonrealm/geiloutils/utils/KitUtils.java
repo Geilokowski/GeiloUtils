@@ -9,7 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
+import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Kit;
 import play.ai.dragonrealm.geiloutils.new_configs.models.KitItem;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Permission;
@@ -53,16 +55,15 @@ public class KitUtils {
                 ps.getKitLastUsed().remove(klu);
                 klu.setLastUsed(date);
                 ps.getKitLastUsed().add(klu);
-                PlayerUtils.updatePlayerstat(ps);
+				GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).updatePlayerstat(ps);
                 return;
             }
         }
 
         KitLastUsed klu = new KitLastUsed(kit.getName(), date);
         ps.getKitLastUsed().add(klu);
-        PlayerUtils.updatePlayerstat(ps);
+		GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).updatePlayerstat(ps);
 
-        //ConfigurationManager.syncFromFields();
     }
 
 	public static boolean canPlayerUseKit(EntityPlayer player, Kit kit){
