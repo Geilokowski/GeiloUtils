@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 
 import java.util.List;
@@ -39,12 +40,7 @@ public class PlayerUtils {
 
 	@Deprecated
 	public static Playerstat getPlayerstatByUUID(String uuid) {
-		for(Playerstat ps : ConfigAccess.getPlayerStatsConfig().getPlayerstats()) {
-			if(ps.getUuid().equals(uuid)) {
-				return ps;
-			}
-		}
-		return null;
+		return GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).getPlayerStatByUUID(uuid).orElse(null);
 	}
 
 
