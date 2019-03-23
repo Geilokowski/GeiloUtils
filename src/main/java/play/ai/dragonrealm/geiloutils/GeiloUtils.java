@@ -38,7 +38,7 @@ import org.apache.logging.log4j.Logger;
 public class GeiloUtils
 {
 	/**
-	 * GeiloUtils - ConfigRewrite branch
+	 * GeiloUtils - MultiWorld branch
 	 * */
 	  public static final String MODID = "geiloutils";
 	  public static final String NAME = "GeiloUtils";
