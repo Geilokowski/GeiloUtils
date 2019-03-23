@@ -37,6 +37,9 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid=GeiloUtils.MODID, name=GeiloUtils.NAME, version=GeiloUtils.VERSION, acceptableRemoteVersions="*", acceptedMinecraftVersions="[1.12.2]")
 public class GeiloUtils
 {
+	/**
+	 * GeiloUtils - Multiworld branch
+	 * */
 	  public static final String MODID = "geiloutils";
 	  public static final String NAME = "GeiloUtils";
 	  public static final String VERSION = "@VERSION@";
