@@ -13,9 +13,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import play.ai.dragonrealm.geiloutils.GeiloUtils;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.config.geiloban.BannedBlock;
+import play.ai.dragonrealm.geiloutils.new_configs.models.BannedBlock;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 
 public class CommandGeiloBan extends CommandBase{
 
@@ -74,7 +73,7 @@ public class CommandGeiloBan extends CommandBase{
 				}
 	      }
 	      if ((args[0].equals("list")) && (args.length == 1)) {
-		        for (BannedBlock bannedBlock : ConfigurationManager.getBannedBlocksConfig().getBannedBlocks())
+		        for (BannedBlock bannedBlock : ConfigAccess.getBannedBlocksConfig().getBannedBlocks())
 		        {
 		        	msg = new TextComponentString("[GeiloBan] " + bannedBlock.toString());
 			        sender.sendMessage(msg);
@@ -102,18 +101,18 @@ public class CommandGeiloBan extends CommandBase{
 	
 	private void addBannedBlock(BannedBlock bannedBlock)
 	  {
-	    ConfigurationManager.getBannedBlocksConfig().getBannedBlocks().add(bannedBlock);
-	    ConfigurationManager.syncFromFields();
+	    ConfigAccess.getBannedBlocksConfig().getBannedBlocks().add(bannedBlock);
+	    ConfigAccess.writeBannedBlocksFile();
 	  }
 	  
 	private String removeBlockFromBlacklist(String registryName){
 		String returnString = "";
-	    for (int i = 0; i < ConfigurationManager.getBannedBlocksConfig().getBannedBlocks().size(); i++) {
-		    if (ConfigurationManager.getBannedBlocksConfig().getBannedBlocks().get(i).getRegistryName().equals(registryName)) {
-		    	returnString = ConfigurationManager.getBannedBlocksConfig().getBannedBlocks().remove(i).getRegistryName();
+	    for (int i = 0; i < ConfigAccess.getBannedBlocksConfig().getBannedBlocks().size(); i++) {
+		    if (ConfigAccess.getBannedBlocksConfig().getBannedBlocks().get(i).getRegistryName().equals(registryName)) {
+		    	returnString = ConfigAccess.getBannedBlocksConfig().getBannedBlocks().remove(i).getRegistryName();
 		    }
 	    }
-	    ConfigurationManager.syncFromFields();
+	    ConfigAccess.writeBannedBlocksFile();
 		return returnString;
 	}
 }

@@ -6,7 +6,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
 
 public class TpsCommand implements ICommand {

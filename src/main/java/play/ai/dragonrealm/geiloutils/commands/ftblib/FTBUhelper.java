@@ -1,8 +1,6 @@
 package play.ai.dragonrealm.geiloutils.commands.ftblib;
 
 import com.feed_the_beast.ftblib.lib.data.ForgeTeam;
-import com.feed_the_beast.ftblib.lib.data.Universe;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 
 import java.util.HashMap;
 

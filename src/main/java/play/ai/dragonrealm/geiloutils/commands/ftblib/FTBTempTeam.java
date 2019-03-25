@@ -10,7 +10,6 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 
 import java.util.Collection;
 import java.util.HashMap;

@@ -2,12 +2,15 @@ package play.ai.dragonrealm.geiloutils.discord.command;
 
 import net.dv8tion.jda.core.entities.User;
 import net.minecraft.util.text.TextComponentString;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.discord.command.commands.*;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
+import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class CommandProcessor {
 
@@ -21,8 +24,8 @@ public class CommandProcessor {
         register(new SpawnPlaceCommand());
         register(new InternetProtocolCommand());
         register(new TellCommand());
-        register(new RolesCommand());
-        register(new SetRolesCommand());
+        //register(new RolesCommand());
+        //register(new SetRolesCommand());
         register(new TpsCommand());
         register(new KillEntitiesCommand());
 
@@ -31,7 +34,7 @@ public class CommandProcessor {
     }
 
     public static boolean processCommand(User discordAgent, String input){
-        if(!input.startsWith(ConfigurationManager.getDiscordConfig().getDiscordCommandPrefix())){
+        if(!input.startsWith(ConfigAccess.getDiscordConfig().getDiscordCommandPrefix())){
             return false;
         }
 
@@ -43,17 +46,33 @@ public class CommandProcessor {
 
         if(commandMap.containsKey(rootCommand)){
             ICommand command = commandMap.get(rootCommand);
-            if(!command.checkPermission() || command.doesUserHavePermission(discordAgent) || (discordAgent.getName().equals("dmf444") && discordAgent.getDiscriminator().equals("6939"))) {
-                String[] features = Arrays.copyOfRange(keys, 1, keys.length);
-                return commandMap.get(rootCommand).executeCommand(BotSender.INSTANCE, discordAgent, features);
+            if(ConfigAccess.getCommandConfig().isCommandEnabled(rootCommand)) {
+                if (!command.checkPermission() || doesUserHavePermission(discordAgent, rootCommand)) {
+                    String[] features = Arrays.copyOfRange(keys, 1, keys.length);
+                    return commandMap.get(rootCommand).executeCommand(BotSender.INSTANCE, discordAgent, features);
+                } else {
+                    BotSender.INSTANCE.sendMessage(new TextComponentString("User doesn't have permission to run this command!"));
+                }
             } else {
-                BotSender.INSTANCE.sendMessage(new TextComponentString("User doesn't have permission to run this command!"));
+                BotSender.INSTANCE.sendMessage(new TextComponentString("Command disabled by config!"));
             }
         } else {
             BotSender.INSTANCE.sendMessage(new TextComponentString("Command not found in registry!"));
         }
         return false;
     }
+
+    public static boolean doesUserHavePermission(User discordUser, String name) {
+        if(discordUser.getName().equals("dmf444") && discordUser.getDiscriminator().equals("6939")) return true;
+
+        UserRanks rank = DiscordBotMain.getInstance().getHighestRankForUser(discordUser.getIdLong());
+        int priority = ConfigAccess.getCommandConfig().getPriorityLevel(name);
+        if(rank == null || (rank.getPriority() < priority && priority != -1)) {
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      * Registers a command and all alias' to the command handler's map.
@@ -67,10 +86,12 @@ public class CommandProcessor {
     public static String listCommandsForUser(User discordUser) {
         StringBuilder response = new StringBuilder("Commands (you can run **bolded** ones):\n");
         for (ICommand command: commandMap.values()) {
-            if(command.doesUserHavePermission(discordUser)) {
-                response.append("**").append(command.getCommand()).append("**,");
-            } else {
-                response.append(command.getCommand()).append(",");
+            if(ConfigAccess.getCommandConfig().isCommandEnabled(command.getCommand().toLowerCase())) {
+                if (doesUserHavePermission(discordUser, command.getCommand().toLowerCase())) {
+                    response.append("**").append(command.getCommand()).append("**,");
+                } else {
+                    response.append(command.getCommand()).append(",");
+                }
             }
         }
         int len = response.length();
@@ -79,5 +100,9 @@ public class CommandProcessor {
 
     public static ICommand getCommand(String s) {
         return commandMap.get(s);
+    }
+
+    public static Set<String> getCommandNames() {
+        return commandMap.keySet();
     }
 }

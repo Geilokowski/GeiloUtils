@@ -9,14 +9,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.config.kits.Kit;
-import play.ai.dragonrealm.geiloutils.config.kits.KitItem;
-import play.ai.dragonrealm.geiloutils.config.permissions.Permission;
-import play.ai.dragonrealm.geiloutils.config.playerstats.KitLastUsed;
-import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
-import play.ai.dragonrealm.geiloutils.config.ranks.Rank;
-import play.ai.dragonrealm.geiloutils.internals.Statics;
+import play.ai.dragonrealm.geiloutils.GeiloUtils;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Kit;
+import play.ai.dragonrealm.geiloutils.new_configs.models.KitItem;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Permission;
+import play.ai.dragonrealm.geiloutils.new_configs.models.KitLastUsed;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Rank;
 
 public class KitUtils {
     public static boolean deliverKit(EntityPlayer player, Kit kit){
@@ -54,16 +55,15 @@ public class KitUtils {
                 ps.getKitLastUsed().remove(klu);
                 klu.setLastUsed(date);
                 ps.getKitLastUsed().add(klu);
-                PlayerUtils.updatePlayerstat(ps);
+				GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).updatePlayerstat(ps);
                 return;
             }
         }
 
         KitLastUsed klu = new KitLastUsed(kit.getName(), date);
         ps.getKitLastUsed().add(klu);
-        PlayerUtils.updatePlayerstat(ps);
+		GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).updatePlayerstat(ps);
 
-        //ConfigurationManager.syncFromFields();
     }
 
 	public static boolean canPlayerUseKit(EntityPlayer player, Kit kit){
@@ -142,13 +142,13 @@ public class KitUtils {
     }
 
 	public static void updateKit(Kit kit){
-		ConfigurationManager.getKitsConfig().getKits().stream().filter(k -> k.getName().equals(kit.getName())).findFirst().ifPresent(k -> ConfigurationManager.getKitsConfig().getKits().remove(k));
-		ConfigurationManager.getKitsConfig().getKits().add(kit);
-		ConfigurationManager.syncFromFields();
+		ConfigAccess.getKitConfig().getKits().stream().filter(k -> k.getName().equals(kit.getName())).findFirst().ifPresent(k -> ConfigAccess.getKitConfig().getKits().remove(k));
+		ConfigAccess.getKitConfig().getKits().add(kit);
+		ConfigAccess.writeKitFile();
 	}
 
 	public static boolean doesKitExist(String kitName) {
-		for(Kit kit : ConfigurationManager.getKitsConfig().getKits()) {
+		for(Kit kit : ConfigAccess.getKitConfig().getKits()) {
 			if(kit.getName().equals(kitName)) {
 				return true;
 			}
@@ -159,17 +159,17 @@ public class KitUtils {
 	
 	public static List<String> getKitNameList() {
 		List<String> nameList = new ArrayList<String>();
-		for(Kit kit : ConfigurationManager.getKitsConfig().getKits()) {
+		for(Kit kit : ConfigAccess.getKitConfig().getKits()) {
 			nameList.add(kit.getName());
 		}
 		return nameList;
 	}
 	
 	public static String removeKitByName(String name) {
-		for(int i = 0; i < ConfigurationManager.getKitsConfig().getKits().size(); i++) {
-			if(ConfigurationManager.getKitsConfig().getKits().get(i).getName().equals(name)) {
-				Kit tmp = ConfigurationManager.getKitsConfig().getKits().remove(i);
-				ConfigurationManager.syncFromFields();
+		for(int i = 0; i < ConfigAccess.getKitConfig().getKits().size(); i++) {
+			if(ConfigAccess.getKitConfig().getKits().get(i).getName().equals(name)) {
+				Kit tmp = ConfigAccess.getKitConfig().getKits().remove(i);
+				ConfigAccess.writeKitFile();
 				return tmp.getName();
 			}
 		}
@@ -178,7 +178,7 @@ public class KitUtils {
 	}
 	
 	public static Kit getKitByName(String name){
-		for(Kit kit : ConfigurationManager.getKitsConfig().getKits()) {
+		for(Kit kit : ConfigAccess.getKitConfig().getKits()) {
 			if(kit.getName().equals(name)) {
 				return kit;
 			}
@@ -188,6 +188,6 @@ public class KitUtils {
 	}
 	
 	public static int getKitCount() {
-		return ConfigurationManager.getKitsConfig().getKits().size();
+		return ConfigAccess.getKitConfig().getKits().size();
 	}
 }

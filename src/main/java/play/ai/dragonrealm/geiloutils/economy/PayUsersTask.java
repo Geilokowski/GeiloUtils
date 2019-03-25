@@ -4,10 +4,11 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.config.permissions.Permission;
-import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
-import play.ai.dragonrealm.geiloutils.config.ranks.Rank;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Permission;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Rank;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 import play.ai.dragonrealm.geiloutils.utils.PermissionUtils;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
@@ -22,7 +23,7 @@ public class PayUsersTask extends TimerTask {
         GeiloUtils.getLogger().info("Payments Starting");
         if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList() != null) { //DON'T TRUST INTELLIJ HERE, THIS IS NULL ON LOADING GAME!
             for (EntityPlayerMP player : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers()) {
-                double baseIncome = ConfigurationManager.getEconomyConfig().getBaseTierIncome() * ConfigurationManager.getEconomyConfig().getBaseMultiplier();
+                double baseIncome = ConfigAccess.getEconomyConfig().getBaseTierIncome() * ConfigAccess.getEconomyConfig().getBaseMultiplier();
                 double rankIncome = 0;
                 Playerstat stat = PlayerUtils.getPlayerstatByUUID(player.getUniqueID().toString());
                 if(stat != null) {
@@ -31,8 +32,8 @@ public class PayUsersTask extends TimerTask {
                     if(rank != null){
                         List<Permission> p = rank.getPermList();
                         for(Permission perm: p){
-                            if(ConfigurationManager.getEconomyConfig().getPermPaymentMap().containsKey(perm.getName())) {
-                                rankIncome = ConfigurationManager.getEconomyConfig().getPermPaymentMap().get(perm.getName());
+                            if(ConfigAccess.getEconomyConfig().getPermPaymentMap().containsKey(perm.getName())) {
+                                rankIncome = ConfigAccess.getEconomyConfig().getPermPaymentMap().get(perm.getName());
                                 break;
                             }
                         }
@@ -41,7 +42,7 @@ public class PayUsersTask extends TimerTask {
                 double totalIncome = baseIncome + rankIncome;
 
                 if(shouldDirectDeposit(stat)) {
-                    PlayerUtils.addPlayerMoney(player, totalIncome);
+                    GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).addPlayerMoney(player.getCachedUniqueIdString(), totalIncome);
                     if(!stat.isPaymentMsgMuted()) {
                         player.sendMessage(new TextComponentString("$" + totalIncome + " has been deposited to your bank account. You can check total amount with /balance"));
                     }

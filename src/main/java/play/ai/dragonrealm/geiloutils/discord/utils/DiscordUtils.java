@@ -1,39 +1,16 @@
 package play.ai.dragonrealm.geiloutils.discord.utils;
 
-import net.dv8tion.jda.core.entities.User;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.discord.command.BotSender;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 
 public class DiscordUtils {
 
-
-    public static DiscordRank getAuthForUser(User user) {
-        Map<Long, DiscordRank> adminMap = ConfigurationManager.getDiscordConfig().getAdminMap();
-        if(adminMap != null && adminMap.size() > 0) {
-            for (Long userId : adminMap.keySet()) {
-                if (user.getIdLong() == userId) {
-                    return adminMap.get(userId);
-                }
-            }
-        }
-        return DiscordRank.COMMONER;
-    }
-
-    public static void setRankForDiscordUser(long userId, DiscordRank rank) {
-        Map<Long, DiscordRank> adminMap = ConfigurationManager.getDiscordConfig().getAdminMap();
-        adminMap.put(userId, rank);
-        ConfigurationManager.getDiscordConfig().setAdminMap(adminMap);
-
-        ConfigurationManager.syncFromFields();
-    }
 
     public static void autoModRankUser(@Nonnull UserRanks rank, String playerUsername) {
         String[] commands = rank.getRawRankCommands();

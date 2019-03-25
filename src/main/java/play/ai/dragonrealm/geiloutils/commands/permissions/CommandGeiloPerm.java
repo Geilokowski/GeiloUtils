@@ -6,9 +6,8 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.config.kits.Kit;
-import play.ai.dragonrealm.geiloutils.config.permissions.Permission;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Permission;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 import play.ai.dragonrealm.geiloutils.utils.PermissionUtils;
 
 public class CommandGeiloPerm extends CommandBase{
@@ -31,13 +30,13 @@ public class CommandGeiloPerm extends CommandBase{
 
 					if(args.length == 2) {
 						Permission perm = new Permission(args[1]);
-						ConfigurationManager.getPermissionsConfig().getPermissions().add(perm);
-						ConfigurationManager.syncFromFields();
+						ConfigAccess.getPermissionConfig().getPermissions().add(perm);
+						ConfigAccess.writePermissionFile();
 						
-						msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Created the permission '" + perm.getName() + "'");
+						msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Created the permission '" + perm.getName() + "'");
 						sender.sendMessage(msg);
 					}else {
-						msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Wrong Syntax: /geiloperm create <name>");
+						msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Wrong Syntax: /geiloperm create <name>");
 						sender.sendMessage(msg);
 					}
 			}
@@ -46,32 +45,32 @@ public class CommandGeiloPerm extends CommandBase{
 				if(args.length == 2) {
 					if(PermissionUtils.doesPermissionExist(args[1])) {
 						if(!PermissionUtils.removePermission(args[1]).equals("")) {
-							msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Deleted the permission '" + args[1] + "'");
+							msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Deleted the permission '" + args[1] + "'");
 							sender.sendMessage(msg);
 						}else {
-							msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Couldnt find the permission '" + args[1] + "'");
+							msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Couldnt find the permission '" + args[1] + "'");
 							sender.sendMessage(msg);
 						}
 					}else {
-						msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Couldnt find the permission '" + args[1] + "'");
+						msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Couldnt find the permission '" + args[1] + "'");
 						sender.sendMessage(msg);
 					}
 				}else {
-					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Wrong syntex: /geiloperm remove <name>");
+					msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Wrong syntex: /geiloperm remove <name>");
 					sender.sendMessage(msg);
 				}
 			}
 			
 			if(args.length == 1 && args[0].equals("list")) {
-				msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Found " + ConfigurationManager.getPermissionsConfig().getPermissions().size() + " permissions!");
+				msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Found " + ConfigAccess.getPermissionConfig().getPermissions().size() + " permissions!");
 				sender.sendMessage(msg);
-				for(Permission perm : ConfigurationManager.getPermissionsConfig().getPermissions()) {
-					msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + perm.toString());
+				for(Permission perm : ConfigAccess.getPermissionConfig().getPermissions()) {
+					msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + perm.toString());
 					sender.sendMessage(msg);
 				}
 			}
 		}else {
-			msg = new TextComponentString(ConfigurationManager.getGeneralConfig().getCommandPrefix() + "Wrong syntax: /geiloperm <remove/create/list> <name>");
+			msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Wrong syntax: /geiloperm <remove/create/list> <name>");
 			sender.sendMessage(msg);
 		}
 	}

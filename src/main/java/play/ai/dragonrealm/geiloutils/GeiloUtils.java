@@ -18,13 +18,17 @@ import play.ai.dragonrealm.geiloutils.commands.permissions.CommandGeiloPerm;
 import play.ai.dragonrealm.geiloutils.commands.ranks.CommandGeiloRank;
 import play.ai.dragonrealm.geiloutils.commands.ranks.CommandUniRank;
 import play.ai.dragonrealm.geiloutils.commands.rtp.CommandRTP;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
 import play.ai.dragonrealm.geiloutils.discord.command.CommandProcessor;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.economy.MoneyDistribution;
 import play.ai.dragonrealm.geiloutils.events.ChatEvent;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerBlocks;
 import play.ai.dragonrealm.geiloutils.events.EventHandlerPlayer;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
+import play.ai.dragonrealm.geiloutils.new_configs.FileEnum;
+import play.ai.dragonrealm.geiloutils.new_configs.JsonManager;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.DiscordCommandConfig;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.utils.CraftingUtils;
 import play.ai.dragonrealm.geiloutils.utils.MoneyUtils;
 
@@ -33,21 +37,28 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid=GeiloUtils.MODID, name=GeiloUtils.NAME, version=GeiloUtils.VERSION, acceptableRemoteVersions="*", acceptedMinecraftVersions="[1.12.2]")
 public class GeiloUtils
 {
+	/**
+	 * GeiloUtils - ConfigRewrite branch
+	 * */
 	  public static final String MODID = "geiloutils";
 	  public static final String NAME = "GeiloUtils";
 	  public static final String VERSION = "@VERSION@";
 	  private static Logger logger;
+	  private static JsonManager manager;
 	  
 	  @EventHandler
 	  public void preInit(FMLPreInitializationEvent event) {
-		  ConfigurationManager.init();
 		  logger = event.getModLog();
+
+		  manager = new JsonManager();
+		  manager.initializeConfigs();
+
 		  MoneyUtils.init();
 	  }
 	  
 	  @EventHandler
 	  public void init(FMLInitializationEvent event) {
-		  if(ConfigurationManager.getDiscordConfig().isEnabled()) {
+		  if(ConfigAccess.getDiscordConfig().isEnabled()) {
 			  DiscordBotMain.getInstance().initializeBot();
 		  }
 	  }
@@ -61,7 +72,7 @@ public class GeiloUtils
 	    event.registerServerCommand(new CommandSell());
 	    event.registerServerCommand(new CommandBalance());
 	    event.registerServerCommand(new CommandPay());
-	    if (ConfigurationManager.getEconomyConfig().isEnabled())
+	    if (ConfigAccess.getEconomyConfig().isEnabled())
 	    {
 	      event.registerServerCommand(new CommandDeposit());
 	      event.registerServerCommand(new CommandWithdraw());
@@ -75,17 +86,19 @@ public class GeiloUtils
 	    event.registerServerCommand(new CommandKit());
 	    event.registerServerCommand(new GeiloKill());
 
-	    if(ConfigurationManager.getDiscordConfig().isSingleToMulti()) {
+	    if(ConfigAccess.getDiscordConfig().isSingleToMulti()) {
 	    	event.registerServerCommand(new CommandMute());
 	    	event.registerServerCommand(new CommandUnmute());
 		}
 
-		if(ConfigurationManager.getDiscordConfig().isEnabled()) {
+		if(ConfigAccess.getDiscordConfig().isEnabled()) {
 	    	event.registerServerCommand(new CommandVerify());
 			CommandProcessor.registerCommands();
+			getManager().addToManager(FileEnum.DISCORD_COMMANDS, new DiscordCommandConfig());
+			getManager().readFileToRuntime(FileEnum.DISCORD_COMMANDS);
 		}
 
-		if(ConfigurationManager.getEconomyConfig().isPaymentTimerEnabled()) {
+		if(ConfigAccess.getEconomyConfig().isPaymentTimerEnabled()) {
 			event.registerServerCommand(new MuteDepositMessageCommand());
 		}
 
@@ -107,14 +120,14 @@ public class GeiloUtils
 
 	  @EventHandler
 	  public void serverStarted(FMLServerStartedEvent event) {
-	  	if(ConfigurationManager.getDiscordConfig().isEnabled()){
+	  	if(ConfigAccess.getDiscordConfig().isEnabled()){
 	  		DiscordBotMain.getInstance().sendMessageDiscord("Server Online!");
 		}
 	  }
 
 	  @EventHandler
 	  public void serverStop(FMLServerStoppingEvent event){
-	  	if(ConfigurationManager.getDiscordConfig().isEnabled()) {
+	  	if(ConfigAccess.getDiscordConfig().isEnabled()) {
 	  		DiscordBotMain.getInstance().sendMessageDiscord("Server Stopping!");
 		}
 	  }
@@ -123,4 +136,8 @@ public class GeiloUtils
 	  {
 	    return logger;
 	  }
+
+	public static JsonManager getManager() {
+		return manager;
+	}
 }

@@ -5,8 +5,9 @@ import net.minecraft.command.ICommandSender;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.discord.command.BotSender;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
-import play.ai.dragonrealm.geiloutils.discord.utils.DiscordRank;
-import play.ai.dragonrealm.geiloutils.discord.utils.DiscordUtils;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
+import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 
 import java.util.concurrent.Callable;
 
@@ -56,7 +57,11 @@ public class ExecCommand implements ICommand {
 
     @Override
     public boolean doesUserHavePermission(User discordUser) {
-        DiscordRank rank = DiscordUtils.getAuthForUser(discordUser);
-        return rank == DiscordRank.ADMIN;
+        UserRanks rank = DiscordBotMain.getInstance().getHighestRankForUser(discordUser.getIdLong());
+        int priority = ConfigAccess.getCommandConfig().getPriorityLevel(getCommand());
+        if(rank == null || (rank.getPriority() < priority && priority != -1)) {
+            return false;
+        }
+        return true;
     }
 }

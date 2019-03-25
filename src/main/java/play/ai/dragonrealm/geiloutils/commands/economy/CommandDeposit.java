@@ -13,7 +13,7 @@ import net.minecraft.util.text.TextComponentString;
 import play.ai.dragonrealm.geiloutils.utils.MoneyUtils;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
-public class CommandDeposit extends CommandBase{
+public class CommandDeposit extends EconomyBaseCommand {
 
 	@Override
 	public String getName() {
@@ -39,10 +39,9 @@ public class CommandDeposit extends CommandBase{
 		if ((sender instanceof EntityPlayer))
 	    {
 	      EntityPlayer player = (EntityPlayer)sender;
-	      Double tmp = Double.valueOf(MoneyUtils.getMoneyValueAndRemove(player));
-	      PlayerUtils.addPlayerMoney(player, tmp.doubleValue());
-	      ITextComponent msg = new TextComponentString("[GeiloEconomy] You made a deposit of " + tmp.toString() + "$. Your new balance is: " + PlayerUtils.getPlayerBalance(player));
-	      player.sendMessage(msg);
+	      Double tmp = MoneyUtils.getMoneyValueAndRemove(player);
+	      addPlayerBalance(player, tmp);
+	      messageSender(player, "You made a deposit of %s$ Your balance is: %s$", tmp, getPlayerBalance(player));
 	    }
 	}
 	

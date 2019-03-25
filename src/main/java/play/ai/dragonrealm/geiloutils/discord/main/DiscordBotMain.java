@@ -6,13 +6,13 @@ import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.*;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
-import play.ai.dragonrealm.geiloutils.config.ConfigurationManager;
-import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.discord.listener.MessageListener;
 import play.ai.dragonrealm.geiloutils.discord.listener.RankChangedListener;
 import play.ai.dragonrealm.geiloutils.discord.listener.ReadyListener;
 import play.ai.dragonrealm.geiloutils.discord.utils.DiscordUtils;
 import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 import javax.security.auth.login.LoginException;
@@ -32,13 +32,13 @@ public class DiscordBotMain {
 
 
     private DiscordBotMain() {
-        textChannelID = ConfigurationManager.getDiscordConfig().getChannelIDRelay();
-        commandChannelID = ConfigurationManager.getDiscordConfig().getChannelIDCommands();
+        textChannelID = ConfigAccess.getDiscordConfig().getChannelIDRelay();
+        commandChannelID = ConfigAccess.getDiscordConfig().getChannelIDCommands();
     }
 
     public void initializeBot() {
         JDABuilder builder = new JDABuilder(AccountType.BOT);
-        builder.setToken(ConfigurationManager.getDiscordConfig().getToken());
+        builder.setToken(ConfigAccess.getDiscordConfig().getToken());
         builder.setAutoReconnect(true);
         builder.setStatus(OnlineStatus.ONLINE);
         builder.addEventListener(new ReadyListener());
@@ -113,7 +113,7 @@ public class DiscordBotMain {
         if(supporterRank != null) {
             return Optional.ofNullable(jda.getRoleById(supporterRank));
         } else {
-            String patronGlobal = ConfigurationManager.getDiscordConfig().getPatronGlobalRank();
+            String patronGlobal = ConfigAccess.getDiscordConfig().getPatronGlobalRank();
             if(patronGlobal.isEmpty()) {
                 return Optional.empty();
             } else {
@@ -134,7 +134,7 @@ public class DiscordBotMain {
     }
 
     public UserRanks getHighestRankForUser(Long discordUserId){
-        List<UserRanks> userRanks = ConfigurationManager.getDiscordConfig().getDiscordRankIntegration();
+        List<UserRanks> userRanks = ConfigAccess.getDiscordConfig().getDiscordRankIntegration();
         if(userRanks.isEmpty()) {
             return null;
         }

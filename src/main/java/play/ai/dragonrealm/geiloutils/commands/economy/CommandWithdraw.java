@@ -1,7 +1,5 @@
 package play.ai.dragonrealm.geiloutils.commands.economy;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +10,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import play.ai.dragonrealm.geiloutils.config.playerstats.Playerstat;
+import play.ai.dragonrealm.geiloutils.GeiloUtils;
+import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
+import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.utils.MathUtils;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
-public class CommandWithdraw extends CommandBase {
+public class CommandWithdraw extends EconomyBaseCommand {
 
     String usage = "/withdraw <amount>";
     @Override
@@ -26,7 +26,7 @@ public class CommandWithdraw extends CommandBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "Withdraw money from your bank account to Good ol' Currency money";
+        return "/withdraw <amount>";
     }
 
     @Override
@@ -48,18 +48,17 @@ public class CommandWithdraw extends CommandBase {
         if ((args.length == 1) && ((sender instanceof EntityPlayer))) {
             EntityPlayer player = (EntityPlayer) sender;
             double money = Double.parseDouble(args[0]);
-            if (money > PlayerUtils.getPlayerBalance(player)) {
-                ITextComponent msg = new TextComponentString("[GeiloEconomy] You dont have enought money. Your balance is: " + PlayerUtils.getPlayerBalance(player) + "$");
-                player.sendMessage(msg);
+            if (money > getPlayerBalance(player)) {
+                messageSender(player, "You dont have enought money. Your balance is: %s$", getPlayerBalance(player));
                 return;
             }
 
-            PlayerUtils.removePlayerMoney(player, money);
+            removePlayerBalance(player, money);
 
             Playerstat ps = PlayerUtils.getPlayerstatByUUID(player.getCachedUniqueIdString());
             ps.setMoney(MathUtils.truncateDecimal(ps.getMoney(), 2).doubleValue());
 
-            PlayerUtils.updatePlayerstat(ps);
+            GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).updatePlayerstat(ps);
 
             while (money > 0) {
 
@@ -103,7 +102,7 @@ public class CommandWithdraw extends CommandBase {
             }
 
 
-            ITextComponent msg = new TextComponentString("[GeiloEconomy] You just withdraw " + args[0] + "$. Your new balance is: " + PlayerUtils.getPlayerBalance(player) + "$.");
+            ITextComponent msg = new TextComponentString("[GeiloEconomy] You just withdrew " + args[0] + "$. Your new balance is: " + getPlayerBalance(player) + "$.");
             player.sendMessage(msg);
         }
     }

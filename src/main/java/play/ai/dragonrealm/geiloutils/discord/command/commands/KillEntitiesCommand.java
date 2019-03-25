@@ -5,8 +5,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.discord.command.BotSender;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
-import play.ai.dragonrealm.geiloutils.discord.utils.DiscordRank;
-import play.ai.dragonrealm.geiloutils.discord.utils.DiscordUtils;
 
 import java.util.concurrent.Callable;
 
@@ -60,7 +58,6 @@ public class KillEntitiesCommand implements ICommand {
 
     @Override
     public boolean doesUserHavePermission(User discordUser) {
-        DiscordRank rank = DiscordUtils.getAuthForUser(discordUser);
-        return rank.getLevel() >= DiscordRank.MOD.getLevel();
+        return false;
     }
 }

@@ -5,16 +5,15 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.text.TextComponentString;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
-import play.ai.dragonrealm.geiloutils.discord.utils.DiscordRank;
-import play.ai.dragonrealm.geiloutils.discord.utils.DiscordUtils;
+
 
 import java.util.List;
 
-public class SetRolesCommand implements ICommand {
+public class SetRolesCommand /*implements ICommand*/ {
 
-    @Override
+    /*@Override
     public String getCommandDesc() {
-        return "Set the role of any discord user.";
+        return "Set the role of any models user.";
     }
 
     @Override
@@ -24,7 +23,7 @@ public class SetRolesCommand implements ICommand {
 
     @Override
     public String getCommandUsage() {
-        return "!setRole <discord#user> <ADMIN|MOD|UNUSED|COMMONER>";
+        return "!setRole <models#user> <ADMIN|MOD|UNUSED|COMMONER>";
     }
 
     @Override
@@ -51,7 +50,7 @@ public class SetRolesCommand implements ICommand {
                         sender.sendMessage(new TextComponentString("Unable to convert: " + commandFeatures[1].toUpperCase() + " to a valid rank"));
                     }
                 } else {
-                    sender.sendMessage(new TextComponentString("Unable to find discord user!"));
+                    sender.sendMessage(new TextComponentString("Unable to find models user!"));
                 }
             } else {
                 sender.sendMessage(new TextComponentString("Discord name must include discriminator!"));
@@ -71,5 +70,5 @@ public class SetRolesCommand implements ICommand {
     public boolean doesUserHavePermission(User discordUser) {
         DiscordRank rank = DiscordUtils.getAuthForUser(discordUser);
         return rank == DiscordRank.ADMIN;
-    }
+    }*/
 }
