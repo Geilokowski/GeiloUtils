@@ -1,16 +1,15 @@
 package play.ai.dragonrealm.geiloutils.commands.permissions;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import play.ai.dragonrealm.geiloutils.commands.CmdBase;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Permission;
 import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 import play.ai.dragonrealm.geiloutils.utils.PermissionUtils;
 
-public class CommandGeiloPerm extends CommandBase{
+public class CommandGeiloPerm extends CmdBase {
 
 	@Override
 	public String getName() {
@@ -33,11 +32,11 @@ public class CommandGeiloPerm extends CommandBase{
 						ConfigAccess.getPermissionConfig().getPermissions().add(perm);
 						ConfigAccess.writePermissionFile();
 						
-						msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Created the permission '" + perm.getName() + "'");
-						sender.sendMessage(msg);
+						sendMsg(sender, "Created the permission '" + perm.getName() + "'");
+						
 					}else {
-						msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Wrong Syntax: /geiloperm create <name>");
-						sender.sendMessage(msg);
+						sendMsg(sender, "Wrong Syntax: /geiloperm create <name>");
+						
 					}
 			}
 			
@@ -45,33 +44,33 @@ public class CommandGeiloPerm extends CommandBase{
 				if(args.length == 2) {
 					if(PermissionUtils.doesPermissionExist(args[1])) {
 						if(!PermissionUtils.removePermission(args[1]).equals("")) {
-							msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Deleted the permission '" + args[1] + "'");
-							sender.sendMessage(msg);
+							sendMsg(sender, "Deleted the permission '" + args[1] + "'");
+							
 						}else {
-							msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Couldnt find the permission '" + args[1] + "'");
-							sender.sendMessage(msg);
+							sendMsg(sender, "Couldnt find the permission '" + args[1] + "'");
+							
 						}
 					}else {
-						msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Couldnt find the permission '" + args[1] + "'");
-						sender.sendMessage(msg);
+						sendMsg(sender, "Couldnt find the permission '" + args[1] + "'");
+						
 					}
 				}else {
-					msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Wrong syntex: /geiloperm remove <name>");
-					sender.sendMessage(msg);
+					sendMsg(sender, "Wrong syntex: /geiloperm remove <name>");
+					
 				}
 			}
 			
 			if(args.length == 1 && args[0].equals("list")) {
-				msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Found " + ConfigAccess.getPermissionConfig().getPermissions().size() + " permissions!");
-				sender.sendMessage(msg);
+				sendMsg(sender, "Found " + ConfigAccess.getPermissionConfig().getPermissions().size() + " permissions!");
+				
 				for(Permission perm : ConfigAccess.getPermissionConfig().getPermissions()) {
-					msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + perm.toString());
-					sender.sendMessage(msg);
+					sendMsg(sender, perm.toString());
+					
 				}
 			}
 		}else {
-			msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Wrong syntax: /geiloperm <remove/create/list> <name>");
-			sender.sendMessage(msg);
+			sendMsg(sender, "Wrong syntax: /geiloperm <remove/create/list> <name>");
+			
 		}
 	}
 

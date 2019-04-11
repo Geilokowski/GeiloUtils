@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
+import play.ai.dragonrealm.geiloutils.commands.CmdBase;
 import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Permission;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
@@ -24,7 +25,7 @@ import play.ai.dragonrealm.geiloutils.utils.KitUtils;
 import play.ai.dragonrealm.geiloutils.utils.PermissionUtils;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
-public class CommandGeiloRank extends CommandBase{
+public class CommandGeiloRank extends CmdBase {
 
 	@Override
 	public String getName() {
@@ -91,15 +92,15 @@ public class CommandGeiloRank extends CommandBase{
                     Playerstat ps = PlayerUtils.getPlayerstatByUUID(PlayerUtils.getPlayerByName(args[2]).getCachedUniqueIdString());
                     ps.setRank(rank.getName());
 					GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).updatePlayerstat(ps);
-                    msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + " Set the rank " + rank.getName() + " for user " + ps.getName());
-                    sender.sendMessage(msg);
+                    sendMsg(sender, " Set the rank " + rank.getName() + " for user " + ps.getName());
+                    
 				}else{
-                    msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + " Error: Couln't find player. Try tab completion."); //TODO: Tab Completions
-                    sender.sendMessage(msg);
+                    sendMsg(sender, " Error: Couln't find player. Try tab completion."); //TODO: Tab Completions
+                    
 				}
 			}else{
-				msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + " Error: Couln't find rank. Get a list of all ranks with /geilorank list");
-				sender.sendMessage(msg);
+				sendMsg(sender, " Error: Couln't find rank. Get a list of all ranks with /geilorank list");
+				
 			}
 		}
 
@@ -109,11 +110,11 @@ public class CommandGeiloRank extends CommandBase{
                     ps.setRank(ConfigAccess.getGeneralConfig().getStandardRank());
 					GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).updatePlayerstat(ps);
 
-                    msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + " Removed all ranks the player " + ps.getName() + " had");
-                    sender.sendMessage(msg);
+                    sendMsg(sender, " Removed all ranks the player " + ps.getName() + " had");
+                    
                 }else{
-                    msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + " Error: Couln't find player. Try tab completion.");
-                    sender.sendMessage(msg);
+                    sendMsg(sender, " Error: Couln't find player. Try tab completion.");
+                    
                 }
 		}
 
@@ -122,25 +123,25 @@ public class CommandGeiloRank extends CommandBase{
 				if(PermissionUtils.doesPermissionExist(args[2])) {
 					Rank rank = PermissionUtils.getRankFromName(args[1]);
 					if(PermissionUtils.doesRankHavePermission(rank, new Permission(args[2]))) {
-						msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "The rank already has that permission");
-						sender.sendMessage(msg);
+						sendMsg(sender, "The rank already has that permission");
+						
 					}else {
 						rank.getPermList().add(new Permission(args[2]));
 						PermissionUtils.removeRank(rank.getName());
 						ConfigAccess.getRanksConfig().getRanks().add(rank);
 						ConfigAccess.writeRanksFile();
 						
-						msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Added the permission '" + args[2] + "'");
-						sender.sendMessage(msg);
+						sendMsg(sender, "Added the permission '" + args[2] + "'");
+						
 					}
 				}else {
 					//TODO: Ask him if he wants to create it now
-					msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Couldnt find the permission '" + args[2] + "'. You can create it with /geiloperm create " + args[2]);
-					sender.sendMessage(msg);
+					sendMsg(sender, "Couldnt find the permission '" + args[2] + "'. You can create it with /geiloperm create " + args[2]);
+					
 				}
 			}else {
-				msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Couldnt find the rank '" + args[1] + "'");
-				sender.sendMessage(msg);
+				sendMsg(sender, "Couldnt find the rank '" + args[1] + "'");
+				
 			}
 		}
 		
@@ -160,27 +161,27 @@ public class CommandGeiloRank extends CommandBase{
 						ConfigAccess.getRanksConfig().getRanks().add(rank);
 						ConfigAccess.writeRanksFile();
 						
-						msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Removed the permission " + args[2] + " from the rank " + args[1]);
-						sender.sendMessage(msg);
+						sendMsg(sender, "Removed the permission " + args[2] + " from the rank " + args[1]);
+						
 					}else {
-						msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "The rank doesnt have that permission");
-						sender.sendMessage(msg);
+						sendMsg(sender, "The rank doesnt have that permission");
+						
 					}
 				}else {
-					msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Couldnt find the permission '" + args[2] + "'. You can create it with /geiloperm create " + args[2]);
-					sender.sendMessage(msg);
+					sendMsg(sender, "Couldnt find the permission '" + args[2] + "'. You can create it with /geiloperm create " + args[2]);
+					
 				}
 			}else {
-				msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Couldnt find the rank '" + args[1] + "'");
-				sender.sendMessage(msg);
+				sendMsg(sender, "Couldnt find the rank '" + args[1] + "'");
+				
 			}
 		}
 		
 		if(args.length == 2 && args[0].equals("create") && !args[1].equals("")) {
 			
 			if(PermissionUtils.doesRankExist(args[1])) {
-				msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "This rank already exists");
-				sender.sendMessage(msg);
+				sendMsg(sender, "This rank already exists");
+				
 				return;
 			}else {
 				Rank rank = new Rank();
@@ -188,18 +189,18 @@ public class CommandGeiloRank extends CommandBase{
 				ConfigAccess.getRanksConfig().getRanks().add(rank);
 				ConfigAccess.writeRanksFile();
 				
-				msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Created the rank '" + rank.getName() + "'");
-				sender.sendMessage(msg);
+				sendMsg(sender, "Created the rank '" + rank.getName() + "'");
+				
 			}
 		}
 		
 		// TODO: Test if this works
 		if(args.length == 1 && args[0].equals("list")) {
-			msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Found " + KitUtils.getKitCount() + " ranks. Use /geilorank info <rank> to gte more detailed information about a rank");
-			sender.sendMessage(msg);
+			sendMsg(sender, "Found " + KitUtils.getKitCount() + " ranks. Use /geilorank info <rank> to gte more detailed information about a rank");
+			
 			for(String s : PermissionUtils.getRankNameList()) {
-				msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Rank '" + s + "' found");
-				sender.sendMessage(msg);
+				sendMsg(sender, "Rank '" + s + "' found");
+				
 			}
 		}
 		
@@ -207,12 +208,12 @@ public class CommandGeiloRank extends CommandBase{
 		if(args.length == 2 && args[0].equals("delete") && !args[1].equals("")) {
 			if(PermissionUtils.removeRank(args[1]).equals("")) {
 				// No rank found
-				msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Couldnt find the rank '" + args[1] + "'");
-				sender.sendMessage(msg);
+				sendMsg(sender, "Couldnt find the rank '" + args[1] + "'");
+				
 			}else {
 				// Rank found and deleted
-				msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Removed the rank '" + args[1] + "'");
-				sender.sendMessage(msg);
+				sendMsg(sender, "Removed the rank '" + args[1] + "'");
+				
 			}
 		}
 		
@@ -220,41 +221,41 @@ public class CommandGeiloRank extends CommandBase{
 			if(PermissionUtils.doesRankExist(args[1])) {
 				Rank rank = PermissionUtils.getRankFromName(args[1]);
 				// Beginning
-				msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Rank found! ");
-				sender.sendMessage(msg);
+				sendMsg(sender, "Rank found! ");
+				
 				// Name
-				msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Name: " + rank.getName());
-				sender.sendMessage(msg);
+				sendMsg(sender, "Name: " + rank.getName());
+				
 				// Cooldown
-				msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Rank inherits the following rank: " + rank.getInherits());
-				sender.sendMessage(msg);
+				sendMsg(sender, "Rank inherits the following rank: " + rank.getInherits());
+				
 				// Member
 				if(PermissionUtils.getUsersWithRank(rank).isEmpty()) {
-					msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Player who own this rank: None");
-					sender.sendMessage(msg);
+					sendMsg(sender, "Player who own this rank: None");
+					
 				}else {
 					String tmp = "";
 					for(String s : PermissionUtils.getUsersWithRank(rank)) {
 						tmp = tmp + s + ", ";
 					}
-					msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Players who have this rank: " + tmp.substring(0, tmp.length() - 1));
-					sender.sendMessage(msg);
+					sendMsg(sender, "Players who have this rank: " + tmp.substring(0, tmp.length() - 1));
+					
 				}
 				// PermissionConfig
 				if(rank.getPermList().isEmpty()) {
-					msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "PermissionConfig: No permissions added yet");
-					sender.sendMessage(msg);
+					sendMsg(sender, "PermissionConfig: No permissions added yet");
+					
 				}else {
 					String tmp = "";
 					for(Permission perm : rank.getPermList()) {
 						tmp = tmp + perm.getName() + ", ";
 					}
-					msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "PermissionConfig: " + tmp.substring(0, tmp.length() - 1));
-					sender.sendMessage(msg);
+					sendMsg(sender, "PermissionConfig: " + tmp.substring(0, tmp.length() - 1));
+					
 				}
 			}else {
-				msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Couldnt find the rank " + args[1] + ". Use /geilorank list for a list of all ranks available");
-				sender.sendMessage(msg);
+				sendMsg(sender, "Couldnt find the rank " + args[1] + ". Use /geilorank list for a list of all ranks available");
+				
 			}
 		}
 	}

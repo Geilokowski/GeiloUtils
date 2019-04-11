@@ -7,9 +7,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import play.ai.dragonrealm.geiloutils.commands.CmdBase;
 import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 
-public class CommandGeiloEconomy extends CommandBase{
+public class CommandGeiloEconomy extends CmdBase {
 
 	String usage = "geiloeconomy <daily> <add/remove> <item> <price>";
 	@Override
@@ -35,15 +36,15 @@ public class CommandGeiloEconomy extends CommandBase{
 	          if (args[1].equals("add") && args.length == 3)
 	          {
 	        	  addSellItem(player.getHeldItemMainhand().getUnlocalizedName() + "#" + args[2] + "#" + player.getHeldItemMainhand().getDisplayName());
-	        	  ITextComponent msg = new TextComponentString("[GeiloEconomy] " + player.getHeldItemMainhand().getDisplayName() + " is now getting bought for " + args[2] + "$!");
-	        	  sender.sendMessage(msg);
+	        	  sendMsg(sender, " " + player.getHeldItemMainhand().getDisplayName() + " is now getting bought for " + args[2] + "$!");
+	        	  
 	        	  return;
 	          }
 	          if ((args[1].equals("remove")) && (args.length == 2))
 	          {
 	            removeSellItem(player.getHeldItemMainhand().getUnlocalizedName());
-	            ITextComponent msg = new TextComponentString("[GeiloEconomy] We are no longer buying " + player.getHeldItemMainhand().getDisplayName());
-	            sender.sendMessage(msg);
+	            sendMsg(sender, " We are no longer buying " + player.getHeldItemMainhand().getDisplayName());
+	            
 	            return;
 	          }
 	        }
@@ -56,20 +57,20 @@ public class CommandGeiloEconomy extends CommandBase{
 	            {
 	              ConfigAccess.getEconomyConfig().setGoodOlCurrencyIntegration(true);
 	              ConfigAccess.writeEconomyConfig();
-	              ITextComponent msg = new TextComponentString("[GeiloEconomy] Enabled Good ol' Currency Integration");
-	              sender.sendMessage(msg);
+	              sendMsg(sender, " Enabled Good ol' Currency Integration");
+	              
 	              return;
 	            }
 	            ConfigAccess.getEconomyConfig().setGoodOlCurrencyIntegration(false);
 	            ConfigAccess.writeEconomyConfig();
-	            ITextComponent msg = new TextComponentString("[GeiloEconomy] Disabled Good ol' Currency Integration");
-	            sender.sendMessage(msg);
+	            sendMsg(sender, " Disabled Good ol' Currency Integration");
+	            
 	            return;
 	          }
 	          catch (Exception e)
 	          {
-	            ITextComponent msg = new TextComponentString("[GeiloEconomy] Usage: /geiloeconomy config <setting> <true/false>");
-	            sender.sendMessage(msg);
+	            sendMsg(sender, " Usage: /geiloeconomy config <setting> <true/false>");
+	            
 	            return;
 	          }
 	        }

@@ -10,9 +10,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import play.ai.dragonrealm.geiloutils.commands.CmdBase;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
-public class CommandBalance extends EconomyBaseCommand{
+public class CommandBalance extends CmdBase {
 
 	@Override
 	public String getName() {
@@ -29,8 +30,7 @@ public class CommandBalance extends EconomyBaseCommand{
 		if ((sender instanceof EntityPlayer))
 	    {
 	      EntityPlayer player = (EntityPlayer)sender;
-	      ITextComponent msg = new TextComponentString("[GeiloEconomy] Your balance is: " + getPlayerBalance(player) + "$");
-	      player.sendMessage(msg);
+	      sendMsg(sender, " Your balance is: " + getPlayerBalance(player) + "$");
 	    }
 	}
 	

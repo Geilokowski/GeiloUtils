@@ -11,12 +11,13 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
+import play.ai.dragonrealm.geiloutils.commands.CmdBase;
 import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.utils.MathUtils;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
-public class CommandWithdraw extends EconomyBaseCommand {
+public class CommandWithdraw extends CmdBase {
 
     String usage = "/withdraw <amount>";
     @Override
@@ -49,7 +50,7 @@ public class CommandWithdraw extends EconomyBaseCommand {
             EntityPlayer player = (EntityPlayer) sender;
             double money = Double.parseDouble(args[0]);
             if (money > getPlayerBalance(player)) {
-                messageSender(player, "You dont have enought money. Your balance is: %s$", getPlayerBalance(player));
+                sendMsg(player, "You dont have enought money. Your balance is: %s$", getPlayerBalance(player));
                 return;
             }
 

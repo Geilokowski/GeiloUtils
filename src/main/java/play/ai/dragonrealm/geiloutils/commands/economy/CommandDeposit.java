@@ -10,10 +10,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import play.ai.dragonrealm.geiloutils.commands.CmdBase;
 import play.ai.dragonrealm.geiloutils.utils.MoneyUtils;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
-public class CommandDeposit extends EconomyBaseCommand {
+public class CommandDeposit extends CmdBase {
 
 	@Override
 	public String getName() {
@@ -41,7 +42,7 @@ public class CommandDeposit extends EconomyBaseCommand {
 	      EntityPlayer player = (EntityPlayer)sender;
 	      Double tmp = MoneyUtils.getMoneyValueAndRemove(player);
 	      addPlayerBalance(player, tmp);
-	      messageSender(player, "You made a deposit of %s$ Your balance is: %s$", tmp, getPlayerBalance(player));
+	      sendMsg(sender, "You made a deposit of %s$ Your balance is: %s$", tmp, getPlayerBalance(player));
 	    }
 	}
 	

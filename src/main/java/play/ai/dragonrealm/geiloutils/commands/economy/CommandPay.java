@@ -15,10 +15,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import play.ai.dragonrealm.geiloutils.commands.CmdBase;
 import play.ai.dragonrealm.geiloutils.utils.ArrayUtils;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
-public class CommandPay extends EconomyBaseCommand{
+public class CommandPay extends CmdBase {
  
 	String usage = "/pay <username> <amount>";
 	@Override
@@ -58,17 +59,17 @@ public class CommandPay extends EconomyBaseCommand{
 		if ((args.length == 2) && ((sender instanceof EntityPlayer))) {
 			EntityPlayer player = (EntityPlayer)sender;
 			if (PlayerUtils.getPlayerByName(args[0]) == null){
-				messageSender(player, "Player not found or not in the same dimension! Try to use tab-completion");
+				sendMsg(player, "Player not found or not in the same dimension! Try to use tab-completion");
 			} else {
 				try {
 					double moneyToSend = Double.parseDouble(args[1]);
 					String name = args[0];
 					if (moneyToSend < 0.0D) {
-						messageSender(player, "This is a super advanced mod xD That aint gonna work my friend");
+						sendMsg(player, "This is a super advanced mod xD That aint gonna work my friend");
 						return;
 					}
 					if (moneyToSend > getPlayerBalance(player)) {
-						messageSender(player, "You dont have enought money. Your balance is: %s", getPlayerBalance(player));
+						sendMsg(player, "You dont have enought money. Your balance is: %s", getPlayerBalance(player));
 						return;
 					}
 
@@ -76,15 +77,15 @@ public class CommandPay extends EconomyBaseCommand{
 					removePlayerBalance(player, moneyToSend);
 
 
-					messageSender(player, "You sent %s$ to %s", moneyToSend, name);
-					messageSender(PlayerUtils.getPlayerByName(name), "%s sent you %s$", player.getDisplayNameString(), moneyToSend);
+					sendMsg(player, "You sent %s$ to %s", moneyToSend, name);
+					sendMsg(PlayerUtils.getPlayerByName(name), "%s sent you %s$", player.getDisplayNameString(), moneyToSend);
 				}
 				catch (NumberFormatException e) {
-					messageSender(player, "%s is not a valid number! Please enter something like: 50.0", args[1]);
+					sendMsg(player, "%s is not a valid number! Please enter something like: 50.0", args[1]);
 				}
 			}
 		}else {
-			messageSender(sender,"Wrong syntax. Usage: %s", usage);
+			sendMsg(sender,"Wrong syntax. Usage: %s", usage);
 	    }
 	}
 

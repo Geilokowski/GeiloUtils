@@ -3,6 +3,7 @@ package play.ai.dragonrealm.geiloutils.commands.economy;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import play.ai.dragonrealm.geiloutils.commands.CmdBase;
 import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CommandRich extends EconomyBaseCommand{
+public class CommandRich extends CmdBase {
     @Override
     public String getName() {
         return "rich";
@@ -45,9 +46,9 @@ public class CommandRich extends EconomyBaseCommand{
         usernames = usernames.substring(2);
 
         if(usernameList.size() > 1){
-            messageSender(sender, "The richest players are: " + usernames + ". They all have a balance of " + max + "$");
+            sendMsg(sender, "The richest players are: " + usernames + ". They all have a balance of " + max + "$");
         }else{
-            messageSender(sender, "The richest player is: " + usernames + ". He has a balance of " + max + "$");
+            sendMsg(sender, "The richest player is: " + usernames + ". He has a balance of " + max + "$");
         }
     }
 }

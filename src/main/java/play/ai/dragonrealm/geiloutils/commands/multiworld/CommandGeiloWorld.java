@@ -8,6 +8,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import play.ai.dragonrealm.geiloutils.commands.CmdBase;
 import play.ai.dragonrealm.geiloutils.multiworld.DimensionTypeEnum;
 import play.ai.dragonrealm.geiloutils.multiworld.WorldManager;
 import play.ai.dragonrealm.geiloutils.multiworld.WorldVoid;
@@ -19,7 +20,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandGeiloWorld extends CommandBase {
+public class CommandGeiloWorld extends CmdBase {
     @Override
     public String getName() {
         return "geiloworld";
@@ -72,16 +73,16 @@ public class CommandGeiloWorld extends CommandBase {
         if(args[0].equalsIgnoreCase("create") && args.length == 3){
             String dimensionName = args[1];
             if(WorldManager.dimensionNameList().contains(dimensionName)){
-                msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Error: Dimension with the name " + dimensionName + " already exists");
-                sender.sendMessage(msg);
+                sendMsg(sender, "Error: Dimension with the name " + dimensionName + " already exists");
+                
             }else{
                 try {
                     DimensionTypeEnum dimensionType = DimensionTypeEnum.valueOf(args[2].toUpperCase());
 
                     WorldManager.registerDimension(new WorldVoid(dimensionName, dimensionType, player.getCachedUniqueIdString(), true));
                 }catch (IllegalArgumentException e){
-                    msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Valid types of dimensions are Void, Overworld and Miningworld. You can also use Tab completion.");
-                    sender.sendMessage(msg);
+                    sendMsg(sender, "Valid types of dimensions are Void, Overworld and Miningworld. You can also use Tab completion.");
+                    
                 }
             }
         }
@@ -94,7 +95,7 @@ public class CommandGeiloWorld extends CommandBase {
             }
 
             msg = new TextComponentString(tmp.substring(0, tmp.length() - 2));
-            sender.sendMessage(msg);
+            
         }
 
         if(args[0].equalsIgnoreCase("setDimensionCount") && args.length == 3){
@@ -107,11 +108,11 @@ public class CommandGeiloWorld extends CommandBase {
                 }
 
                 ConfigAccess.writeMultiworldFile(); //TODO: Remove this
-                msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Everyone who has the permission '" + args[1] + "' can now create " + numberOfDimensions + " dimensions");
-                sender.sendMessage(msg);
+                sendMsg(sender, "Everyone who has the permission '" + args[1] + "' can now create " + numberOfDimensions + " dimensions");
+                
             }else{
-                msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "Couldn't find the permissions '" + args[1] + "'");
-                sender.sendMessage(msg);
+                sendMsg(sender, "Couldn't find the permissions '" + args[1] + "'");
+                
             }
         }
     }

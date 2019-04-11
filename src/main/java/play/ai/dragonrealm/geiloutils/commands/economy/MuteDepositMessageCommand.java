@@ -5,11 +5,12 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
+import play.ai.dragonrealm.geiloutils.commands.CmdBase;
 import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
-public class MuteDepositMessageCommand extends EconomyBaseCommand {
+public class MuteDepositMessageCommand extends CmdBase {
 
     @Override
     public String getName() {
@@ -31,7 +32,7 @@ public class MuteDepositMessageCommand extends EconomyBaseCommand {
                 stat.setMutePaymentMsg(!stat.isPaymentMsgMuted());
                 GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).updatePlayerstat(stat);
                 String updated = stat.isPaymentMsgMuted() ? "muted." : "unmuted.";
-                messageSender(sender, "Payment Messages will now be %s", updated);
+                sendMsg(sender, "Payment Messages will now be %s", updated);
             }
         }
 

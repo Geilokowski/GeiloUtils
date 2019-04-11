@@ -4,8 +4,9 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import play.ai.dragonrealm.geiloutils.commands.CmdBase;
 
-public class CommandSell extends CommandBase{
+public class CommandSell extends CmdBase {
 
 	//TODO: Add Error Reporting
 	String usage = "/sell <daily> <item/list>";

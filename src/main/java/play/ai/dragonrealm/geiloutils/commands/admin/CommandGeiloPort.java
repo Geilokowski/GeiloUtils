@@ -1,19 +1,17 @@
 package play.ai.dragonrealm.geiloutils.commands.admin;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import play.ai.dragonrealm.geiloutils.commands.CmdBase;
 import play.ai.dragonrealm.geiloutils.exceptions.NoSuchDimensionException;
 import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Rank;
 import play.ai.dragonrealm.geiloutils.utils.PermissionUtils;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
-public class CommandGeiloPort extends CommandBase {
+public class CommandGeiloPort extends CmdBase {
     @Override
     public String getName() {
         return "geiloport";
@@ -39,23 +37,18 @@ public class CommandGeiloPort extends CommandBase {
                         int dimension = Integer.parseInt(args[3]);
 
                         PlayerUtils.teleportToDimension(player, dimension, x, y, z);
-                        ITextComponent msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "You got teleported to x: " + x + " y: " + y + " z:" + z + " [Dimension:" + dimension + "]");
-                        sender.sendMessage(msg);
+                        sendMsg(sender,"You got teleported to x: " + x + " y: " + y + " z:" + z + " [Dimension:" + dimension + "]");
                     } catch (NoSuchDimensionException e) {
-                        ITextComponent msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "There is no dimension with this ID. Try using /geiloworld list");
-                        sender.sendMessage(msg);
+                        sendMsg(sender, "There is no dimension with this ID. Try using /geiloworld list");
                     } catch (NumberFormatException e) {
-                        ITextComponent msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "You can only use numbers as an argument");
-                        sender.sendMessage(msg);
+                        sendMsg(sender, "You can only use numbers as an argument");
                     }
                 }else{
-                    ITextComponent msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "You do not have the permission to execute this command");
-                    sender.sendMessage(msg);
+                    sendMsg(sender, "You do not have the permission to execute this command");
                 }
             }
         }else{
-            ITextComponent msg = new TextComponentString(ConfigAccess.getGeneralConfig().getCommandPrefix() + "You can only use numbers as an argument");
-            sender.sendMessage(msg);
+            sendMsg(sender, "You can only use numbers as an argument");
         }
     }
 }

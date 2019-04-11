@@ -13,9 +13,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import play.ai.dragonrealm.geiloutils.commands.CmdBase;
 import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 
-public class CommandRTP extends CommandBase{
+public class CommandRTP extends CmdBase {
 
 	Random r = new Random();
 	public static Block[] dangerBlockArray = { Blocks.LAVA, Blocks.FLOWING_LAVA, Blocks.WATER, Blocks.FLOWING_WATER, Blocks.AIR };
@@ -57,15 +58,13 @@ public class CommandRTP extends CommandBase{
 	        	maxTries--;
 			}
 			if(maxTries == 0) {
-				ITextComponent msg = new TextComponentString("[GeiloRTP] Could not find a safe space to RTP, please try again!");
-				player.sendMessage(msg);
+				sendMsg(sender,"Could not find a safe space to RTP, please try again!");
 				return;
 			}
 	      }
 	      player.setPositionAndUpdate(newX, newY, newZ);
-	      
-	      ITextComponent msg = new TextComponentString("[GeiloRTP] You were teleported to X: " + newX + " Y: " + newY + " Z: " + newZ);
-	      player.sendMessage(msg);
+
+	      sendMsg(sender," You were teleported to X: " + newX + " Y: " + newY + " Z: " + newZ);
 	    }
 	}
 	
