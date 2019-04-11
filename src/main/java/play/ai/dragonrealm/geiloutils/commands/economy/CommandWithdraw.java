@@ -3,7 +3,6 @@ package play.ai.dragonrealm.geiloutils.commands.economy;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;

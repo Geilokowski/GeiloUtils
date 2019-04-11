@@ -3,15 +3,11 @@ package play.ai.dragonrealm.geiloutils.commands.economy;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import play.ai.dragonrealm.geiloutils.commands.CmdBase;
-import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 public class CommandBalance extends CmdBase {
 
