@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.*;
+import play.ai.dragonrealm.geiloutils.commands.CommandDebug;
 import play.ai.dragonrealm.geiloutils.commands.admin.CommandGeiloPort;
 import play.ai.dragonrealm.geiloutils.commands.admin.CommandGeiloReload;
 import play.ai.dragonrealm.geiloutils.commands.admin.CommandRN;
@@ -18,6 +19,7 @@ import play.ai.dragonrealm.geiloutils.commands.kits.CommandGeiloKit;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandKit;
 import play.ai.dragonrealm.geiloutils.commands.multiworld.CommandGeiloWorld;
 import play.ai.dragonrealm.geiloutils.commands.permissions.CommandGeiloPerm;
+import play.ai.dragonrealm.geiloutils.commands.qol.CommandTrashcan;
 import play.ai.dragonrealm.geiloutils.commands.ranks.CommandGeiloRank;
 import play.ai.dragonrealm.geiloutils.commands.ranks.CommandUniRank;
 import play.ai.dragonrealm.geiloutils.commands.rtp.CommandRTP;
@@ -116,6 +118,8 @@ public class GeiloUtils
 
 		//event.registerServerCommand(new FTBServerClaim());
 	    //event.registerServerCommand(new FTBTempTeam());
+		  event.registerServerCommand(new CommandDebug());
+		event.registerServerCommand(new CommandTrashcan());
 	  }
 	  
 	  @EventHandler
