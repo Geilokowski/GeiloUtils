@@ -1,5 +1,6 @@
 package play.ai.dragonrealm.geiloutils.new_configs.containers;
 
+import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Permission;
 import play.ai.dragonrealm.geiloutils.new_configs.IJsonFile;
 import play.ai.dragonrealm.geiloutils.new_configs.interfaces.IPermissionConfig;
@@ -28,7 +29,8 @@ public class PermissionConfig implements IPermissionConfig {
 	@Nonnull
 	@Override
 	public IJsonFile getDefaultJson() {
-		//PermissionConfig defaultPerms = new PermissionConfig();
-		return  new PermissionConfig();
+		PermissionConfig defaultPerms = new PermissionConfig();
+		defaultPerms.getPermissions().add(ConfigAccess.getMultiworldConfig().getGeiloportPerm()); // Since this is the standard perm for the geiloprt command it has to be created by default
+		return defaultPerms;
 	}
 }

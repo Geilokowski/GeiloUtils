@@ -1,9 +1,11 @@
 package play.ai.dragonrealm.geiloutils;
 
+import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.*;
+import play.ai.dragonrealm.geiloutils.commands.admin.CommandGeiloPort;
 import play.ai.dragonrealm.geiloutils.commands.admin.CommandGeiloReload;
 import play.ai.dragonrealm.geiloutils.commands.admin.CommandRN;
 import play.ai.dragonrealm.geiloutils.commands.ban.CommandGeiloBan;
@@ -14,6 +16,7 @@ import play.ai.dragonrealm.geiloutils.commands.economy.*;
 import play.ai.dragonrealm.geiloutils.commands.geilokill.GeiloKill;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandGeiloKit;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandKit;
+import play.ai.dragonrealm.geiloutils.commands.multiworld.CommandGeiloWorld;
 import play.ai.dragonrealm.geiloutils.commands.permissions.CommandGeiloPerm;
 import play.ai.dragonrealm.geiloutils.commands.ranks.CommandGeiloRank;
 import play.ai.dragonrealm.geiloutils.commands.ranks.CommandUniRank;
@@ -29,6 +32,8 @@ import play.ai.dragonrealm.geiloutils.new_configs.FileEnum;
 import play.ai.dragonrealm.geiloutils.new_configs.JsonManager;
 import play.ai.dragonrealm.geiloutils.new_configs.containers.DiscordCommandConfig;
 import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
+import play.ai.dragonrealm.geiloutils.multiworld.WorldManager;
+import play.ai.dragonrealm.geiloutils.multiworld.Void.WorldProviderVoid;
 import play.ai.dragonrealm.geiloutils.utils.CraftingUtils;
 import play.ai.dragonrealm.geiloutils.utils.MoneyUtils;
 
@@ -45,7 +50,8 @@ public class GeiloUtils
 	  public static final String VERSION = "@VERSION@";
 	  private static Logger logger;
 	  private static JsonManager manager;
-	  
+	  public static final DimensionType type = DimensionType.register("void", "_void", 5, WorldProviderVoid.class, true);
+
 	  @EventHandler
 	  public void preInit(FMLPreInitializationEvent event) {
 		  logger = event.getModLog();
@@ -54,6 +60,9 @@ public class GeiloUtils
 		  manager.initializeConfigs();
 
 		  MoneyUtils.init();
+		  logger.info("Starting dimension registration");
+		  WorldManager.registerDimensions();
+		  logger.info("Finished dimension Registration");
 	  }
 	  
 	  @EventHandler
@@ -76,6 +85,7 @@ public class GeiloUtils
 	    {
 	      event.registerServerCommand(new CommandDeposit());
 	      event.registerServerCommand(new CommandWithdraw());
+	      event.registerServerCommand(new CommandRich());
 	    }
 	    event.registerServerCommand(new CommandRN());
 	    event.registerServerCommand(new CommandGeiloKit());
@@ -85,6 +95,8 @@ public class GeiloUtils
 	    event.registerServerCommand(new CommandGeiloReload());
 	    event.registerServerCommand(new CommandKit());
 	    event.registerServerCommand(new GeiloKill());
+	    event.registerServerCommand(new CommandGeiloPort());
+	    event.registerServerCommand(new CommandGeiloWorld());
 
 	    if(ConfigAccess.getDiscordConfig().isSingleToMulti()) {
 	    	event.registerServerCommand(new CommandMute());

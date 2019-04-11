@@ -13,7 +13,9 @@ public class EventHandlerPlayer {
 	@SubscribeEvent
 	public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event){
 		boolean firstJoin = false;
+		System.out.println("Player join");
 		if (GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).isFirstJoin(event.player.getCachedUniqueIdString())){
+			System.out.println("First join");
 			Playerstat ps = new Playerstat();
 			ps.setName(event.player.getDisplayNameString());
 			ps.setMoney(ConfigAccess.getEconomyConfig().getStartingMoney());

@@ -30,7 +30,7 @@ public class RanksConfig implements IRanksConfig, IJsonFile {
 	@Override
 	public IJsonFile getDefaultJson() {
 		RanksConfig ranks = new RanksConfig();
-		ranks.getRanks().add(new Rank(ConfigAccess.getGeneralConfig().getStandardRank()));
+		ranks.getRanks().add(new Rank(ConfigAccess.getGeneralConfig().getStandardRank())); //TODO: Fix this line. It causes errors
 		return ranks;
 	}
 }

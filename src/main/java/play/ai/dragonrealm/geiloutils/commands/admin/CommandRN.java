@@ -28,7 +28,7 @@ public class CommandRN extends CommandBase{
 	      EntityPlayer player = (EntityPlayer)sender;
 	      ITextComponent msg = new TextComponentString("[GeiloAdmin] The registry name of the item in your hand is: " + player.getHeldItemMainhand().getItem().getRegistryName() + ". The Metadata is: " + player.getHeldItemMainhand().getMetadata());
 	      player.sendMessage(msg);
-	      msg = new TextComponentString("[GeiloAdmin] The unlocalized name of the item in your hand is: " + player.getHeldItemMainhand().getUnlocalizedName());
+	      //msg = new TextComponentString("[GeiloAdmin] The unlocalized name of the item in your hand is: " + player.getHeldItemMainhand().getUnlocalizedName());
 	    }
 	}
 

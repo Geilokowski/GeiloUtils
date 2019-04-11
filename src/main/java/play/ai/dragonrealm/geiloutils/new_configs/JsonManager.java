@@ -24,6 +24,7 @@ public class JsonManager {
             configLocation.mkdirs();
         }
 
+        readFileToRuntime(FileEnum.GENERAL);
         readFilesToRuntime();
     }
 
@@ -32,12 +33,12 @@ public class JsonManager {
         this.addToManager(FileEnum.DISCORD_GENERAL, new DiscordConfig());
         this.addToManager(FileEnum.GENERAL, new GeneralConfig());
         this.addToManager(FileEnum.ECONOMY, new EconomyConfig());
-        this.addToManager(FileEnum.GENERAL, new GeneralConfig());
         this.addToManager(FileEnum.FTB_UTILITIES, new FTBUtilsConfig());
         this.addToManager(FileEnum.RANKS, new RanksConfig());
         this.addToManager(FileEnum.BLOCK_BANS, new BannedBlockConfig());
         this.addToManager(FileEnum.PERMISSIONS, new PermissionConfig());
         this.addToManager(FileEnum.KIT, new KitConfig());
+        this.addToManager(FileEnum.MULTIWORLD, new MultiworldConfig());
     }
 
     public <T> T getConfig(Class<T> configClass) {

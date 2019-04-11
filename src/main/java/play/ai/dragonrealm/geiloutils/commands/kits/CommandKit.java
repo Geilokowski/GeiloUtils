@@ -91,7 +91,7 @@ public class CommandKit extends CommandBase {
                 }
             }
 
-            if (args.length == 1 && !(args[0].equals("list"))) {
+            if (args.length == 1 && !((args[0].equals("list") || args[0].equals("info")))) {
                 if (KitUtils.doesKitExist(args[0])) {
                     Kit kit = KitUtils.getKitByName(args[0]);
                     if(KitUtils.canPlayerUseKit(player, kit)){

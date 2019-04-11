@@ -31,7 +31,7 @@ public class CommandGeiloBan extends CommandBase{
 	
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos){
-		List<String> tmpList = new ArrayList<String>();
+		List<String> tmpList = new ArrayList<>();
 		EntityPlayer player;
 		if(sender instanceof EntityPlayer) {
 			player = (EntityPlayer) sender;

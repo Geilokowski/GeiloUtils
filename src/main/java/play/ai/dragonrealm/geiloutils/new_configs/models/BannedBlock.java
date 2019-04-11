@@ -1,7 +1,5 @@
 package play.ai.dragonrealm.geiloutils.new_configs.models;
 
-import net.minecraft.util.text.TextComponentString;
-
 public class BannedBlock {
 	private String registryName;
 	private String metadata;

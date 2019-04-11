@@ -9,5 +9,8 @@ public enum FileEnum {
     RANKS,
     FTB_UTILITIES,
     BLOCK_BANS,
-    PLAYER_STATS, PERMISSIONS, KIT;
+    PLAYER_STATS,
+    PERMISSIONS,
+    KIT,
+    MULTIWORLD
 }

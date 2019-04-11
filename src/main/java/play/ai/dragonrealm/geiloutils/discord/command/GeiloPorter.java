@@ -5,13 +5,23 @@ import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 
 public class GeiloPorter extends Teleporter {
+    private final WorldServer worldServerInstance;
+
+    private double x;
+    private double y;
+    private double z;
 
     public GeiloPorter(WorldServer worldIn) {
         super(worldIn);
+        this.worldServerInstance = world;
     }
 
-    @Override
-    public void placeInPortal(Entity entity, float rotationYaw) {
+    public GeiloPorter(WorldServer world, double x, double y, double z) {
+        super(world);
+        this.worldServerInstance = world;
+        this.x = x;
+        this.y = y;
+        this.z = z;
 
     }
 
@@ -23,6 +33,7 @@ public class GeiloPorter extends Teleporter {
         entity.fallDistance = 0;
         return true;
     }
+
 
     @Override
     public boolean makePortal(Entity entity) {

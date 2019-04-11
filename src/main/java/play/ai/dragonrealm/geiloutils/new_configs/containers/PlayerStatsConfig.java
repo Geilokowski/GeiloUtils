@@ -53,7 +53,7 @@ public class PlayerStatsConfig implements IPlayerStatsConfig {
 	}
 
 	public boolean isFirstJoin(String uuid) {
-		return getPlayerStatByUUID(uuid).isPresent();
+		return !getPlayerStatByUUID(uuid).isPresent();
 	}
 
 	public void updatePlayerstat(Playerstat ps) {
