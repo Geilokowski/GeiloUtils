@@ -1,19 +1,22 @@
 package play.ai.dragonrealm.geiloutils.commands;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.IInventoryChangedListener;
-import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.server.SPacketOpenWindow;
+import net.minecraft.network.play.server.SPacketSetSlot;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.ILockableContainer;
+import play.ai.dragonrealm.geiloutils.gui.inventories.ChestInventory;
+import play.ai.dragonrealm.geiloutils.gui.listeners.IInventoryChangedListener;
 
 public class CommandDebug extends CmdBase implements IInventoryChangedListener {
-	EntityPlayer player;
+	EntityPlayerMP player;
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
@@ -28,15 +31,18 @@ public class CommandDebug extends CmdBase implements IInventoryChangedListener {
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		// TODO Auto-generated method stub
-		player = (EntityPlayer) sender;
-		InventoryBasic testInv = new InventoryBasic("TestInv",false,10);
-		testInv.addInventoryChangeListener(this);
-		testInv.setInventorySlotContents(2, new ItemStack(Items.ARROW));
+		player = (EntityPlayerMP) sender;
+		ChestInventory testInv = new ChestInventory("TestInv",false,10, player);
+
+		player.connection.sendPacket(new SPacketOpenWindow(player.currentWindowId,"minecraft:container",testInv.getDisplayName(),testInv.getSizeInventory()));
+		//player.openContainer = new ContainerChest(player.inventory,testInv,player);
 		player.displayGUIChest(testInv);
+		testInv.addInventoryChangeListener(this);
+		//player.connection.sendPacket(new SPacketSetSlot(player.currentWindowId,0, new ItemStack(Items.ARROW)));
 	}
 
-	public void onInventoryChanged(IInventory invBasic){
-		player.closeScreen();
+	boolean flag = true;
+	public void onInventoryChanged(ChestInventory chestInv, EntityPlayer player) {
+		//chestInv.setInventorySlotContentsWithoutNotifiy(0, new ItemStack(Items.CARROT));
 	}
 }
