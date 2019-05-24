@@ -19,7 +19,7 @@ public class MoneyUtils {
 	    moneyValues.put("item.modcurrency:coin_4", 1.0D);
 	    moneyValues.put("item.modcurrency:coin_5", 2.0D);
 	    
-	    moneyValues.put("item.modcurrency:banknote_0", 1.0D);
+	    //moneyValues.put("item.modcurrency:banknote_0", 1.0D);
 	    moneyValues.put("item.modcurrency:banknote_1", 5.0D);
 	    moneyValues.put("item.modcurrency:banknote_2", 10.0D);
 	    moneyValues.put("item.modcurrency:banknote_3", 20.0D);
@@ -33,7 +33,7 @@ public class MoneyUtils {
 	    moneyValuesDS.put(1.0D, "item.modcurrency:coin_4");
 	    moneyValuesDS.put(2.0D, "item.modcurrency:coin_5");
 	    
-	    moneyValuesDS.put(1.0D, "item.modcurrency:banknote_0");
+	    //moneyValuesDS.put(1.0D, "item.modcurrency:banknote_0");
 	    moneyValuesDS.put(5.0D, "item.modcurrency:banknote_1");
 	    moneyValuesDS.put(10.0D, "item.modcurrency:banknote_2");
 	    moneyValuesDS.put(20.0D, "item.modcurrency:banknote_3");

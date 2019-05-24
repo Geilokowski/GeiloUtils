@@ -81,7 +81,7 @@ public class CommandWithdraw extends EconomyBaseCommand {
                     PlayerUtils.addItemByName(player, "modcurrency:coin", 1, 5);
                     money -= 2.0;
                 } else if (money >= 1.0) {
-                    PlayerUtils.addItemByName(player, "modcurrency:banknote", 1, 0);
+                    PlayerUtils.addItemByName(player, "modcurrency:coin", 1, 4);
                     money -= 1.0;
                 } else if (money >= 0.25) {
                     PlayerUtils.addItemByName(player, "modcurrency:coin", 1, 3);

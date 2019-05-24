@@ -56,6 +56,13 @@ public class TpsCommand implements ICommand {
         return true;
     }
 
+    /**
+     * Get the tick time for a single dimension.
+     * @param dimension id to find
+     * @return mean tick time for said world
+     *
+     * @see net.minecraftforge.server.command.CommandTps
+     */
     public double getTickTime(int dimension) {
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
         long[] tickTimes = server.worldTickTimes.get(dimension);
@@ -63,6 +70,8 @@ public class TpsCommand implements ICommand {
         for (int i = 0; i < tickTimes.length; i++){
             sum += tickTimes[i];
         }
-        return (sum / tickTimes.length) * 1.0E-6D;
+
+        double worldTickTime = (sum / tickTimes.length) * 1.0E-6D;
+        return Math.min(1000.0/worldTickTime, 20);
     }
 }
