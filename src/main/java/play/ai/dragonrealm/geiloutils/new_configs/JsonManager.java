@@ -38,6 +38,7 @@ public class JsonManager {
         this.addToManager(FileEnum.BLOCK_BANS, new BannedBlockConfig());
         this.addToManager(FileEnum.PERMISSIONS, new PermissionConfig());
         this.addToManager(FileEnum.KIT, new KitConfig());
+        this.addToManager(FileEnum.RTP, new RandomTPConfig());
     }
 
     public <T> T getConfig(Class<T> configClass) {

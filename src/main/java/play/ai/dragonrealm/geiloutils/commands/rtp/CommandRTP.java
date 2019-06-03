@@ -37,35 +37,39 @@ public class CommandRTP extends CommandBase{
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		if ((sender instanceof EntityPlayer))
-	    {
-	      EntityPlayer player = (EntityPlayer)sender;
-	      int newX = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
-	      int newY = ConfigAccess.getRTPConfig().getMinY();
-	      int newZ = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
-	      int maxTries = ConfigAccess.getRTPConfig().getMaxTries();
-	      while (!isSafe(player, newX, newY, newZ) && (maxTries == -1 || maxTries > 0))
-	      {
-	        newY++;
-	        if (newY > 120)
-	        {
-	          newX = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
-	          newY = ConfigAccess.getRTPConfig().getMinY();
-	          newZ = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
-	        }
-	        if(maxTries > 0){
-	        	maxTries--;
-			}
-			if(maxTries == 0) {
-				ITextComponent msg = new TextComponentString("[GeiloRTP] Could not find a safe space to RTP, please try again!");
+		if ((sender instanceof EntityPlayer)) {
+			EntityPlayer player = (EntityPlayer)sender;
+	    	if(!ConfigAccess.getRTPConfig().isEnabled()){
+				ITextComponent msg = new TextComponentString("[GeiloRTP] RTP is disabled on the server!");
 				player.sendMessage(msg);
 				return;
 			}
-	      }
-	      player.setPositionAndUpdate(newX, newY, newZ);
-	      
-	      ITextComponent msg = new TextComponentString("[GeiloRTP] You were teleported to X: " + newX + " Y: " + newY + " Z: " + newZ);
-	      player.sendMessage(msg);
+
+		  	int newX = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
+		  	int newY = ConfigAccess.getRTPConfig().getMinY();
+		  	int newZ = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
+		  	int maxTries = ConfigAccess.getRTPConfig().getMaxTries();
+		  	while (!isSafe(player, newX, newY, newZ) && (maxTries == -1 || maxTries > 0)) {
+				newY++;
+				if (newY > 120) {
+			  		newX = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
+			  		newY = ConfigAccess.getRTPConfig().getMinY();
+			  		newZ = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
+				}
+				if(maxTries > 0){
+					maxTries--;
+				}
+				if(maxTries == 0) {
+					ITextComponent msg = new TextComponentString("[GeiloRTP] Could not find a safe space to RTP, please try again!");
+					player.sendMessage(msg);
+					return;
+				}
+		  	}
+
+		  	player.setPositionAndUpdate(newX, newY, newZ);
+
+		  	ITextComponent msg = new TextComponentString("[GeiloRTP] You were teleported to X: " + newX + " Y: " + newY + " Z: " + newZ);
+		  	player.sendMessage(msg);
 	    }
 	}
 	
