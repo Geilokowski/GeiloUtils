@@ -1,6 +1,7 @@
 package play.ai.dragonrealm.geiloutils;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.*;
@@ -11,6 +12,9 @@ import play.ai.dragonrealm.geiloutils.commands.discord.CommandMute;
 import play.ai.dragonrealm.geiloutils.commands.discord.CommandUnmute;
 import play.ai.dragonrealm.geiloutils.commands.discord.CommandVerify;
 import play.ai.dragonrealm.geiloutils.commands.economy.*;
+import play.ai.dragonrealm.geiloutils.commands.ftblib.FTBSetupTeams;
+import play.ai.dragonrealm.geiloutils.commands.ftblib.FTBTempTeam;
+import play.ai.dragonrealm.geiloutils.commands.ftblib.FTBTransferClaimSellable;
 import play.ai.dragonrealm.geiloutils.commands.geilokill.GeiloKill;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandGeiloKit;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandKit;
@@ -102,8 +106,12 @@ public class GeiloUtils
 			event.registerServerCommand(new MuteDepositMessageCommand());
 		}
 
+		if(Loader.isModLoaded("ftblib") && Loader.isModLoaded("ftbutilities") && ConfigAccess.getFTBConfig().enabled) {
+			event.registerServerCommand(new FTBSetupTeams());
+			event.registerServerCommand(new FTBTempTeam());
+			event.registerServerCommand(new FTBTransferClaimSellable());
+		}
 		//event.registerServerCommand(new FTBServerClaim());
-	    //event.registerServerCommand(new FTBTempTeam());
 	  }
 	  
 	  @EventHandler

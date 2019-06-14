@@ -8,48 +8,54 @@ import com.feed_the_beast.ftblib.lib.data.Universe;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.Collection;
 import java.util.HashMap;
 
-public class FTBTempTeam extends CommandBase {
+public class FTBTempTeam extends FTBIntegrationCommandBase {
     @Override
     public String getName() {
-        return "ilb";
+        return "sudo";
     }
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "brah!";
+        return "/sudo [server_team]";
     }
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        Collection<ForgeTeam> teams = Universe.get().getTeams();
-        ForgeTeam serverTeam = null;
-        for(ForgeTeam team: teams) {
-            if(team.type == TeamType.SERVER){
-                serverTeam = team;
-                break;
-            }
+        if(!(sender instanceof EntityPlayer)) {
+            messageSender(sender, "This only works for players!");
+            return;
+        }
+        if(args.length != 1){
+            messageSender(sender, "You must specify the team to sudo into!");
+            return;
+        }
+        if(!(args[0].equals(getConfig().getSellingTeamName()) || args[0].equals(getConfig().getServerHoldingTeamName()) || args[0].equals("personal"))){
+            messageSender(sender, "You did not name a valid server team!");
+            return;
         }
 
-        if(serverTeam != null) {
-            ForgePlayer player = Universe.get().getPlayer(sender);
-            if(player.hasTeam()){
-                if(player.team.type == TeamType.SERVER) {
-                    removePlayerFromServerTeam(serverTeam, player);
-                    return;
-                }
-                FTBUhelper.addPlayerToTeamMemory(player.getId().toString(), player.team.toString());
-                //Set the player to the Server team
-                addPlayerToServer(serverTeam, player);
+        ForgePlayer player = Universe.get().getPlayer(sender);
 
-            } else {
-                addPlayerToServer(serverTeam, player);
+        if(args[0].equals("personal")){
+            if(player.team.type == TeamType.SERVER) {
+                removePlayerFromServerTeam(player.team, player);
+                messageSender(sender, "You have been moved back to your own team");
+                return;
             }
+        } else {
+            ForgeTeam serverTeam = Universe.get().getTeam(args[0]);
+            if(player.hasTeam() && player.team.type != TeamType.SERVER){
+                addPlayerToTeamMemory(player.getId().toString(), player.team.toString());
+            }
+            addPlayerToServer(serverTeam, player);
+            messageSender(sender, "You were added to the team.");
         }
     }
 
@@ -60,11 +66,15 @@ public class FTBTempTeam extends CommandBase {
         player.team = serverTeam;
     }
 
-    public static void removePlayerFromServerTeam(ForgeTeam serverTeam, ForgePlayer player) {
+    public void removePlayerFromServerTeam(ForgeTeam serverTeam, ForgePlayer player) {
         serverTeam.setStatus(player, EnumTeamStatus.NONE);
         serverTeam.removeMember(player);
 
-        ForgeTeam newTeam = FTBUhelper.getPlayerTeamFromConfig(player.getId().toString());
+        ForgeTeam newTeam = getPlayerTeamFromConfig(player.getId().toString());
+        if(newTeam == null){
+            newTeam = Universe.get().getTeam("");
+        }
         player.team = newTeam;
+        writeConfig();
     }
 }
