@@ -1,5 +1,6 @@
 package play.ai.dragonrealm.geiloutils.commands.ftblib;
 
+import com.feed_the_beast.ftblib.lib.data.ForgePlayer;
 import com.feed_the_beast.ftblib.lib.data.ForgeTeam;
 import com.feed_the_beast.ftblib.lib.data.Universe;
 import com.feed_the_beast.ftblib.lib.math.ChunkDimPos;
@@ -9,6 +10,7 @@ import com.feed_the_beast.ftbutilities.data.ClaimedChunks;
 import com.feed_the_beast.ftbutilities.data.FTBUtilitiesTeamData;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
@@ -17,6 +19,8 @@ import play.ai.dragonrealm.geiloutils.new_configs.containers.FTBUtilsConfig;
 import play.ai.dragonrealm.geiloutils.new_configs.models.ChunkStorage;
 import play.ai.dragonrealm.geiloutils.new_configs.models.SellablePlots;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.OptionalInt;
 import java.util.Set;
 
@@ -60,6 +64,7 @@ public abstract class FTBIntegrationCommandBase extends CommandBase {
         }
 
         getConfig().addSellables(plots);
+        writeConfig();
     }
 
     /**
@@ -78,6 +83,16 @@ public abstract class FTBIntegrationCommandBase extends CommandBase {
                 ClaimedChunks.instance.addChunk(oldClaim);
             }
         }
+    }
+
+    public void transferProperty(List<ChunkStorage> chunks, ICommandSender sender) {
+        ForgePlayer player = Universe.get().getPlayer(sender);
+
+        Set<ClaimedChunk> ftbChunks = new HashSet<>();
+        for (ChunkStorage chunk: chunks) {
+            ftbChunks.add(ClaimedChunks.instance.getChunk(new ChunkDimPos(chunk.getPosX(), chunk.getPosZ(), chunk.getDim())));
+        }
+        transferProperty(ftbChunks, player.team);
     }
 
     public ForgeTeam getPlayerTeamFromConfig(String playerUID) {

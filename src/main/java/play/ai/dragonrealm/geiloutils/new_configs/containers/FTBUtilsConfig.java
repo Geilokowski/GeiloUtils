@@ -47,6 +47,10 @@ public class FTBUtilsConfig implements IJsonFile {
         plots.add(plot);
     }
 
+    public List<SellablePlots> getSellables(){
+        return plots;
+    }
+
     @Nonnull
     @Override
     public String getFileName() {

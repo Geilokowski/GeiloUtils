@@ -11,4 +11,16 @@ public class ChunkStorage {
         this.posZ = posZ;
         this.dim = dim;
     }
+
+    public int getDim() {
+        return dim;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public int getPosZ() {
+        return posZ;
+    }
 }

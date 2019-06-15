@@ -9,6 +9,7 @@ public class SellablePlots {
 
     private String plotName;
     private int plotPrice;
+    private String ownerUID;
     private List<ChunkStorage> containedChunks;
 
     public SellablePlots(int plotPrice) {
@@ -23,5 +24,17 @@ public class SellablePlots {
 
     public void addChunk(ChunkStorage storage) {
         this.containedChunks.add(storage);
+    }
+
+    public String getOwnerUID() {
+        return ownerUID;
+    }
+
+    public void setOwnerUID(String ownerUID) {
+        this.ownerUID = ownerUID;
+    }
+
+    public String getPlotName() {
+        return plotName;
     }
 }
