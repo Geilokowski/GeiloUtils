@@ -2,6 +2,7 @@ package play.ai.dragonrealm.geiloutils.commands.ftblib;
 
 import com.feed_the_beast.ftblib.lib.data.ForgePlayer;
 import com.feed_the_beast.ftblib.lib.data.ForgeTeam;
+import com.feed_the_beast.ftblib.lib.data.TeamType;
 import com.feed_the_beast.ftblib.lib.data.Universe;
 import com.feed_the_beast.ftblib.lib.math.ChunkDimPos;
 import com.feed_the_beast.ftbutilities.data.ClaimResult;
@@ -10,6 +11,7 @@ import com.feed_the_beast.ftbutilities.data.ClaimedChunks;
 import com.feed_the_beast.ftbutilities.data.FTBUtilitiesTeamData;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -48,6 +50,11 @@ public abstract class FTBIntegrationCommandBase extends CommandBase {
         return Universe.get().getTeam(name).isValid();
     }
 
+    public boolean hasTeam(ICommandSender sender) {
+        ForgePlayer player = Universe.get().getPlayer(sender);
+        return player.team.type == TeamType.PLAYER;
+    }
+
     public void buildLandClaim(int price){
         ForgeTeam claimTeam = Universe.get().getTeam(getConfig().getSellingTeamName());
         ForgeTeam holdingTeam = Universe.get().getTeam(getConfig().getServerHoldingTeamName());
@@ -60,7 +67,7 @@ public abstract class FTBIntegrationCommandBase extends CommandBase {
         SellablePlots plots = new SellablePlots(price);
         for(ClaimedChunk chunk: claim){
             ChunkDimPos chunkDimPos = chunk.getPos();
-            plots.addChunk(new ChunkStorage(chunkDimPos.posX, chunkDimPos.posX, chunkDimPos.dim));
+            plots.addChunk(new ChunkStorage(chunkDimPos.posX, chunkDimPos.posZ, chunkDimPos.dim));
         }
 
         getConfig().addSellables(plots);

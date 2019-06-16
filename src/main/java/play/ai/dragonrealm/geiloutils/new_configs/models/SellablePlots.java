@@ -15,6 +15,7 @@ public class SellablePlots {
     public SellablePlots(int plotPrice) {
         this.plotName = "plot" + ConfigAccess.getFTBConfig().getNextPlotNumber();
         this.plotPrice = plotPrice;
+        this.ownerUID = "";
         this.containedChunks = new ArrayList<>();
     }
 
@@ -36,5 +37,9 @@ public class SellablePlots {
 
     public String getPlotName() {
         return plotName;
+    }
+
+    public int getPlotPrice() {
+        return plotPrice;
     }
 }

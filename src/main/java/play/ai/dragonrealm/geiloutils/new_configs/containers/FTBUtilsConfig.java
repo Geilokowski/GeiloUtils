@@ -6,6 +6,7 @@ import play.ai.dragonrealm.geiloutils.new_configs.models.ChunkStorage;
 import play.ai.dragonrealm.geiloutils.new_configs.models.SellablePlots;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,6 +66,7 @@ public class FTBUtilsConfig implements IJsonFile {
         inter.serverHoldingTeamName = "land_holdings_incorporated";
         inter.enabled = false;
         inter.inLocoBigas = new HashMap<>();
+        inter.plots = new ArrayList<>();
         return inter;
     }
 }

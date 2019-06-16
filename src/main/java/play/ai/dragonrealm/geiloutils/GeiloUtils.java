@@ -15,6 +15,7 @@ import play.ai.dragonrealm.geiloutils.commands.economy.*;
 import play.ai.dragonrealm.geiloutils.commands.ftblib.FTBSetupTeams;
 import play.ai.dragonrealm.geiloutils.commands.ftblib.FTBTempTeam;
 import play.ai.dragonrealm.geiloutils.commands.ftblib.FTBTransferClaimSellable;
+import play.ai.dragonrealm.geiloutils.commands.ftblib.plot.PlotTreeCommand;
 import play.ai.dragonrealm.geiloutils.commands.geilokill.GeiloKill;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandGeiloKit;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandKit;
@@ -84,7 +85,7 @@ public class GeiloUtils
 	    event.registerServerCommand(new CommandRN());
 	    event.registerServerCommand(new CommandGeiloKit());
 	    event.registerServerCommand(new CommandGeiloPerm());
-	    event.registerServerCommand(new CommandUniRank());
+	    //event.registerServerCommand(new CommandUniRank());
 	    event.registerServerCommand(new CommandGeiloRank());
 	    event.registerServerCommand(new CommandGeiloReload());
 	    event.registerServerCommand(new CommandKit());
@@ -110,6 +111,7 @@ public class GeiloUtils
 			event.registerServerCommand(new FTBSetupTeams());
 			event.registerServerCommand(new FTBTempTeam());
 			event.registerServerCommand(new FTBTransferClaimSellable());
+			event.registerServerCommand(new PlotTreeCommand());
 		}
 		//event.registerServerCommand(new FTBServerClaim());
 	  }
