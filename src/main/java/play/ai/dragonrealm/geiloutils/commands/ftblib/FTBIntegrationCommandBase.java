@@ -38,7 +38,7 @@ public abstract class FTBIntegrationCommandBase extends CommandBase {
 
     public void messageSender(ICommandSender sender, String message, Object... args){
         String stringMsg = String.format(message, args);
-        ITextComponent msg = new TextComponentString("[GeiloFTBLand] " + stringMsg);
+        ITextComponent msg = new TextComponentString("[§eGeiloFTBLand§r] " + stringMsg);
         sender.sendMessage(msg);
     }
 
@@ -92,14 +92,26 @@ public abstract class FTBIntegrationCommandBase extends CommandBase {
         }
     }
 
+    public void transferPropertyToServer(List<ChunkStorage> chunks){
+        ForgeTeam holdingTeam = Universe.get().getTeam(getConfig().getServerHoldingTeamName());
+        Set<ClaimedChunk> claims = convertChunkStorage(chunks);
+
+        transferProperty(claims, holdingTeam);
+    }
+
     public void transferProperty(List<ChunkStorage> chunks, ICommandSender sender) {
         ForgePlayer player = Universe.get().getPlayer(sender);
+        Set<ClaimedChunk> ftbChunks = convertChunkStorage(chunks);
 
+        transferProperty(ftbChunks, player.team);
+    }
+
+    private Set<ClaimedChunk> convertChunkStorage(List<ChunkStorage> chunks) {
         Set<ClaimedChunk> ftbChunks = new HashSet<>();
         for (ChunkStorage chunk: chunks) {
             ftbChunks.add(ClaimedChunks.instance.getChunk(new ChunkDimPos(chunk.getPosX(), chunk.getPosZ(), chunk.getDim())));
         }
-        transferProperty(ftbChunks, player.team);
+        return ftbChunks;
     }
 
     public ForgeTeam getPlayerTeamFromConfig(String playerUID) {

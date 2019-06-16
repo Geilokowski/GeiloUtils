@@ -11,9 +11,10 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
-import java.util.Collection;
-import java.util.HashMap;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class FTBTempTeam extends FTBIntegrationCommandBase {
     @Override
@@ -57,6 +58,19 @@ public class FTBTempTeam extends FTBIntegrationCommandBase {
             addPlayerToServer(serverTeam, player);
             messageSender(sender, "You were added to the team.");
         }
+    }
+
+    /**
+     * Get a list of options for when the user presses the TAB key
+     */
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        List<String> tabCompletes = new ArrayList<>();
+        tabCompletes.add("personal");
+        tabCompletes.add(getConfig().getSellingTeamName());
+        tabCompletes.add(getConfig().getServerHoldingTeamName());
+
+        return tabCompletes;
     }
 
     public static void addPlayerToServer(ForgeTeam serverTeam, ForgePlayer player) {

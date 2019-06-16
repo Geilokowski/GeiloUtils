@@ -52,6 +52,24 @@ public class FTBUtilsConfig implements IJsonFile {
         return plots;
     }
 
+    public SellablePlots getPlotByChunkCoord(ChunkStorage storage){
+        for(SellablePlots plot: plots) {
+            if(plot.getContainedChunks().contains(storage)){
+                return plot;
+            }
+        }
+        return null;
+    }
+
+    public SellablePlots getPlotByName(String name) {
+        for (SellablePlots plots: getSellables()) {
+            if(plots.getPlotName().toLowerCase().equals(name.toLowerCase())){
+                return plots;
+            }
+        }
+        return null;
+    }
+
     @Nonnull
     @Override
     public String getFileName() {

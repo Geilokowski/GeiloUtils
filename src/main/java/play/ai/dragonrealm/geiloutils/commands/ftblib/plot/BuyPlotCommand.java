@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.commands.ftblib.FTBIntegrationCommandBase;
-import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 import play.ai.dragonrealm.geiloutils.new_configs.FileEnum;
 import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.new_configs.models.SellablePlots;
@@ -36,13 +35,7 @@ public class BuyPlotCommand extends FTBIntegrationCommandBase {
             return;
         }
 
-        SellablePlots plot = null;
-        for (SellablePlots plots: getConfig().getSellables()) {
-            if(plots.getPlotName().toLowerCase().equals(args[0].toLowerCase())){
-                plot = plots;
-                break;
-            }
-        }
+        SellablePlots plot = getConfig().getPlotByName(args[0]);
 
         if (plot == null) {
             messageSender(sender, "Unable to locate plot, did you put the correct name?");
