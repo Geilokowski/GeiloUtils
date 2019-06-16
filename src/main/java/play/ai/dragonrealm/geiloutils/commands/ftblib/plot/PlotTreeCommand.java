@@ -1,6 +1,7 @@
 package play.ai.dragonrealm.geiloutils.commands.ftblib.plot;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.server.command.CommandTreeBase;
 import net.minecraftforge.server.command.CommandTreeHelp;
 
@@ -22,5 +23,10 @@ public class PlotTreeCommand extends CommandTreeBase {
     @Override
     public String getUsage(ICommandSender sender) {
         return "Use /plot <subcommand>";
+    }
+
+    @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return true;
     }
 }
