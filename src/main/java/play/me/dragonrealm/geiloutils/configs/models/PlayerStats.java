@@ -8,7 +8,7 @@ public class PlayerStats {
     private String uuid = "";
     private double money = 0.0;
     private String rank = "";
-    //private List<KitLastUsed> kitLastUsed = new ArrayList<>();
+    private List<KitLastUsed> kitLastUsed = new ArrayList<>();
     private List<String> mutedChats = new ArrayList<>();
     private boolean directDeposit;
     private Long discordID;
@@ -32,13 +32,12 @@ public class PlayerStats {
     public void setRank(String rank) {
         this.rank = rank;
     }
-    /*public List<KitLastUsed> getKitLastUsed() {
+    public List<KitLastUsed> getKitLastUsed() {
         return kitLastUsed;
     }
     public void setKitLastUsed(List<KitLastUsed> kitLastUsed) {
         this.kitLastUsed = kitLastUsed;
-    }*/
-
+    }
     public String getUuid() {
         return uuid;
     }
@@ -80,5 +79,10 @@ public class PlayerStats {
 
     public void setDiscordID(Long discordID) {
         this.discordID = discordID;
+    }
+
+    @Override
+    public String toString() {
+        return "Player: " + getName() + " (" + getUuid() + ")";
     }
 }

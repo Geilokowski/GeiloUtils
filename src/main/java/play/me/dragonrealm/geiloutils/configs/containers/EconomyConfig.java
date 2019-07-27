@@ -1,8 +1,9 @@
 package play.me.dragonrealm.geiloutils.configs.containers;
 
-import play.me.dragonrealm.geiloutils.configs.models.EcoItem;
+
 import play.me.dragonrealm.geiloutils.configs.IJsonFile;
 import play.me.dragonrealm.geiloutils.configs.interfaces.IEcononmyConfig;
+import play.me.dragonrealm.geiloutils.configs.models.EcoItem;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;

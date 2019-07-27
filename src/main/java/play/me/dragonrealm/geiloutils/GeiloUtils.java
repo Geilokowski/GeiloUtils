@@ -10,7 +10,7 @@ import play.me.dragonrealm.geiloutils.commands.discord.MuteCommand;
 import play.me.dragonrealm.geiloutils.commands.discord.UnMuteCommand;
 import play.me.dragonrealm.geiloutils.commands.discord.VerifyCommand;
 import play.me.dragonrealm.geiloutils.commands.other.RandomTPCommand;
-import play.me.dragonrealm.geiloutils.configs.ConfigManager;
+import play.me.dragonrealm.geiloutils.configs.ConfigAccess;
 import play.me.dragonrealm.geiloutils.configs.FileEnum;
 import play.me.dragonrealm.geiloutils.configs.JsonManager;
 import play.me.dragonrealm.geiloutils.configs.containers.DiscordCommandConfig;
@@ -45,16 +45,16 @@ public final class GeiloUtils extends JavaPlugin {
         registerCommandDynamically(new ReloadConfigsCommand());
         registerCommandDynamically(new RandomTPCommand());
 
-        if(ConfigManager.getDiscordConfig().isEnabled()) {
+        if(ConfigAccess.getDiscordConfig().isEnabled()) {
             getServer().getPluginManager().registerEvents(new ChatEvent(), this);
             getServer().getPluginManager().registerEvents(new LoginEvent(), this);
             DiscordBotMain.getInstance().initializeBot();
             CommandProcessor.registerCommands();
             getManager().addToManager(FileEnum.DISCORD_COMMANDS, new DiscordCommandConfig());
-            getManager().readFileToRuntime(FileEnum.DISCORD_COMMANDS.name());
+            getManager().readFileToRuntime(FileEnum.DISCORD_COMMANDS);
             registerCommandDynamically(new VerifyCommand());
 
-            if(ConfigManager.getDiscordConfig().isSingleToMulti()) {
+            if(ConfigAccess.getDiscordConfig().isSingleToMulti()) {
                 registerCommandDynamically(new MuteCommand());
                 registerCommandDynamically(new UnMuteCommand());
             }

@@ -23,17 +23,30 @@ public class JsonManager {
             configLocation.mkdirs();
         }
 
+        readFileToRuntime(FileEnum.GENERAL);
         readFilesToRuntime();
     }
 
     private void loadAllConfigs() {
+        this.addToManager(FileEnum.PLAYER_STATS, new PlayerStatsConfig());
         this.addToManager(FileEnum.DISCORD_GENERAL, new DiscordConfig());
         this.addToManager(FileEnum.GENERAL, new GeneralConfig());
-        this.addToManager(FileEnum.PLAYER_STATS, new PlayerStatsConfig());
         this.addToManager(FileEnum.ECONOMY, new EconomyConfig());
-        this.addToManager(FileEnum.RTP, new RandomTPConfig());
-        //this.addToManager(FileEnum.GENERAL, new GeneralConfig());
         //this.addToManager(FileEnum.FTB_UTILITIES, new FTBUtilsConfig());
+        this.addToManager(FileEnum.RANKS, new RanksConfig());
+        this.addToManager(FileEnum.BLOCK_BANS, new BannedBlockConfig());
+        this.addToManager(FileEnum.PERMISSIONS, new PermissionConfig());
+        this.addToManager(FileEnum.KIT, new KitConfig());
+        this.addToManager(FileEnum.RTP, new RandomTPConfig());
+    }
+
+    public <T> T getConfig(Class<T> configClass) {
+        for(IJsonFile fileTypes : fileTable.values()) {
+            if(fileTypes.getClass().equals(configClass)) {
+                return configClass.cast(fileTypes);
+            }
+        }
+        return null;
     }
 
 
@@ -50,7 +63,11 @@ public class JsonManager {
         }
     }
 
-    public void readFileToRuntime(String localName) {
+    public void readFileToRuntime(FileEnum fileEnum) {
+        readFileToRuntime(fileEnum.name());
+    }
+
+    private void readFileToRuntime(String localName) {
         IJsonFile file = fileTable.get(localName);
         File configFile = getFileFromString(file.getFileName());
 

@@ -12,14 +12,16 @@ import play.me.dragonrealm.geiloutils.discord.listener.RankChangedListener;
 import play.me.dragonrealm.geiloutils.discord.listener.ReadyListener;
 import play.me.dragonrealm.geiloutils.discord.utils.DiscordUtils;
 import play.me.dragonrealm.geiloutils.discord.utils.UserRanks;
-import play.me.dragonrealm.geiloutils.configs.ConfigManager;
+import play.me.dragonrealm.geiloutils.configs.ConfigAccess;
 import play.me.dragonrealm.geiloutils.utils.PlayerUtils;
+import play.me.dragonrealm.geiloutils.GeiloUtils;
+import play.me.dragonrealm.geiloutils.discord.utils.DiscordUtils;
+import play.me.dragonrealm.geiloutils.discord.utils.UserRanks;
 
 import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
 
 public class DiscordBotMain {
 
@@ -33,13 +35,13 @@ public class DiscordBotMain {
 
 
     private DiscordBotMain() {
-        textChannelID = ConfigManager.getDiscordConfig().getChannelIDRelay();
-        commandChannelID = ConfigManager.getDiscordConfig().getChannelIDCommands();
+        textChannelID = ConfigAccess.getDiscordConfig().getChannelIDRelay();
+        commandChannelID = ConfigAccess.getDiscordConfig().getChannelIDCommands();
     }
 
     public void initializeBot() {
         JDABuilder builder = new JDABuilder(AccountType.BOT);
-        builder.setToken(ConfigManager.getDiscordConfig().getToken());
+        builder.setToken(ConfigAccess.getDiscordConfig().getToken());
         builder.setAutoReconnect(true);
         builder.setStatus(OnlineStatus.ONLINE);
         builder.addEventListener(new ReadyListener());
@@ -50,7 +52,7 @@ public class DiscordBotMain {
             jda = builder.build();
             botActive = true;
         } catch (LoginException e) {
-            GeiloUtils.getLog().log(Level.SEVERE, "Login Exception thrown by DiscordBot. Disabled until next reload!");
+            GeiloUtils.getLog().warning("Login Exception thrown by DiscordBot. Disabled until next reload!");
             botActive = false;
         }
     }
@@ -114,7 +116,7 @@ public class DiscordBotMain {
         if(supporterRank != null) {
             return Optional.ofNullable(jda.getRoleById(supporterRank));
         } else {
-            String patronGlobal = ConfigManager.getDiscordConfig().getPatronGlobalRank();
+            String patronGlobal = ConfigAccess.getDiscordConfig().getPatronGlobalRank();
             if(patronGlobal.isEmpty()) {
                 return Optional.empty();
             } else {
@@ -135,7 +137,7 @@ public class DiscordBotMain {
     }
 
     public UserRanks getHighestRankForUser(Long discordUserId){
-        List<UserRanks> userRanks = ConfigManager.getDiscordConfig().getDiscordRankIntegration();
+        List<UserRanks> userRanks = ConfigAccess.getDiscordConfig().getDiscordRankIntegration();
         if(userRanks.isEmpty()) {
             return null;
         }

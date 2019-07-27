@@ -1,11 +1,11 @@
 package play.me.dragonrealm.geiloutils.configs;
 
 import play.me.dragonrealm.geiloutils.GeiloUtils;
+import play.me.dragonrealm.geiloutils.configs.FileEnum;
+import play.me.dragonrealm.geiloutils.configs.containers.*;
 import play.me.dragonrealm.geiloutils.configs.interfaces.*;
-import play.me.dragonrealm.geiloutils.configs.containers.DiscordCommandConfig;
-import play.me.dragonrealm.geiloutils.configs.containers.FTBUtilsConfig;
 
-public class ConfigManager {
+public class ConfigAccess {
 
     /*
      * Discord Files
@@ -67,11 +67,54 @@ public class ConfigManager {
         GeiloUtils.getManager().writeToFile(FileEnum.FTB_UTILITIES);
     }
 
+    /*
+     * Ranks Files
+     */
+    public static IRanksConfig getRanksConfig(){
+        return (IRanksConfig) GeiloUtils.getManager().getConfig(FileEnum.RANKS);
+    }
+    public static void writeRanksFile(){
+        GeiloUtils.getManager().writeToFile(FileEnum.RANKS);
+    }
 
-    public static IPlayerStatConfig getPlayerConfig(){
+    /*
+     * Banned Blocks
+     */
+    public static IBannedBlocksConfig getBannedBlocksConfig(){
+        return (IBannedBlocksConfig) GeiloUtils.getManager().getConfig(FileEnum.BLOCK_BANS);
+    }
+    public static void writeBannedBlocksFile(){
+        GeiloUtils.getManager().writeToFile(FileEnum.BLOCK_BANS);
+    }
+
+    /*
+     * PlayerStats
+     */
+    public static IPlayerStatConfig getPlayerStatsConfig(){
         return (IPlayerStatConfig) GeiloUtils.getManager().getConfig(FileEnum.PLAYER_STATS);
     }
-    public static void writePlayerStats(){
+    public static void writePlayerStatsFile(){
         GeiloUtils.getManager().writeToFile(FileEnum.PLAYER_STATS);
     }
+
+    /*
+     * PlayerStats
+     */
+    public static IPermissionConfig getPermissionConfig(){
+        return (IPermissionConfig) GeiloUtils.getManager().getConfig(FileEnum.PERMISSIONS);
+    }
+    public static void writePermissionFile(){
+        GeiloUtils.getManager().writeToFile(FileEnum.PERMISSIONS);
+    }
+
+    /*
+     * Kits
+     */
+    public static IKitConfig getKitConfig(){
+        return (IKitConfig) GeiloUtils.getManager().getConfig(FileEnum.KIT);
+    }
+    public static void writeKitFile(){
+        GeiloUtils.getManager().writeToFile(FileEnum.KIT);
+    }
+
 }

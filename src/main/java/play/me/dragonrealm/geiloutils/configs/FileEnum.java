@@ -6,6 +6,8 @@ public enum FileEnum {
     ECONOMY,
     GENERAL,
     RTP,
+    RANKS,
     FTB_UTILITIES,
-    PLAYER_STATS;
+    BLOCK_BANS,
+    PLAYER_STATS, PERMISSIONS, KIT;
 }

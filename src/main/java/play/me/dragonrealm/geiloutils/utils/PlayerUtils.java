@@ -1,9 +1,8 @@
 package play.me.dragonrealm.geiloutils.utils;
 
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import play.me.dragonrealm.geiloutils.GeiloUtils;
-import play.me.dragonrealm.geiloutils.configs.ConfigManager;
+import play.me.dragonrealm.geiloutils.configs.ConfigAccess;
 import play.me.dragonrealm.geiloutils.configs.models.PlayerStats;
 
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.List;
 public class PlayerUtils {
 
     public static boolean isFirstJoin(Player player) {
-        for(PlayerStats ps : ConfigManager.getPlayerConfig().getPlayerstats()) {
+        for(PlayerStats ps : ConfigAccess.getPlayerStatsConfig().getPlayerstats()) {
             if(ps.getUuid().equals(player.getUniqueId().toString())) {
                 return false;
             }
@@ -21,7 +20,7 @@ public class PlayerUtils {
     }
 
     public static PlayerStats getPlayerstatByUUID(String uuid) {
-        for(PlayerStats ps : ConfigManager.getPlayerConfig().getPlayerstats()) {
+        for(PlayerStats ps : ConfigAccess.getPlayerStatsConfig().getPlayerstats()) {
             if(ps.getUuid().equals(uuid)) {
                 return ps;
             }
@@ -31,7 +30,7 @@ public class PlayerUtils {
     }
 
     public static PlayerStats getPlayerstatByDiscordID(Long id) {
-        for(PlayerStats ps : ConfigManager.getPlayerConfig().getPlayerstats()) {
+        for(PlayerStats ps : ConfigAccess.getPlayerStatsConfig().getPlayerstats()) {
             if(ps.getDiscordID().equals(id)) {
                 return ps;
             }
@@ -40,11 +39,11 @@ public class PlayerUtils {
     }
 
     public static void updatePlayerstat(PlayerStats ps) {
-        for(PlayerStats oldPlayerstats : ConfigManager.getPlayerConfig().getPlayerstats()) {
+        for(PlayerStats oldPlayerstats : ConfigAccess.getPlayerStatsConfig().getPlayerstats()) {
             if(oldPlayerstats.getUuid().equals(ps.getUuid())) {
-                ConfigManager.getPlayerConfig().getPlayerstats().remove(oldPlayerstats);
-                ConfigManager.getPlayerConfig().getPlayerstats().add(ps);
-                ConfigManager.writePlayerStats();
+                ConfigAccess.getPlayerStatsConfig().getPlayerstats().remove(oldPlayerstats);
+                ConfigAccess.getPlayerStatsConfig().getPlayerstats().add(ps);
+                ConfigAccess.writePlayerStatsFile();
                 return;
             }
         }

@@ -8,7 +8,7 @@ import play.me.dragonrealm.geiloutils.GeiloUtils;
 import play.me.dragonrealm.geiloutils.configs.models.PlayerStats;
 import play.me.dragonrealm.geiloutils.discord.command.CommandProcessor;
 import play.me.dragonrealm.geiloutils.discord.main.DiscordBotMain;
-import play.me.dragonrealm.geiloutils.configs.ConfigManager;
+import play.me.dragonrealm.geiloutils.configs.ConfigAccess;
 import play.me.dragonrealm.geiloutils.utils.PlayerUtils;
 
 import java.util.HashMap;
@@ -18,14 +18,14 @@ import java.util.Map;
 public class MessageListener extends ListenerAdapter{
 
 	private static Map<String, String> colorMap = new HashMap<>();
-	private static List<String> colors = ConfigManager.getDiscordConfig().getValidColors();
+	private static List<String> colors = ConfigAccess.getDiscordConfig().getValidColors();
 
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		if(event.getChannel().getId().equals(ConfigManager.getDiscordConfig().getChannelIDRelay()) && !(event.getAuthor().getId().equals(DiscordBotMain.getInstance().getBotID()))) {
+		if(event.getChannel().getId().equals(ConfigAccess.getDiscordConfig().getChannelIDRelay()) && !(event.getAuthor().getId().equals(DiscordBotMain.getInstance().getBotID()))) {
 
 			Message msg = event.getMessage();
 
-			if(msg.getContentDisplay().startsWith(ConfigManager.getDiscordConfig().getDiscordCommandPrefix())){
+			if(msg.getContentDisplay().startsWith(ConfigAccess.getDiscordConfig().getDiscordCommandPrefix())){
 				boolean deleteMessage = CommandProcessor.processCommand(event.getAuthor(), msg.getContentDisplay());
 				if(deleteMessage){
 					msg.delete().queue();
@@ -36,7 +36,7 @@ public class MessageListener extends ListenerAdapter{
 
 			String output = getPrefix(msg.getAuthor().isBot(), msg.getAuthor().getName()) + " " + "\u00A76" + "\u00BB " + "\u00A7r" +msg.getContentDisplay();
 			// Multi-server chat clogs up the readers view. This allows us to mute any chat network we don't like
-			if (ConfigManager.getDiscordConfig().isSingleToMulti()){
+			if (ConfigAccess.getDiscordConfig().isSingleToMulti()){
 				for (Player player : GeiloUtils.getInstanceServer().getOnlinePlayers()) {
 					PlayerStats ps = PlayerUtils.getPlayerstatByUUID(player.getUniqueId().toString());
 					if(ps != null && !ps.getMutedChats().contains(msg.getAuthor().getName())) {
@@ -58,7 +58,7 @@ public class MessageListener extends ListenerAdapter{
 			return getBotPrefix(authorName);
 		} else {
 			// Not a bot, this is from a discord user, so [DISCORD] <User> >> msg
-			return ConfigManager.getDiscordConfig().getMinecraftChatPrefix() + authorName;
+			return ConfigAccess.getDiscordConfig().getMinecraftChatPrefix() + authorName;
 		}
 	}
 

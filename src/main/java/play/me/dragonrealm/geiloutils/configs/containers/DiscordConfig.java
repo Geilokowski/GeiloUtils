@@ -1,8 +1,10 @@
 package play.me.dragonrealm.geiloutils.configs.containers;
 
-import play.me.dragonrealm.geiloutils.discord.utils.UserRanks;
+
+
 import play.me.dragonrealm.geiloutils.configs.IJsonFile;
 import play.me.dragonrealm.geiloutils.configs.interfaces.IDiscordConfigs;
+import play.me.dragonrealm.geiloutils.discord.utils.UserRanks;
 
 import java.util.ArrayList;
 import java.util.List;

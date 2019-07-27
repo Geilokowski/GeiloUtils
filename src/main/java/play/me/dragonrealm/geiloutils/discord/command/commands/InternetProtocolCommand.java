@@ -3,7 +3,7 @@ package play.me.dragonrealm.geiloutils.discord.command.commands;
 import net.dv8tion.jda.core.entities.User;
 import org.bukkit.command.CommandSender;
 import play.me.dragonrealm.geiloutils.discord.command.ICommand;
-import play.me.dragonrealm.geiloutils.configs.ConfigManager;
+import play.me.dragonrealm.geiloutils.configs.ConfigAccess;
 
 public class InternetProtocolCommand implements ICommand {
     @Override
@@ -23,7 +23,7 @@ public class InternetProtocolCommand implements ICommand {
 
     @Override
     public boolean executeCommand(CommandSender sender, User discordUser, String[] commandFeatures) {
-        sender.sendMessage("``` SERVER IP: " + ConfigManager.getDiscordConfig().getServerIP() + "```");
+        sender.sendMessage("``` SERVER IP: " + ConfigAccess.getDiscordConfig().getServerIP() + "```");
         return false;
     }
 

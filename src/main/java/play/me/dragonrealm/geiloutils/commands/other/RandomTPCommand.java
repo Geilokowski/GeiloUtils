@@ -3,11 +3,10 @@ package play.me.dragonrealm.geiloutils.commands.other;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import play.me.dragonrealm.geiloutils.commands.CommandBase;
-import play.me.dragonrealm.geiloutils.configs.ConfigManager;
+import play.me.dragonrealm.geiloutils.configs.ConfigAccess;
 
 import java.util.Random;
 
@@ -35,18 +34,18 @@ public class RandomTPCommand  extends CommandBase {
         if ((sender instanceof Player))
         {
             Player player = (Player)sender;
-            int newX = this.r.nextInt(ConfigManager.getRTPConfig().getRadius() * 2) - ConfigManager.getRTPConfig().getRadius();
-            int newY = ConfigManager.getRTPConfig().getMinY();
-            int newZ = this.r.nextInt(ConfigManager.getRTPConfig().getRadius() * 2) - ConfigManager.getRTPConfig().getRadius();
-            int maxTries = ConfigManager.getRTPConfig().getMaxTries();
+            int newX = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
+            int newY = ConfigAccess.getRTPConfig().getMinY();
+            int newZ = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
+            int maxTries = ConfigAccess.getRTPConfig().getMaxTries();
             while (!isSafe(player, newX, newY, newZ) && (maxTries == -1 || maxTries > 0))
             {
                 newY++;
                 if (newY > 120)
                 {
-                    newX = this.r.nextInt(ConfigManager.getRTPConfig().getRadius() * 2) - ConfigManager.getRTPConfig().getRadius();
-                    newY = ConfigManager.getRTPConfig().getMinY();
-                    newZ = this.r.nextInt(ConfigManager.getRTPConfig().getRadius() * 2) - ConfigManager.getRTPConfig().getRadius();
+                    newX = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
+                    newY = ConfigAccess.getRTPConfig().getMinY();
+                    newZ = this.r.nextInt(ConfigAccess.getRTPConfig().getRadius() * 2) - ConfigAccess.getRTPConfig().getRadius();
                 }
                 if(maxTries > 0){
                     maxTries--;

@@ -3,15 +3,12 @@ package play.me.dragonrealm.geiloutils.discord.command.commands;
 import net.dv8tion.jda.core.entities.User;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import play.me.dragonrealm.geiloutils.GeiloUtils;
 import play.me.dragonrealm.geiloutils.discord.command.BotSender;
 import play.me.dragonrealm.geiloutils.discord.command.ICommand;
 import play.me.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.me.dragonrealm.geiloutils.discord.utils.UserRanks;
-import play.me.dragonrealm.geiloutils.configs.ConfigManager;
-
-import java.util.concurrent.Callable;
+import play.me.dragonrealm.geiloutils.configs.ConfigAccess;
 
 public class ExecCommand implements ICommand {
 
@@ -55,7 +52,7 @@ public class ExecCommand implements ICommand {
     @Override
     public boolean doesUserHavePermission(User discordUser) {
         UserRanks rank = DiscordBotMain.getInstance().getHighestRankForUser(discordUser.getIdLong());
-        int priority = ConfigManager.getCommandConfig().getPriorityLevel(getCommand());
+        int priority = ConfigAccess.getCommandConfig().getPriorityLevel(getCommand());
         if(rank == null || (rank.getPriority() < priority && priority != -1)) {
             return false;
         }
