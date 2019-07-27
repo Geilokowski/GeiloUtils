@@ -3,7 +3,10 @@ package play.me.dragonrealm.geiloutils;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.CommandMap;
+import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 import play.me.dragonrealm.geiloutils.commands.CommandBase;
 import play.me.dragonrealm.geiloutils.commands.administration.ReloadConfigsCommand;
 import play.me.dragonrealm.geiloutils.commands.discord.MuteCommand;
@@ -16,11 +19,13 @@ import play.me.dragonrealm.geiloutils.configs.JsonManager;
 import play.me.dragonrealm.geiloutils.configs.containers.DiscordCommandConfig;
 import play.me.dragonrealm.geiloutils.discord.command.CommandProcessor;
 import play.me.dragonrealm.geiloutils.discord.main.DiscordBotMain;
+import play.me.dragonrealm.geiloutils.economy.PayUsers;
 import play.me.dragonrealm.geiloutils.events.ChatEvent;
 import play.me.dragonrealm.geiloutils.events.LoginEvent;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public final class GeiloUtils extends JavaPlugin {
@@ -31,23 +36,25 @@ public final class GeiloUtils extends JavaPlugin {
     private static File configDataFolder;
     private static JsonManager manager;
     private static Logger logger;
-    //private static Server server;
+
+
 
     @Override
     public void onEnable() {
         // Plugin startup logic
         configDataFolder = getDataFolder();
         logger = getLogger();
-        //server = getServer();
+
         manager = new JsonManager();
         manager.initializeConfigs();
 
+
         registerCommandDynamically(new ReloadConfigsCommand());
         registerCommandDynamically(new RandomTPCommand());
+        getServer().getPluginManager().registerEvents(new LoginEvent(), this);
 
         if(ConfigAccess.getDiscordConfig().isEnabled()) {
             getServer().getPluginManager().registerEvents(new ChatEvent(), this);
-            getServer().getPluginManager().registerEvents(new LoginEvent(), this);
             DiscordBotMain.getInstance().initializeBot();
             CommandProcessor.registerCommands();
             getManager().addToManager(FileEnum.DISCORD_COMMANDS, new DiscordCommandConfig());
@@ -60,11 +67,21 @@ public final class GeiloUtils extends JavaPlugin {
             }
         }
 
+        if(ConfigManager.getEconomyConfig().isEnabled()) {
+            if(ConfigManager.getEconomyConfig().isPaymentTimerEnabled()) {
+                getServer().getScheduler().runTaskTimer(this, new PayUsers(), 0, ConfigManager.getEconomyConfig().getPaymentTimeInSeconds() * 20);
+            }
+        }
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        manager.writeToFiles();
+
+        if (ConfigManager.getDiscordConfig().isEnabled()){
+            DiscordBotMain.getInstance().shutdown();
+        }
     }
 
     public static File getConfigDataFolder() {
@@ -81,7 +98,6 @@ public final class GeiloUtils extends JavaPlugin {
 
     public static Server getInstanceServer() {
         return getPlugin(GeiloUtils.class).getServer();
-        //return server;
     }
 
     public void registerCommandDynamically(CommandBase base){

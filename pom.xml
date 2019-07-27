@@ -6,7 +6,7 @@
 
     <groupId>play.me.dragonrealm.geiloutils</groupId>
     <artifactId>GeiloUtils</artifactId>
-    <version>1.4.${v}</version>
+    <version>1.4.${v}_spigot</version>
     <packaging>jar</packaging>
 
     <name>GeiloUtils</name>

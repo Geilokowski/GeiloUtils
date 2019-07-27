@@ -3,6 +3,7 @@ package play.me.dragonrealm.geiloutils.discord.command.commands;
 import net.dv8tion.jda.core.entities.User;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import play.me.dragonrealm.geiloutils.GeiloUtils;
 import play.me.dragonrealm.geiloutils.discord.command.BotSender;
 import play.me.dragonrealm.geiloutils.discord.command.ICommand;
 
@@ -30,9 +31,9 @@ public class KillEntitiesCommand implements ICommand {
         if(commandFeatures.length == 1) {
             Integer number = Integer.getInteger(commandFeatures[0]);
             String cmd = String.format("kill @e[type=Item,r=[%s]]", number);
-            Bukkit.dispatchCommand(BotSender.BLOCK_INSTANCE, cmd);
+            Bukkit.getScheduler().runTask(GeiloUtils.getPlugin(GeiloUtils.class), () -> Bukkit.dispatchCommand(BotSender.BLOCK_INSTANCE, cmd));
         } else {
-            Bukkit.dispatchCommand(BotSender.BLOCK_INSTANCE, "kill @e[type=item]");
+            Bukkit.getScheduler().runTask(GeiloUtils.getPlugin(GeiloUtils.class), () -> Bukkit.dispatchCommand(BotSender.BLOCK_INSTANCE, "kill @e[type=item]"));
         }
         return false;
     }

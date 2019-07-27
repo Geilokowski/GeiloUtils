@@ -33,7 +33,7 @@ public class OnlineCommand implements ICommand {
             sender.sendMessage("No players online!");
         }else{
 
-            String prefix = players.size() == 1 ? "1 Player online: " : players.size() + " Players online";
+            String prefix = players.size() == 1 ? "1 Player online: " : players.size() + " Players online: ";
 
 
             StringBuilder output = new StringBuilder();

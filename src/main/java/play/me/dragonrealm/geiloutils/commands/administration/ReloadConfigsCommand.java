@@ -1,6 +1,7 @@
 package play.me.dragonrealm.geiloutils.commands.administration;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import play.me.dragonrealm.geiloutils.GeiloUtils;
 import play.me.dragonrealm.geiloutils.commands.CommandBase;
 
@@ -22,8 +23,17 @@ public class ReloadConfigsCommand extends CommandBase {
 
     @Override
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        GeiloUtils.getManager().readFilesToRuntime();
-        sender.sendMessage("GeiloUtils Reloaded Configs.");
-        return true;
+        if(sender instanceof Player && ((Player)sender).hasPermission("geiloutils.admin_perms")) {
+            GeiloUtils.getManager().readFilesToRuntime();
+            sender.sendMessage("GeiloUtils Reloaded Configs.");
+            return true;
+        } else {
+            if(!(sender instanceof Player)){
+                GeiloUtils.getManager().readFilesToRuntime();
+                sender.sendMessage("GeiloUtils Reloaded Configs.");
+                return true;
+            }
+        }
+        return false;
     }
 }
