@@ -3,10 +3,7 @@ package play.me.dragonrealm.geiloutils;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.CommandMap;
-import org.bukkit.permissions.Permission;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
 import play.me.dragonrealm.geiloutils.commands.CommandBase;
 import play.me.dragonrealm.geiloutils.commands.administration.ReloadConfigsCommand;
 import play.me.dragonrealm.geiloutils.commands.discord.MuteCommand;
@@ -67,9 +64,9 @@ public final class GeiloUtils extends JavaPlugin {
             }
         }
 
-        if(ConfigManager.getEconomyConfig().isEnabled()) {
-            if(ConfigManager.getEconomyConfig().isPaymentTimerEnabled()) {
-                getServer().getScheduler().runTaskTimer(this, new PayUsers(), 0, ConfigManager.getEconomyConfig().getPaymentTimeInSeconds() * 20);
+        if(ConfigAccess.getEconomyConfig().isEnabled()) {
+            if(ConfigAccess.getEconomyConfig().isPaymentTimerEnabled()) {
+                getServer().getScheduler().runTaskTimer(this, new PayUsers(), 0, ConfigAccess.getEconomyConfig().getPaymentTimeInSeconds() * 20);
             }
         }
     }
@@ -79,7 +76,7 @@ public final class GeiloUtils extends JavaPlugin {
         // Plugin shutdown logic
         manager.writeToFiles();
 
-        if (ConfigManager.getDiscordConfig().isEnabled()){
+        if (ConfigAccess.getDiscordConfig().isEnabled()){
             DiscordBotMain.getInstance().shutdown();
         }
     }

@@ -37,9 +37,8 @@ public class ExecCommand implements ICommand {
             int len = builder.length();
             builder = builder.delete(len - 1, len);
             String finalStr = builder.toString();
-            //ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
             Bukkit.getScheduler().runTask(GeiloUtils.getPlugin(GeiloUtils.class), () -> Bukkit.dispatchCommand(BotSender.BLOCK_INSTANCE, finalStr));
-            return true;
+            return false;
         }
         return false;
     }

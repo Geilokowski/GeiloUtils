@@ -22,8 +22,7 @@ public class CommandProcessor {
         register(new SpawnPlaceCommand());
         register(new InternetProtocolCommand());
         register(new TellCommand());
-        //register(new RolesCommand());
-        //register(new SetRolesCommand());
+
         register(new TpsCommand());
         register(new KillEntitiesCommand());
 

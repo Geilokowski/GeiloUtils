@@ -4,7 +4,7 @@
   <groupId>play.me.dragonrealm.geiloutils</groupId>
   <artifactId>GeiloUtils</artifactId>
   <name>GeiloUtils</name>
-  <version>1.4.${v}</version>
+  <version>1.4.${v}_spigot</version>
   <description>A plugin for DragonRealm, doing discord and all the things</description>
   <build>
     <defaultGoal>clean package</defaultGoal>
