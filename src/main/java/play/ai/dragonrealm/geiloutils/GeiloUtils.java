@@ -18,6 +18,7 @@ import play.ai.dragonrealm.geiloutils.commands.permissions.CommandGeiloPerm;
 import play.ai.dragonrealm.geiloutils.commands.ranks.CommandGeiloRank;
 import play.ai.dragonrealm.geiloutils.commands.ranks.CommandUniRank;
 import play.ai.dragonrealm.geiloutils.commands.rtp.CommandRTP;
+import play.ai.dragonrealm.geiloutils.commands.rtp.CommandRTPGamerules;
 import play.ai.dragonrealm.geiloutils.discord.command.CommandProcessor;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.economy.MoneyDistribution;
@@ -67,6 +68,7 @@ public class GeiloUtils
 	  public static void serverInit(FMLServerStartingEvent event)
 	  {
 	    event.registerServerCommand(new CommandRTP());
+	    event.registerServerCommand(new CommandRTPGamerules());
 	    event.registerServerCommand(new CommandGeiloBan());
 	    event.registerServerCommand(new CommandGeiloEconomy());
 	    event.registerServerCommand(new CommandSell());
