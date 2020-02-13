@@ -28,14 +28,14 @@ public class EventHandlerPlayer {
 
 		if(ConfigAccess.getDiscordConfig().isEnabled()){
 			String message = firstJoin ? " joined for the first time!" : " joined the game";
-			DiscordBotMain.getInstance().sendMessageDiscord(event.player.getDisplayNameString() + message);
+			DiscordBotMain.getInstance().sendMessageDiscord(event.player.getGameProfile().getName() + message);
 		}
 	}
 
 	@SubscribeEvent
 	public void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event){
 		if(ConfigAccess.getDiscordConfig().isEnabled()){
-			DiscordBotMain.getInstance().sendMessageDiscord(event.player.getDisplayNameString() + " left the game");
+			DiscordBotMain.getInstance().sendMessageDiscord(event.player.getGameProfile().getName() + " left the game");
 		}
 	}
 }
