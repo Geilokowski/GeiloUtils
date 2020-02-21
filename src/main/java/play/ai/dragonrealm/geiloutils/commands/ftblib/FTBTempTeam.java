@@ -37,7 +37,7 @@ public class FTBTempTeam extends FTBIntegrationCommandBase {
             messageSender(sender, "You must specify the team to sudo into!");
             return;
         }
-        if(!(args[0].equals(getConfig().getSellingTeamName()) || args[0].equals(getConfig().getServerHoldingTeamName()) || args[0].equals("personal"))){
+        if(!(args[0].equals(getConfig().getSellingTeamName()) || args[0].equals(getConfig().getServerShopTeamName()) || args[0].equals(getConfig().getServerHoldingTeamName()) || args[0].equals("personal"))){
             messageSender(sender, "You did not name a valid server team!");
             return;
         }

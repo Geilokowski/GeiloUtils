@@ -17,6 +17,7 @@ public class FTBUtilsConfig implements IJsonFile {
     public boolean enabled;
     public String sellingTeamName = "server_seller";
     public String serverHoldingTeamName = "land_holdings_incorporated";
+    public String serverShopTeamName = "shopland";
     public HashMap<String, String> inLocoBigas;
     public List<SellablePlots> plots;
 
@@ -26,6 +27,10 @@ public class FTBUtilsConfig implements IJsonFile {
 
     public String getServerHoldingTeamName() {
         return serverHoldingTeamName;
+    }
+
+    public String getServerShopTeamName() {
+        return serverShopTeamName;
     }
 
     public String getTeamIfExist(String uuid) {
@@ -82,6 +87,7 @@ public class FTBUtilsConfig implements IJsonFile {
         FTBUtilsConfig inter = new FTBUtilsConfig();
         inter.sellingTeamName = "server_seller";
         inter.serverHoldingTeamName = "land_holdings_incorporated";
+        inter.serverShopTeamName = "shopland";
         inter.enabled = false;
         inter.inLocoBigas = new HashMap<>();
         inter.plots = new ArrayList<>();

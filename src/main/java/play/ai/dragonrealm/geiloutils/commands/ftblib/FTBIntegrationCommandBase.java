@@ -55,7 +55,7 @@ public abstract class FTBIntegrationCommandBase extends CommandBase {
         return player.team.type == TeamType.PLAYER;
     }
 
-    public void buildLandClaim(int price){
+    public String buildLandClaim(int price){
         ForgeTeam claimTeam = Universe.get().getTeam(getConfig().getSellingTeamName());
         ForgeTeam holdingTeam = Universe.get().getTeam(getConfig().getServerHoldingTeamName());
         Set<ClaimedChunk> claim = ClaimedChunks.instance.getTeamChunks(claimTeam, OptionalInt.empty());
@@ -72,6 +72,7 @@ public abstract class FTBIntegrationCommandBase extends CommandBase {
 
         getConfig().addSellables(plots);
         writeConfig();
+        return plots.getPlotName();
     }
 
     /**
@@ -79,7 +80,7 @@ public abstract class FTBIntegrationCommandBase extends CommandBase {
      * @param claim the chunk claim by user.
      * @param team the team to transfer to.
      */
-    public void transferProperty(Set<ClaimedChunk> claim, ForgeTeam team){
+    private void transferProperty(Set<ClaimedChunk> claim, ForgeTeam team){
         for (ClaimedChunk chunk: claim) {
             ClaimedChunks.instance.unclaimChunk(chunk.getPos());
 
@@ -97,6 +98,13 @@ public abstract class FTBIntegrationCommandBase extends CommandBase {
         Set<ClaimedChunk> claims = convertChunkStorage(chunks);
 
         transferProperty(claims, holdingTeam);
+    }
+
+    public void transferPropertyToShop(List<ChunkStorage> chunks){
+        ForgeTeam shopTeam = Universe.get().getTeam(getConfig().getServerShopTeamName());
+        Set<ClaimedChunk> claims = convertChunkStorage(chunks);
+
+        transferProperty(claims, shopTeam);
     }
 
     public void transferProperty(List<ChunkStorage> chunks, ICommandSender sender) {

@@ -25,7 +25,8 @@ public class FTBTransferClaimSellable extends FTBIntegrationCommandBase{
 
         try {
             int cost = parseInt(args[0]);
-            buildLandClaim(cost);
+            String plotName = buildLandClaim(cost);
+            messageSender(sender, String.format("Created [%s] for $%s", plotName, cost));
 
 
         } catch (NumberFormatException e) {

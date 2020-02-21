@@ -11,6 +11,8 @@ public class PlotTreeCommand extends CommandTreeBase {
         super.addSubcommand(new BuyPlotCommand());
         super.addSubcommand(new CurrentPlotCommand());
         super.addSubcommand(new ResellPropertyCommand());
+        super.addSubcommand(new ComercializePlotCommand());
+        super.addSubcommand(new PrivatizePlotCommand());
         // As per documentation, this needs to be kept for last!
         super.addSubcommand(new CommandTreeHelp(this));
     }
