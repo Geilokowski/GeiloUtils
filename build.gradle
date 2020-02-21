@@ -14,7 +14,7 @@ plugins {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-def build_version = "1.4.${System.getenv("BUILD_NUMBER") ?: 0}"
+def build_version = "1.4.${System.getenv("BUILD_NUMBER") ?: 0}-${System.getenv("GIT_BRANCH") ?: "CUSTOM_BUILD"}"
 version = build_version
 group = "play.ai.dragonrealm.geiloutils" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "geiloutils"
@@ -25,7 +25,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.4.2765"
+    version = "1.12.2-14.23.5.2768"
     runDir = "run"
     mappings = "snapshot_20171003"
 
@@ -33,9 +33,14 @@ minecraft {
     replace "@VERSION@", "${build_version}"
 }
 
+repositories {
+    maven { url "https://maven.latmod.com/" }
+    maven { url "https://dvs1.progwml6.com/files/maven" } //JEI
+}
+
 dependencies {
-    compileOnly files("lib/FTBLib-5.3.1.57.jar")
-    compileOnly files("lib/FTBUtilities-5.3.0.53.jar")
+    deobfCompile "com.feed_the_beast.mods:FTBLib:5.+"
+    deobfCompile "com.feed_the_beast.mods:FTBUtilities:5.+"
 }
 
 

@@ -1,6 +1,7 @@
 package play.ai.dragonrealm.geiloutils;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.*;
@@ -11,6 +12,10 @@ import play.ai.dragonrealm.geiloutils.commands.discord.CommandMute;
 import play.ai.dragonrealm.geiloutils.commands.discord.CommandUnmute;
 import play.ai.dragonrealm.geiloutils.commands.discord.CommandVerify;
 import play.ai.dragonrealm.geiloutils.commands.economy.*;
+import play.ai.dragonrealm.geiloutils.commands.ftblib.FTBSetupTeams;
+import play.ai.dragonrealm.geiloutils.commands.ftblib.FTBTempTeam;
+import play.ai.dragonrealm.geiloutils.commands.ftblib.FTBTransferClaimSellable;
+import play.ai.dragonrealm.geiloutils.commands.ftblib.plot.PlotTreeCommand;
 import play.ai.dragonrealm.geiloutils.commands.geilokill.GeiloKill;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandGeiloKit;
 import play.ai.dragonrealm.geiloutils.commands.kits.CommandKit;
@@ -63,50 +68,56 @@ public class GeiloUtils
 			  DiscordBotMain.getInstance().initializeBot();
 		  }
 	  }
-	  
-	  @EventHandler
-	  public static void serverInit(FMLServerStartingEvent event)
-	  {
-	    event.registerServerCommand(new CommandRTP());
-	    event.registerServerCommand(new CommandRTPGamerules());
-	    event.registerServerCommand(new CommandGeiloBan());
-	    event.registerServerCommand(new CommandGeiloEconomy());
-	    event.registerServerCommand(new CommandSell());
-	    event.registerServerCommand(new CommandBalance());
-	    event.registerServerCommand(new CommandPay());
-	    if (ConfigAccess.getEconomyConfig().isEnabled())
-	    {
-	      event.registerServerCommand(new CommandDeposit());
-	      event.registerServerCommand(new CommandWithdraw());
-	    }
-	    event.registerServerCommand(new CommandRN());
-	    event.registerServerCommand(new CommandGeiloKit());
-	    event.registerServerCommand(new CommandGeiloPerm());
-	    event.registerServerCommand(new CommandUniRank());
-	    event.registerServerCommand(new CommandGeiloRank());
-	    event.registerServerCommand(new CommandGeiloReload());
-	    event.registerServerCommand(new CommandKit());
-	    event.registerServerCommand(new GeiloKill());
 
-	    if(ConfigAccess.getDiscordConfig().isSingleToMulti()) {
-	    	event.registerServerCommand(new CommandMute());
-	    	event.registerServerCommand(new CommandUnmute());
-		}
+    @EventHandler
+    public static void serverInit(FMLServerStartingEvent event) {
+        event.registerServerCommand(new CommandRTP());
+        event.registerServerCommand(new CommandRTPGamerules());
+        event.registerServerCommand(new CommandGeiloBan());
+        event.registerServerCommand(new CommandGeiloEconomy());
+        event.registerServerCommand(new CommandSell());
+        event.registerServerCommand(new CommandBalance());
+        event.registerServerCommand(new CommandPay());
 
-		if(ConfigAccess.getDiscordConfig().isEnabled()) {
-	    	event.registerServerCommand(new CommandVerify());
-			CommandProcessor.registerCommands();
-			getManager().addToManager(FileEnum.DISCORD_COMMANDS, new DiscordCommandConfig());
-			getManager().readFileToRuntime(FileEnum.DISCORD_COMMANDS);
-		}
+        if (ConfigAccess.getEconomyConfig().isEnabled()) {
+            event.registerServerCommand(new CommandDeposit());
+            event.registerServerCommand(new CommandWithdraw());
+        }
 
-		if(ConfigAccess.getEconomyConfig().isPaymentTimerEnabled()) {
-			event.registerServerCommand(new MuteDepositMessageCommand());
-		}
+        event.registerServerCommand(new CommandRN());
+        event.registerServerCommand(new CommandGeiloKit());
+        event.registerServerCommand(new CommandGeiloPerm());
+        event.registerServerCommand(new CommandUniRank());
+        event.registerServerCommand(new CommandGeiloRank());
+        event.registerServerCommand(new CommandGeiloReload());
+        event.registerServerCommand(new CommandKit());
+        event.registerServerCommand(new GeiloKill());
 
-		//event.registerServerCommand(new FTBServerClaim());
-	    //event.registerServerCommand(new FTBTempTeam());
-	  }
+        if (ConfigAccess.getDiscordConfig().isSingleToMulti()) {
+            event.registerServerCommand(new CommandMute());
+            event.registerServerCommand(new CommandUnmute());
+        }
+
+        if (ConfigAccess.getDiscordConfig().isEnabled()) {
+            event.registerServerCommand(new CommandVerify());
+            CommandProcessor.registerCommands();
+            getManager().addToManager(FileEnum.DISCORD_COMMANDS, new DiscordCommandConfig());
+            getManager().readFileToRuntime(FileEnum.DISCORD_COMMANDS);
+        }
+
+        if (ConfigAccess.getEconomyConfig().isPaymentTimerEnabled()) {
+            event.registerServerCommand(new MuteDepositMessageCommand());
+        }
+
+        if (Loader.isModLoaded("ftblib") && Loader.isModLoaded("ftbutilities") && ConfigAccess.getFTBConfig().enabled) {
+            event.registerServerCommand(new FTBSetupTeams());
+            event.registerServerCommand(new FTBTempTeam());
+            if (ConfigAccess.getEconomyConfig().isEnabled()) {
+                event.registerServerCommand(new FTBTransferClaimSellable());
+                event.registerServerCommand(new PlotTreeCommand());
+            }
+        }
+    }
 	  
 	  @EventHandler
 	  public void postInit(FMLPostInitializationEvent event)
