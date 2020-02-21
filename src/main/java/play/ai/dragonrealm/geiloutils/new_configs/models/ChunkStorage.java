@@ -23,4 +23,13 @@ public class ChunkStorage {
     public int getPosZ() {
         return posZ;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof ChunkStorage){
+            ChunkStorage other = (ChunkStorage) obj;
+            return this.posX == other.getPosX() && this.posZ == other.getPosZ() && this.dim == other.getDim();
+        }
+        return super.equals(obj);
+    }
 }

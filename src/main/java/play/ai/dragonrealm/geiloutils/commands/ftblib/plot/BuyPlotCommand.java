@@ -49,7 +49,7 @@ public class BuyPlotCommand extends FTBIntegrationCommandBase {
 
         EntityPlayer player = (EntityPlayer) sender;
 
-        if(((PlayerStatsConfig)GeiloUtils.getManager().getConfig(FileEnum.PLAYER_STATS)).getPlayerBalance(player.getCachedUniqueIdString()) <= plot.getPlotPrice()){
+        if(((PlayerStatsConfig)GeiloUtils.getManager().getConfig(FileEnum.PLAYER_STATS)).getPlayerBalance(player.getCachedUniqueIdString()) >= plot.getPlotPrice()){
             if(hasTeam(sender)){
                 transferProperty(plot.getContainedChunks(), sender);
                 plot.setOwnerUID(player.getCachedUniqueIdString());
