@@ -82,7 +82,7 @@ public abstract class FTBIntegrationCommandBase extends CommandBase {
      */
     private void transferProperty(Set<ClaimedChunk> claim, ForgeTeam team){
         for (ClaimedChunk chunk: claim) {
-            ClaimedChunks.instance.unclaimChunk(chunk.getPos());
+            ClaimedChunks.instance.unclaimChunk(team.owner, chunk.getPos());
 
             FTBUtilitiesTeamData data = FTBUtilitiesTeamData.get(team);
             ClaimedChunk oldClaim = ClaimedChunks.instance.getChunk(chunk.getPos());
