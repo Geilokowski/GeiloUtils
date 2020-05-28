@@ -77,6 +77,7 @@ public final class GeiloUtils extends JavaPlugin {
         manager.writeToFiles();
 
         if (ConfigAccess.getDiscordConfig().isEnabled()){
+            DiscordBotMain.getInstance().sendMessageDiscord("Server Shutting Down!");
             DiscordBotMain.getInstance().shutdown();
         }
     }

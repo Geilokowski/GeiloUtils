@@ -4,6 +4,7 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import play.me.dragonrealm.geiloutils.GeiloUtils;
+import play.me.dragonrealm.geiloutils.configs.ConfigAccess;
 import play.me.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 
 public class ReadyListener extends ListenerAdapter{
@@ -13,7 +14,9 @@ public class ReadyListener extends ListenerAdapter{
 		for (Guild g : event.getJDA().getGuilds()) {
 			GeiloUtils.getLog().info(("Name: " + g.getName() + " ID: " + g.getId()));
 
-			DiscordBotMain.getInstance().sendMessageDiscord("Server Starting!");
+			if(g.getTextChannelById(ConfigAccess.getDiscordConfig().getChannelIDRelay()) != null){
+				DiscordBotMain.getInstance().sendMessageDiscord("Server Starting!");
+			}
 		}
 	}
 }
