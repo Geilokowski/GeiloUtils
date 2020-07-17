@@ -14,7 +14,7 @@ public class ReadyListener extends ListenerAdapter{
 		for (Guild g : event.getJDA().getGuilds()) {
 			GeiloUtils.getLog().info(("Name: " + g.getName() + " ID: " + g.getId()));
 
-			if(g.getTextChannelById(ConfigAccess.getDiscordConfig().getChannelIDRelay()) != null){
+			if(!ConfigAccess.getDiscordConfig().getChannelIDRelay().isEmpty()){
 				DiscordBotMain.getInstance().sendMessageDiscord("Server Starting!");
 			}
 		}

@@ -21,7 +21,7 @@ public class MessageListener extends ListenerAdapter{
 	private static List<String> colors = ConfigAccess.getDiscordConfig().getValidColors();
 
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		if(event.getChannel().getId().equals(ConfigAccess.getDiscordConfig().getChannelIDRelay()) && !(event.getAuthor().getId().equals(DiscordBotMain.getInstance().getBotID()))) {
+		if(ConfigAccess.getDiscordConfig().getChannelIDRelay().contains(event.getChannel().getId()) && !(event.getAuthor().getId().equals(DiscordBotMain.getInstance().getBotID()))) {
 
 			Message msg = event.getMessage();
 
