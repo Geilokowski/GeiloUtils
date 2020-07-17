@@ -15,8 +15,8 @@ public interface IDiscordConfigs {
     public String getChannelIDCommands();
     public void setChannelIDCommands(String channelIDCommands);
 
-    public String getChannelIDRelay();
-    public void setChannelIDRelay(String channelIDRelay);
+    public List<String> getChannelIDRelay();
+    public void setChannelIDRelay(List<String> channelIDRelay);
 
     public String getMinecraftChatPrefix();
     public void setMinecraftChatPrefix(String minecraftChatPrefix);

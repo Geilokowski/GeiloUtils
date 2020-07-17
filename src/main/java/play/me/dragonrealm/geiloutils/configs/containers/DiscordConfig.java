@@ -15,7 +15,7 @@ public class DiscordConfig implements IJsonFile, IDiscordConfigs {
     private boolean enableMultipleServersOnOneChannel;
     private String token;
     private String channelIDCommands;
-    private String channelIDRelay;
+    private List<String> channelIDRelay;
     private String minecraftChatPrefix;
     private String discordChatPrefix;
     private String discordCommandPrefix;
@@ -36,7 +36,8 @@ public class DiscordConfig implements IJsonFile, IDiscordConfigs {
         defaultDiscordConfig.setSingleToMulti(false);
         defaultDiscordConfig.setMinecraftChatPrefix("§3[§6Discord§3] §r");
         defaultDiscordConfig.setChannelIDCommands("");
-        defaultDiscordConfig.setChannelIDRelay("");
+        ArrayList<String> list = new ArrayList<>();
+        defaultDiscordConfig.setChannelIDRelay(list);
         defaultDiscordConfig.setToken("");
         defaultDiscordConfig.setDiscordCommandPrefix("!");
         defaultDiscordConfig.setDiscordChatPrefix("[%s] >> ");
@@ -75,10 +76,10 @@ public class DiscordConfig implements IJsonFile, IDiscordConfigs {
     public void setChannelIDCommands(String channelIDCommands) {
         this.channelIDCommands = channelIDCommands;
     }
-    public String getChannelIDRelay() {
+    public List<String> getChannelIDRelay() {
         return channelIDRelay;
     }
-    public void setChannelIDRelay(String channelIDRelay) {
+    public void setChannelIDRelay(List<String> channelIDRelay) {
         this.channelIDRelay = channelIDRelay;
     }
     public String getMinecraftChatPrefix() {

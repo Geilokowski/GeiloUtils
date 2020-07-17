@@ -27,7 +27,7 @@ public class DiscordBotMain {
 
     private static DiscordBotMain INSTANCE = null;
 
-    private String textChannelID;
+    private List<String> textChannelID;
     private String commandChannelID;
     private JDA jda;
     private boolean botActive = false;
@@ -62,9 +62,15 @@ public class DiscordBotMain {
     }
 
 
-    private Optional<TextChannel> getTextChannel(){
-        if(botActive)
-            return Optional.ofNullable(jda.getTextChannelById(textChannelID));
+    private Optional<List<TextChannel>> getTextChannel(){
+        if(botActive) {
+            ArrayList<TextChannel> channels = new ArrayList<>();
+            for(String id: textChannelID) {
+                channels.add(jda.getTextChannelById(id));
+            }
+            return Optional.of(channels);
+        }
+
         return Optional.empty();
     }
 
@@ -82,7 +88,7 @@ public class DiscordBotMain {
 
     public void sendMessageDiscord(String message) {
         if(botActive)
-            getTextChannel().ifPresent(tx -> tx.sendMessage(message).queue());
+            getTextChannel().ifPresent(tx -> tx.forEach(textChannel -> textChannel.sendMessage(message).queue()));
     }
 
     public User getUserFromPlayerUUID(String mcUUID) {
@@ -102,15 +108,18 @@ public class DiscordBotMain {
         ArrayList < String > bots = new ArrayList<>();
 
         if(getTextChannel().isPresent()) {
-            List<Member> memberList = getTextChannel().get().getMembers();
-
-            for (Member member : memberList) {
-                if (member.getUser().isBot()) {
-                    String name = member.getUser().getName();
-                    String botName = underscoreSeparated ? name.replace(" ", "_") : name;
-                    bots.add(botName);
+            List<TextChannel> textChannels = getTextChannel().get();
+            for(TextChannel textChannel : textChannels) {
+                List<Member> memberList = textChannel.getMembers();
+                for (Member member : memberList) {
+                    if (member.getUser().isBot()) {
+                        String name = member.getUser().getName();
+                        String botName = underscoreSeparated ? name.replace(" ", "_") : name;
+                        bots.add(botName);
+                    }
                 }
             }
+
         }
 
         return bots;
@@ -125,9 +134,14 @@ public class DiscordBotMain {
                 return Optional.empty();
             } else {
                 if(getTextChannel().isPresent()) {
-                    Guild guild = getTextChannel().get().getGuild();
-                    supporterRank = patronGlobal;
-                    return Optional.ofNullable(guild.getRoleById(patronGlobal));
+                    List<TextChannel> channels = getTextChannel().get();
+                    for(Channel channel : channels) {
+                        if(channel.getGuild().getRoleById(patronGlobal) != null) {
+                            supporterRank = patronGlobal;
+                            return Optional.ofNullable(channel.getGuild().getRoleById(patronGlobal));
+                        }
+                    }
+
                 }
             }
         }
@@ -136,8 +150,15 @@ public class DiscordBotMain {
 
     public List<Role> getRolesOnUser(long userId){
         User user = jda.getUserById(userId);
-        Member member = jda.getTextChannelById(textChannelID).getGuild().getMember(user);
-        return member.getRoles();
+        if(getTextChannel().isPresent()) {
+            List<TextChannel> channels = getTextChannel().get();
+            for (TextChannel channel : channels) {
+                if(channel.getGuild().isMember(user)) {
+                    return channel.getGuild().getMember(user).getRoles();
+                }
+            }
+        }
+        return null;
     }
 
     public UserRanks getHighestRankForUser(Long discordUserId){
