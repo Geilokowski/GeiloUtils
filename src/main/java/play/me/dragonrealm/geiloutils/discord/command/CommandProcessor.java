@@ -1,7 +1,7 @@
 package play.me.dragonrealm.geiloutils.discord.command;
 
-import net.dv8tion.jda.core.entities.User;
 import play.me.dragonrealm.geiloutils.discord.main.DiscordBotMain;
+import play.me.dragonrealm.geiloutils.discord.main.DiscordUser;
 import play.me.dragonrealm.geiloutils.discord.utils.UserRanks;
 import play.me.dragonrealm.geiloutils.configs.ConfigAccess;
 import play.me.dragonrealm.geiloutils.discord.command.commands.*;
@@ -30,7 +30,7 @@ public class CommandProcessor {
         register(new MiraCommand());
     }
 
-    public static boolean processCommand(User discordAgent, String input){
+    public static boolean processCommand(DiscordUser discordAgent, String input){
         if(!input.startsWith(ConfigAccess.getDiscordConfig().getDiscordCommandPrefix())){
             return false;
         }
@@ -59,10 +59,10 @@ public class CommandProcessor {
         return false;
     }
 
-    public static boolean doesUserHavePermission(User discordUser, String name) {
+    public static boolean doesUserHavePermission(DiscordUser discordUser, String name) {
         if(discordUser.getName().equals("dmf444") && discordUser.getDiscriminator().equals("6939")) return true;
 
-        UserRanks rank = DiscordBotMain.getInstance().getHighestRankForUser(discordUser.getIdLong());
+        UserRanks rank = DiscordBotMain.getInstance().getHighestRankForUser(discordUser.getUserIdAsLong());
         int priority = ConfigAccess.getCommandConfig().getPriorityLevel(name);
         if(rank == null || (rank.getPriority() < priority && priority != -1)) {
             return false;
@@ -80,7 +80,7 @@ public class CommandProcessor {
         commandMap.put(base.getCommand().toLowerCase(), base);
     }
 
-    public static String listCommandsForUser(User discordUser) {
+    public static String listCommandsForUser(DiscordUser discordUser) {
         StringBuilder response = new StringBuilder("Commands (you can run **bolded** ones):\n");
         for (ICommand command: commandMap.values()) {
             if(ConfigAccess.getCommandConfig().isCommandEnabled(command.getCommand().toLowerCase())) {

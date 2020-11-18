@@ -1,12 +1,12 @@
 package play.me.dragonrealm.geiloutils.discord.command.commands;
 
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.User;
 import org.bukkit.command.CommandSender;
 import play.me.dragonrealm.geiloutils.discord.command.ICommand;
 import play.me.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 
 import java.util.List;
+import play.me.dragonrealm.geiloutils.discord.main.DiscordRole;
+import play.me.dragonrealm.geiloutils.discord.main.DiscordUser;
 
 public class DeclareAllCommand implements ICommand {
     @Override
@@ -25,9 +25,9 @@ public class DeclareAllCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(CommandSender sender, User discordUser, String[] commandFeatures) {
-        List<Role> roleList = DiscordBotMain.getInstance().getRolesOnUser(Long.parseLong(commandFeatures[0]));
-        for(Role role: roleList) {
+    public boolean executeCommand(CommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
+        List<DiscordRole> roleList = DiscordBotMain.getInstance().getRolesOnUser(Long.parseLong(commandFeatures[0]));
+        for(DiscordRole role: roleList) {
             sender.sendMessage("ROLE: " + role.getName() + "|| ID:" + role.getId());
         }
         return false;
@@ -39,7 +39,7 @@ public class DeclareAllCommand implements ICommand {
     }
 
     @Override
-    public boolean doesUserHavePermission(User discordUser) {
+    public boolean doesUserHavePermission(DiscordUser discordUser) {
         return discordUser.getName().equals("dmf444");
     }
 }

@@ -1,9 +1,9 @@
 package play.me.dragonrealm.geiloutils.discord.command.commands;
 
-import net.dv8tion.jda.core.entities.User;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import play.me.dragonrealm.geiloutils.discord.command.ICommand;
+import play.me.dragonrealm.geiloutils.discord.main.DiscordUser;
 
 public class SpawnPlaceCommand implements ICommand {
     @Override
@@ -22,7 +22,7 @@ public class SpawnPlaceCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(CommandSender sender, User discordUser, String[] commandFeatures) {
+    public boolean executeCommand(CommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
         if (commandFeatures.length > 0) {
             Player player = sender.getServer().getPlayer(commandFeatures[0]);
 
@@ -45,7 +45,7 @@ public class SpawnPlaceCommand implements ICommand {
     }
 
     @Override
-    public boolean doesUserHavePermission(User discordUser) {
+    public boolean doesUserHavePermission(DiscordUser discordUser) {
         /*DiscordRank rank = DiscordUtils.getAuthForUser(discordUser);
         return rank.getLevel() >= DiscordRank.MOD.getLevel();*/
         return true;

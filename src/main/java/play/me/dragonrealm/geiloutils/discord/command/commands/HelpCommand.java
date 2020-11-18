@@ -1,11 +1,11 @@
 package play.me.dragonrealm.geiloutils.discord.command.commands;
 
 
-import net.dv8tion.jda.core.entities.User;
 import org.bukkit.command.CommandSender;
 import play.me.dragonrealm.geiloutils.GeiloUtils;
 import play.me.dragonrealm.geiloutils.discord.command.CommandProcessor;
 import play.me.dragonrealm.geiloutils.discord.command.ICommand;
+import play.me.dragonrealm.geiloutils.discord.main.DiscordUser;
 
 public class HelpCommand implements ICommand {
     @Override
@@ -24,7 +24,7 @@ public class HelpCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(CommandSender sender, User discordUser, String[] commandFeatures) {
+    public boolean executeCommand(CommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
         if(commandFeatures.length == 0) {
             String res = getCommand() + ": " + getCommandDesc() + "\nUsage: " + getCommandUsage();
             sender.sendMessage(res);
@@ -52,7 +52,7 @@ public class HelpCommand implements ICommand {
     }
 
     @Override
-    public boolean doesUserHavePermission(User discordUser) {
+    public boolean doesUserHavePermission(DiscordUser discordUser) {
         return true;
     }
 }

@@ -1,9 +1,10 @@
 package play.me.dragonrealm.geiloutils.discord.command.commands;
 
-import net.dv8tion.jda.core.entities.User;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import play.me.dragonrealm.geiloutils.discord.command.ICommand;
+import play.me.dragonrealm.geiloutils.discord.main.DiscordUser;
 
 public class TellCommand implements ICommand {
     @Override
@@ -22,7 +23,7 @@ public class TellCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(CommandSender sender, User discordUser, String[] commandFeatures) {
+    public boolean executeCommand(CommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
         Player player = sender.getServer().getPlayer(commandFeatures[0]);
         if(player != null) {
             StringBuilder b = new StringBuilder();
@@ -41,7 +42,7 @@ public class TellCommand implements ICommand {
     }
 
     @Override
-    public boolean doesUserHavePermission(User discordUser) {
+    public boolean doesUserHavePermission(DiscordUser discordUser) {
         return true;
     }
 }

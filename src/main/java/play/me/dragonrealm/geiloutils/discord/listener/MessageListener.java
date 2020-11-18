@@ -1,21 +1,22 @@
 package play.me.dragonrealm.geiloutils.discord.listener;
 
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.entity.Player;
 import play.me.dragonrealm.geiloutils.GeiloUtils;
 import play.me.dragonrealm.geiloutils.configs.models.PlayerStats;
 import play.me.dragonrealm.geiloutils.discord.command.CommandProcessor;
 import play.me.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.me.dragonrealm.geiloutils.configs.ConfigAccess;
+import play.me.dragonrealm.geiloutils.discord.main.DiscordUser;
 import play.me.dragonrealm.geiloutils.utils.PlayerUtils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MessageListener extends ListenerAdapter{
+public class MessageListener extends ListenerAdapter {
 
 	private static Map<String, String> colorMap = new HashMap<>();
 	private static List<String> colors = ConfigAccess.getDiscordConfig().getValidColors();
@@ -26,7 +27,7 @@ public class MessageListener extends ListenerAdapter{
 			Message msg = event.getMessage();
 
 			if(msg.getContentDisplay().startsWith(ConfigAccess.getDiscordConfig().getDiscordCommandPrefix())){
-				boolean deleteMessage = CommandProcessor.processCommand(event.getAuthor(), msg.getContentDisplay());
+				boolean deleteMessage = CommandProcessor.processCommand(new DiscordUser(event.getAuthor()), msg.getContentDisplay());
 				if(deleteMessage){
 					msg.delete().queue();
 				}

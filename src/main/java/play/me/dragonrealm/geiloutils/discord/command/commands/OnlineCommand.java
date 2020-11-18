@@ -1,6 +1,5 @@
 package play.me.dragonrealm.geiloutils.discord.command.commands;
 
-import net.dv8tion.jda.core.entities.User;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import play.me.dragonrealm.geiloutils.GeiloUtils;
@@ -8,6 +7,7 @@ import play.me.dragonrealm.geiloutils.discord.command.ICommand;
 
 import java.util.Collection;
 import java.util.Iterator;
+import play.me.dragonrealm.geiloutils.discord.main.DiscordUser;
 
 public class OnlineCommand implements ICommand {
 
@@ -27,7 +27,7 @@ public class OnlineCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(CommandSender sender, User discordUser, String[] commandFeatures) {
+    public boolean executeCommand(CommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
         Collection<? extends Player> players = GeiloUtils.getInstanceServer().getOnlinePlayers();
         if(players.size() == 0) {
             sender.sendMessage("No players online!");
@@ -55,7 +55,7 @@ public class OnlineCommand implements ICommand {
     }
 
     @Override
-    public boolean doesUserHavePermission(User discordUser) {
+    public boolean doesUserHavePermission(DiscordUser discordUser) {
         return true;
     }
 }

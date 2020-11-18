@@ -1,11 +1,11 @@
 package play.me.dragonrealm.geiloutils.discord.command.commands;
 
-import net.dv8tion.jda.core.entities.User;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import play.me.dragonrealm.geiloutils.GeiloUtils;
 import play.me.dragonrealm.geiloutils.discord.command.BotSender;
 import play.me.dragonrealm.geiloutils.discord.command.ICommand;
+import play.me.dragonrealm.geiloutils.discord.main.DiscordUser;
 
 public class TpsCommand implements ICommand {
 
@@ -25,7 +25,7 @@ public class TpsCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(CommandSender sender, User discordUser, String[] commandFeatures) {
+    public boolean executeCommand(CommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
         Bukkit.getScheduler().runTask(GeiloUtils.getPlugin(GeiloUtils.class), () -> Bukkit.dispatchCommand(BotSender.INSTANCE, "tps"));
         return false;
     }
@@ -36,7 +36,7 @@ public class TpsCommand implements ICommand {
     }
 
     @Override
-    public boolean doesUserHavePermission(User discordUser) {
+    public boolean doesUserHavePermission(DiscordUser discordUser) {
         return true;
     }
 

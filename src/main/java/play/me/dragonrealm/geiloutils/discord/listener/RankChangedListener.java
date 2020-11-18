@@ -1,13 +1,14 @@
 package play.me.dragonrealm.geiloutils.discord.listener;
 
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberRoleAddEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberRoleRemoveEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import play.me.dragonrealm.geiloutils.GeiloUtils;
 import play.me.dragonrealm.geiloutils.configs.containers.PlayerStatsConfig;
 import play.me.dragonrealm.geiloutils.configs.models.PlayerStats;
 import play.me.dragonrealm.geiloutils.discord.main.DiscordBotMain;
+import play.me.dragonrealm.geiloutils.discord.main.DiscordRole;
 import play.me.dragonrealm.geiloutils.discord.utils.DiscordUtils;
 import play.me.dragonrealm.geiloutils.discord.utils.UserRanks;
 import play.me.dragonrealm.geiloutils.configs.ConfigAccess;
@@ -31,7 +32,7 @@ public class RankChangedListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent event) {
-        Optional<Role> opRole = DiscordBotMain.getInstance().getSupporterRole();
+        Optional<DiscordRole> opRole = DiscordBotMain.getInstance().getSupporterRole();
         Optional<PlayerStats> stat = GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).getPlayerstatByDiscordID(event.getUser().getIdLong());
         if(stat.isPresent()) {
             if (opRole.isPresent()) {
@@ -43,7 +44,7 @@ public class RankChangedListener extends ListenerAdapter {
             }
 
             // So we're dealing with a staff demotion?
-            UserRanks prevRank = getPrevRole(event.getRoles());
+            UserRanks prevRank = getPrevRole(DiscordRole.toList(event.getRoles()));
             if (prevRank != null) {
                 UserRanks rank = DiscordBotMain.getInstance().getHighestRankForUser(event.getUser().getIdLong());
                 if (prevRank.getPriority() > rank.getPriority()) {
@@ -53,7 +54,7 @@ public class RankChangedListener extends ListenerAdapter {
         }
     }
 
-    private UserRanks getPrevRole(List<Role> rolesOnUser){
+    private UserRanks getPrevRole(List<DiscordRole> rolesOnUser){
         List<UserRanks> userRanks = ConfigAccess.getDiscordConfig().getDiscordRankIntegration();
         if(userRanks.isEmpty()) {
             return null;
@@ -61,7 +62,7 @@ public class RankChangedListener extends ListenerAdapter {
         List<String> possibleRoleIDs = DiscordUtils.getRoleIDList(userRanks);
         UserRanks validRankForUser = null;
 
-        for(Role role : rolesOnUser) {
+        for(DiscordRole role : rolesOnUser) {
             if(possibleRoleIDs.contains(role.getId())) {
                 if(validRankForUser == null) {
                     validRankForUser = DiscordUtils.getUserRanksFromId(userRanks, role.getId());

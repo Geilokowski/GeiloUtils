@@ -1,11 +1,12 @@
 package play.me.dragonrealm.geiloutils.commands.discord;
 
-import net.dv8tion.jda.core.entities.User;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import play.me.dragonrealm.geiloutils.GeiloUtils;
 import play.me.dragonrealm.geiloutils.commands.CommandBase;
 import play.me.dragonrealm.geiloutils.discord.main.DiscordBotMain;
+import play.me.dragonrealm.geiloutils.discord.main.DiscordUser;
 import play.me.dragonrealm.geiloutils.discord.utils.AuthenticationRegistry;
 import play.me.dragonrealm.geiloutils.discord.utils.DiscordUtils;
 import play.me.dragonrealm.geiloutils.discord.utils.UserRanks;
@@ -40,9 +41,9 @@ public class VerifyCommand extends CommandBase {
         if(args.length == 1){
             String[] names = args[0].split("#");
             if(names.length == 2) {
-                List<User> users = DiscordBotMain.getInstance().getUsersByName(names[0]);
-                User target = null;
-                for (User player : users) {
+                List<DiscordUser> users = DiscordBotMain.getInstance().getUsersByName(names[0]);
+                DiscordUser target = null;
+                for (DiscordUser player : users) {
                     if (player.getDiscriminator().equals(names[1])) {
                         target = player;
                         break;
@@ -89,7 +90,7 @@ public class VerifyCommand extends CommandBase {
         return false;
     }
 
-    public void sendPrivateMessage(User user, String content)
+    public void sendPrivateMessage(DiscordUser user, String content)
     {
         // notice that we are not placing a semicolon (;) in the callback this time!
         user.openPrivateChannel().queue( (channel) -> channel.sendMessage(content).queue() );

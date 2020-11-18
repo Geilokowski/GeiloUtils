@@ -1,10 +1,10 @@
 package play.me.dragonrealm.geiloutils.discord.utils;
 
-import net.dv8tion.jda.core.entities.User;
 import play.me.dragonrealm.geiloutils.GeiloUtils;
 import play.me.dragonrealm.geiloutils.configs.containers.PlayerStatsConfig;
 import play.me.dragonrealm.geiloutils.configs.models.PlayerStats;
 import play.me.dragonrealm.geiloutils.discord.main.DiscordBotMain;
+import play.me.dragonrealm.geiloutils.discord.main.DiscordUser;
 import play.me.dragonrealm.geiloutils.utils.PlayerUtils;
 
 
@@ -17,10 +17,10 @@ public class AuthenticationRegistry {
 
     public static AuthenticationRegistry INSTANCE = new AuthenticationRegistry();
     private Map<String, String> nameMap = new HashMap<>();
-    private Map<String, User> userMap = new HashMap<>();
+    private Map<String, DiscordUser> userMap = new HashMap<>();
 
 
-    public void addAuthAttempt(String mcUID, String code, User discordUser) {
+    public void addAuthAttempt(String mcUID, String code, DiscordUser discordUser) {
         nameMap.put(mcUID, code);
         userMap.put(mcUID, discordUser);
     }
@@ -43,7 +43,7 @@ public class AuthenticationRegistry {
             Optional<PlayerStats> playerstat = GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).getPlayerStatByUUID(mcUID);
             if(playerstat.isPresent()) {
                 PlayerStats ps = playerstat.get();
-                ps.setDiscordID(userMap.get(mcUID).getIdLong());
+                ps.setDiscordID(userMap.get(mcUID).getUserIdAsLong());
                 GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).updatePlayerstat(ps);
 
                 userMap.remove(mcUID);
