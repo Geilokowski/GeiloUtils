@@ -14,7 +14,7 @@ plugins {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-def build_version = "1.4.${System.getenv("BUILD_NUMBER") ?: 0}-${System.getenv("GIT_BRANCH") ?: "CUSTOM_BUILD"}"
+def build_version = "1.5.${System.getenv("BUILD_NUMBER") ?: 0}-${System.getenv("GIT_BRANCH") ?: "CUSTOM_BUILD"}"
 version = build_version
 group = "play.ai.dragonrealm.geiloutils" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "geiloutils"
@@ -36,11 +36,13 @@ minecraft {
 repositories {
     maven { url "https://maven.latmod.com/" }
     maven { url "https://dvs1.progwml6.com/files/maven" } //JEI
+    maven { url  "https://dl.bintray.com/dv8fromtheworld/maven" }
 }
 
 dependencies {
     deobfCompile "com.feed_the_beast.mods:FTBLib:5.+"
     deobfCompile "com.feed_the_beast.mods:FTBUtilities:5.+"
+    compile 'net.dv8tion:JDA:4.2.0_218'
 }
 
 
@@ -59,17 +61,8 @@ shadowJar {
     relocate "org.apache.commons.lang3", "play.ai.dragonrealm.geiloutils.repack.org.apache.commons.lang3"
     relocate "org.json", "play.ai.dragonrealm.geiloutils.repack.org.json"
     relocate "tomp2p.opuswrapper", "play.ai.dragonrealm.geiloutils.repack.tomp2p.opuswrapper"
-
-    dependencies {
-        include(dependency("net.dv8tion:JDA:4.2.0_168:withDependencies"))
-    }
 }
 
-repositories {
-    flatDir {
-        dirs "/libs"
-    }
-}
 
 processResources {
     inputs.property "version", project.version
