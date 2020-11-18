@@ -1,9 +1,9 @@
 package play.ai.dragonrealm.geiloutils.discord.command.commands;
 
-import net.dv8tion.jda.core.entities.User;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.text.TextComponentString;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordUser;
 
 public class MiraCommand implements ICommand {
     @Override
@@ -22,7 +22,7 @@ public class MiraCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(ICommandSender sender, User discordUser, String[] commandFeatures) {
+    public boolean executeCommand(ICommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
         if(discordUser.getName().equals("Tesca")){
             sender.sendMessage(new TextComponentString("Mira's a pretty bad guy!"));
         } else {
@@ -37,7 +37,7 @@ public class MiraCommand implements ICommand {
     }
 
     @Override
-    public boolean doesUserHavePermission(User discordUser) {
+    public boolean doesUserHavePermission(DiscordUser discordUser) {
         return true;
     }
 }

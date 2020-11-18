@@ -1,7 +1,9 @@
 package play.ai.dragonrealm.geiloutils.discord.command;
 
-import net.dv8tion.jda.core.entities.User;
+
+
 import net.minecraft.command.ICommandSender;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordUser;
 
 public interface ICommand {
 
@@ -28,11 +30,11 @@ public interface ICommand {
      * Called to execute the command. Return true to delete the
      * the !command that called this.
      */
-    public boolean executeCommand(ICommandSender sender, User discordUser, String[] commandFeatures);
+    public boolean executeCommand(ICommandSender sender, DiscordUser discordUser, String[] commandFeatures);
 
 
     public boolean checkPermission();
 
 
-    public boolean doesUserHavePermission(User discordUser);
+    public boolean doesUserHavePermission(DiscordUser discordUser);
 }

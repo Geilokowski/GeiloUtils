@@ -1,12 +1,12 @@
 package play.ai.dragonrealm.geiloutils.discord.command.commands;
 
-import net.dv8tion.jda.core.entities.User;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordUser;
 
 public class TpsCommand implements ICommand {
 
@@ -26,7 +26,7 @@ public class TpsCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(ICommandSender sender, User discordUser, String[] commandFeatures) {
+    public boolean executeCommand(ICommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
         if(commandFeatures.length == 1){
             Integer nub = Integer.valueOf(commandFeatures[0]);
             double tickTime = getTickTime(nub);
@@ -52,7 +52,7 @@ public class TpsCommand implements ICommand {
     }
 
     @Override
-    public boolean doesUserHavePermission(User discordUser) {
+    public boolean doesUserHavePermission(DiscordUser discordUser) {
         return true;
     }
 

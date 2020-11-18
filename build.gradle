@@ -61,7 +61,7 @@ shadowJar {
     relocate "tomp2p.opuswrapper", "play.ai.dragonrealm.geiloutils.repack.tomp2p.opuswrapper"
 
     dependencies {
-        include(dependency("JDA:JDA:3.8.0_428:withDependencies"))
+        include(dependency("net.dv8tion:JDA:4.2.0_168:withDependencies"))
     }
 }
 

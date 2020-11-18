@@ -1,10 +1,10 @@
 package play.ai.dragonrealm.geiloutils.discord.command.commands;
 
-import net.dv8tion.jda.core.entities.User;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordUser;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 public class OnlineCommand implements ICommand {
@@ -25,7 +25,7 @@ public class OnlineCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(ICommandSender sender, User discordUser, String[] commandFeatures) {
+    public boolean executeCommand(ICommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
         if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().size() == 0) {
             sender.sendMessage(new TextComponentString("No players online!"));
         }else{
@@ -53,7 +53,7 @@ public class OnlineCommand implements ICommand {
     }
 
     @Override
-    public boolean doesUserHavePermission(User discordUser) {
+    public boolean doesUserHavePermission(DiscordUser discordUser) {
         return true;
     }
 }

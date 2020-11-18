@@ -1,7 +1,6 @@
 package play.ai.dragonrealm.geiloutils.discord.command.commands;
 
 import com.mojang.authlib.GameProfile;
-import net.dv8tion.jda.core.entities.User;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,6 +14,7 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.discord.command.GeiloPorter;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordUser;
 
 public class SpawnPlaceCommand implements ICommand {
     @Override
@@ -33,7 +33,7 @@ public class SpawnPlaceCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(ICommandSender sender, User discordUser, String[] commandFeatures) {
+    public boolean executeCommand(ICommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
         if(commandFeatures.length > 0) {
             MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
             WorldServer world = server.getWorld(0);
@@ -93,7 +93,7 @@ public class SpawnPlaceCommand implements ICommand {
     }
 
     @Override
-    public boolean doesUserHavePermission(User discordUser) {
+    public boolean doesUserHavePermission(DiscordUser discordUser) {
         /*DiscordRank rank = DiscordUtils.getAuthForUser(discordUser);
         return rank.getLevel() >= DiscordRank.MOD.getLevel();*/
         return true;

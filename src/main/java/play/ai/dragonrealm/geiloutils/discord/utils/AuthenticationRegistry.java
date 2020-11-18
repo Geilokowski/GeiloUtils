@@ -1,13 +1,10 @@
 package play.ai.dragonrealm.geiloutils.discord.utils;
 
-import net.dv8tion.jda.core.entities.User;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordUser;
 import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
-import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 import java.util.HashMap;
@@ -19,20 +16,10 @@ public class AuthenticationRegistry {
 
     public static AuthenticationRegistry INSTANCE = new AuthenticationRegistry();
     private Map<String, String> nameMap = new HashMap<>();
-    private Map<String, User> userMap = new HashMap<>();
+    private Map<String, DiscordUser> userMap = new HashMap<>();
 
 
-    public void updateOnlineUsers() {
-        List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
-        for(EntityPlayerMP player : players) {
-            User discordAcc = DiscordBotMain.getInstance().getUserFromPlayerUUID(player.getCachedUniqueIdString());
-            if(discordAcc != null) {
-                //GeiloBot.jda.getRoles()
-            }
-        }
-    }
-
-    public void addAuthAttempt(String mcUID, String code, User discordUser) {
+    public void addAuthAttempt(String mcUID, String code, DiscordUser discordUser) {
         nameMap.put(mcUID, code);
         userMap.put(mcUID, discordUser);
     }
@@ -55,7 +42,7 @@ public class AuthenticationRegistry {
             Optional<Playerstat> playerstat = GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).getPlayerStatByUUID(mcUID);
             if(playerstat.isPresent()) {
                 Playerstat ps = playerstat.get();
-                ps.setDiscordID(userMap.get(mcUID).getIdLong());
+                ps.setDiscordID(userMap.get(mcUID).getUserIdAsLong());
                 GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).updatePlayerstat(ps);
 
                 userMap.remove(mcUID);

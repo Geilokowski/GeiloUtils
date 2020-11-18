@@ -1,10 +1,15 @@
 package play.ai.dragonrealm.geiloutils.discord.main;
 
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.OnlineStatus;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.discord.listener.MessageListener;
@@ -37,13 +42,14 @@ public class DiscordBotMain {
     }
 
     public void initializeBot() {
-        JDABuilder builder = new JDABuilder(AccountType.BOT);
-        builder.setToken(ConfigAccess.getDiscordConfig().getToken());
+        JDABuilder builder = JDABuilder.createDefault(ConfigAccess.getDiscordConfig().getToken());
+        builder.enableIntents(GatewayIntent.GUILD_MEMBERS);
+        builder.setMemberCachePolicy(MemberCachePolicy.ALL);
         builder.setAutoReconnect(true);
         builder.setStatus(OnlineStatus.ONLINE);
-        builder.addEventListener(new ReadyListener());
-        builder.addEventListener(new MessageListener());
-        builder.addEventListener(new RankChangedListener());
+        builder.addEventListeners(new ReadyListener(), new MessageListener(), new RankChangedListener());
+        // builder.addEventListener(new MessageListener());
+        // builder.addEventListener(new RankChangedListener());
 
         try {
             jda = builder.build();
@@ -78,13 +84,13 @@ public class DiscordBotMain {
             getTextChannel().ifPresent(tx -> tx.sendMessage(message).queue());
     }
 
-    public User getUserFromPlayerUUID(String mcUUID) {
+    public DiscordUser getUserFromPlayerUUID(String mcUUID) {
         if(botActive) {
             Playerstat stat = PlayerUtils.getPlayerstatByUUID(mcUUID);
             if (stat != null) {
                 Long id = stat.getDiscordID();
                 if (id != null) {
-                    return jda.getUserById(id);
+                    return new DiscordUser(jda.retrieveUserById(id).complete());
                 }
             }
         }
@@ -127,10 +133,10 @@ public class DiscordBotMain {
         return Optional.empty();
     }
 
-    public List<Role> getRolesOnUser(long userId){
+    public List<DiscordRole> getRolesOnUser(long userId){
         User user = jda.getUserById(userId);
-        Member member = jda.getTextChannelById(textChannelID).getGuild().getMember(user);
-        return member.getRoles();
+        Member member = jda.getTextChannelById(textChannelID).getGuild().retrieveMember(user).complete();
+        return DiscordRole.toList(member.getRoles());
     }
 
     public UserRanks getHighestRankForUser(Long discordUserId){
@@ -139,11 +145,11 @@ public class DiscordBotMain {
             return null;
         }
 
-        List<Role> rolesOnUser = getRolesOnUser(discordUserId);
+        List<DiscordRole> rolesOnUser = getRolesOnUser(discordUserId);
         List<String> possibleRoleIDs = DiscordUtils.getRoleIDList(userRanks);
         UserRanks validRankForUser = null;
 
-        for(Role role : rolesOnUser) {
+        for(DiscordRole role : rolesOnUser) {
             if(possibleRoleIDs.contains(role.getId())) {
                 if(validRankForUser == null) {
                     validRankForUser = DiscordUtils.getUserRanksFromId(userRanks, role.getId());
@@ -158,11 +164,11 @@ public class DiscordBotMain {
         return validRankForUser;
     }
 
-    public List<User> getUsersByName(String name) {
+    public List<DiscordUser> getUsersByName(String name) {
         if(botActive) {
-            return jda.getUsersByName(name, true);
+            return DiscordUser.toList(jda.getUsersByName(name, true));
         } else {
-            return new ArrayList<User>();
+            return new ArrayList<DiscordUser>();
         }
     }
 

@@ -1,12 +1,12 @@
 package play.ai.dragonrealm.geiloutils.discord.command.commands;
 
-import net.dv8tion.jda.core.entities.User;
 import net.minecraft.command.ICommandSender;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import play.ai.dragonrealm.geiloutils.discord.command.BotSender;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
 
 import java.util.concurrent.Callable;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordUser;
 
 public class KillEntitiesCommand implements ICommand {
 
@@ -26,7 +26,7 @@ public class KillEntitiesCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(ICommandSender sender, User discordUser, String[] commandFeatures) {
+    public boolean executeCommand(ICommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
         if(commandFeatures.length == 1) {
             Integer number = Integer.getInteger(commandFeatures[0]);
             String cmd = String.format("kill @e[type=Item,r=[%s]]", number);
@@ -57,7 +57,7 @@ public class KillEntitiesCommand implements ICommand {
     }
 
     @Override
-    public boolean doesUserHavePermission(User discordUser) {
+    public boolean doesUserHavePermission(DiscordUser discordUser) {
         return false;
     }
 }

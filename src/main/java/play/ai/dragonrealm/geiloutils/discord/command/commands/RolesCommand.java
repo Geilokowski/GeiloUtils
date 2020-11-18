@@ -1,9 +1,9 @@
 package play.ai.dragonrealm.geiloutils.discord.command.commands;
 
-import net.dv8tion.jda.core.entities.User;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.text.TextComponentString;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordUser;
 
 
 public class RolesCommand implements ICommand {
@@ -24,8 +24,8 @@ public class RolesCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(ICommandSender sender, User discordUser, String[] commandFeatures) {
-        sender.sendMessage(new TextComponentString("Your rank is: MotherFucker!"));
+    public boolean executeCommand(ICommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
+        sender.sendMessage(new TextComponentString("Your rank is: non-existant!"));
         return false;
     }
 
@@ -35,7 +35,7 @@ public class RolesCommand implements ICommand {
     }
 
     @Override
-    public boolean doesUserHavePermission(User discordUser) {
+    public boolean doesUserHavePermission(DiscordUser discordUser) {
         return true;
     }
 }

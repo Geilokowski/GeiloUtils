@@ -69,6 +69,7 @@ public class FTBTempTeam extends FTBIntegrationCommandBase {
         tabCompletes.add("personal");
         tabCompletes.add(getConfig().getSellingTeamName());
         tabCompletes.add(getConfig().getServerHoldingTeamName());
+        tabCompletes.add(getConfig().getServerShopTeamName());
 
         return tabCompletes;
     }

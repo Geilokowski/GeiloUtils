@@ -1,6 +1,5 @@
 package play.ai.dragonrealm.geiloutils.discord.command.commands;
 
-import net.dv8tion.jda.core.entities.User;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.text.TextComponentString;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;

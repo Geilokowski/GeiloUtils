@@ -1,6 +1,5 @@
 package play.ai.dragonrealm.geiloutils.commands.discord;
 
-import net.dv8tion.jda.core.entities.User;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -9,6 +8,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
+import play.ai.dragonrealm.geiloutils.discord.main.DiscordUser;
 import play.ai.dragonrealm.geiloutils.discord.utils.AuthenticationRegistry;
 import play.ai.dragonrealm.geiloutils.discord.utils.DiscordUtils;
 import play.ai.dragonrealm.geiloutils.discord.utils.UserRanks;
@@ -35,9 +35,9 @@ public class CommandVerify extends CommandBase {
         if(args.length == 1){
             String[] names = args[0].split("#");
             if(names.length == 2) {
-                List<User> users = DiscordBotMain.getInstance().getUsersByName(names[0]);
-                User target = null;
-                for (User player : users) {
+                List<DiscordUser> users = DiscordBotMain.getInstance().getUsersByName(names[0]);
+                DiscordUser target = null;
+                for (DiscordUser player : users) {
                     if (player.getDiscriminator().equals(names[1])) {
                         target = player;
                         break;
@@ -87,7 +87,7 @@ public class CommandVerify extends CommandBase {
     }
 
 
-    public void sendPrivateMessage(User user, String content)
+    public void sendPrivateMessage(DiscordUser user, String content)
     {
         // notice that we are not placing a semicolon (;) in the callback this time!
         user.openPrivateChannel().queue( (channel) -> channel.sendMessage(content).queue() );
