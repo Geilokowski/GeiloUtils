@@ -5,6 +5,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.*;
+import org.apache.logging.log4j.Logger;
 import play.ai.dragonrealm.geiloutils.commands.admin.CommandGeiloReload;
 import play.ai.dragonrealm.geiloutils.commands.admin.CommandRN;
 import play.ai.dragonrealm.geiloutils.commands.ban.CommandGeiloBan;
@@ -38,7 +39,6 @@ import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.utils.CraftingUtils;
 import play.ai.dragonrealm.geiloutils.utils.MoneyUtils;
 
-import org.apache.logging.log4j.Logger;
 
 @Mod(modid=GeiloUtils.MODID, name=GeiloUtils.NAME, version=GeiloUtils.VERSION, acceptableRemoteVersions="*", acceptedMinecraftVersions="[1.12.2]")
 public class GeiloUtils

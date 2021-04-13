@@ -30,6 +30,10 @@ public class CommandPay extends EconomyBaseCommand{
 	public String getUsage(ICommandSender sender) {
 	    return "/pay <username> <amount>";
 	}
+
+	public List<String> getAliases() {
+		return Arrays.asList("geilopay", "gp");
+	}
 	
 	@Override
 	public boolean checkPermission(MinecraftServer server, ICommandSender sender)
