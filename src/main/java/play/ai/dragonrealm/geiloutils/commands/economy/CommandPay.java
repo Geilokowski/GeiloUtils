@@ -20,19 +20,19 @@ import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
 public class CommandPay extends EconomyBaseCommand{
  
-	String usage = "/pay <username> <amount>";
+	String usage = "/geilopay <username> <amount>";
 	@Override
 	public String getName() {
-	    return "pay";
+	    return "geilopay";
 	}
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-	    return "/pay <username> <amount>";
+	    return "/geilopay <username> <amount>";
 	}
 
 	public List<String> getAliases() {
-		return Arrays.asList("geilopay", "gp");
+		return Arrays.asList("gp");
 	}
 	
 	@Override
