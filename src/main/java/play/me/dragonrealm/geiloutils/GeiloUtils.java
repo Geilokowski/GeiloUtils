@@ -47,7 +47,9 @@ public final class GeiloUtils extends JavaPlugin {
 
 
         registerCommandDynamically(new ReloadConfigsCommand());
-        registerCommandDynamically(new RandomTPCommand());
+        if(ConfigAccess.getRTPConfig().isEnabled()) {
+            registerCommandDynamically(new RandomTPCommand());
+        }
         getServer().getPluginManager().registerEvents(new LoginEvent(), this);
 
         if(ConfigAccess.getDiscordConfig().isEnabled()) {
