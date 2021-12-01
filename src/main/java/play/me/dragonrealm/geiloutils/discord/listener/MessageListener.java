@@ -27,7 +27,7 @@ public class MessageListener extends ListenerAdapter {
 			Message msg = event.getMessage();
 
 			if(msg.getContentDisplay().startsWith(ConfigAccess.getDiscordConfig().getDiscordCommandPrefix())){
-				boolean deleteMessage = CommandProcessor.processCommand(new DiscordUser(event.getAuthor()), msg.getContentDisplay());
+				boolean deleteMessage = CommandProcessor.processCommand(new DiscordUser(event.getAuthor()), msg.getContentDisplay(), event.getChannel().getGuild().getId());
 				if(deleteMessage){
 					msg.delete().queue();
 				}

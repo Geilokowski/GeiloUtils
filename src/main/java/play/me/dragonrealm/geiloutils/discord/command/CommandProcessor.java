@@ -30,7 +30,7 @@ public class CommandProcessor {
         register(new MiraCommand());
     }
 
-    public static boolean processCommand(DiscordUser discordAgent, String input){
+    public static boolean processCommand(DiscordUser discordAgent, String input, String channelId){
         if(!input.startsWith(ConfigAccess.getDiscordConfig().getDiscordCommandPrefix())){
             return false;
         }
@@ -46,7 +46,10 @@ public class CommandProcessor {
             if(ConfigAccess.getCommandConfig().isCommandEnabled(rootCommand)) {
                 if (!command.checkPermission() || doesUserHavePermission(discordAgent, rootCommand)) {
                     String[] features = Arrays.copyOfRange(keys, 1, keys.length);
-                    return commandMap.get(rootCommand).executeCommand(BotSender.INSTANCE, discordAgent, features);
+                    BotSender.INSTANCE.setChannelResponse(channelId);
+                    boolean commandResp = commandMap.get(rootCommand).executeCommand(BotSender.INSTANCE, discordAgent, features);
+                    BotSender.INSTANCE.clearResponse();
+                    return commandResp;
                 } else {
                     BotSender.INSTANCE.sendMessage("User doesn't have permission to run this command!");
                 }

@@ -11,7 +11,7 @@
 
     <name>GeiloUtils</name>
 
-    <description>A plugin for DragonRealm, doing discord and all the things</description>
+    <description>A plugin for Pinite Gaming, doing discord and all the things</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -74,7 +74,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.14.3-R0.1-SNAPSHOT</version>
+            <version>1.18-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

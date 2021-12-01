@@ -1,9 +1,9 @@
 package play.me.dragonrealm.geiloutils.discord.command;
 
 
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
@@ -11,10 +11,10 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
-import play.me.dragonrealm.geiloutils.GeiloUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import play.me.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 
-import javax.annotation.Nullable;
 import java.util.Set;
 
 public class BotSender implements ConsoleCommandSender {
@@ -28,6 +28,7 @@ public class BotSender implements ConsoleCommandSender {
     private boolean useBlockResp = false;
     private boolean isSilent = false;
     private ConsoleCommandSender sender = Bukkit.getServer().getConsoleSender();
+    private String channelResponse = null;
 
     public BotSender(boolean useBlockResp) {
         this.useBlockResp = useBlockResp;
@@ -52,13 +53,21 @@ public class BotSender implements ConsoleCommandSender {
 
 
     @Override
-    public void sendMessage(String message) {
+    public void sendMessage(@NotNull String message) {
         if (!isSilent) {
             if (useBlockResp) {
-                DiscordBotMain.getInstance().sendMessageDiscord("```" + message + "```");
+                if(channelResponse == null){
+                    DiscordBotMain.getInstance().sendMessageDiscord("```" + message + "```");
+                } else {
+                    DiscordBotMain.getInstance().sendMessageDiscord("```" + message + "```", this.channelResponse);
+                }
                 return;
             }
-            DiscordBotMain.getInstance().sendMessageDiscord(message);
+            if(channelResponse == null) {
+                DiscordBotMain.getInstance().sendMessageDiscord(message);
+            } else {
+                DiscordBotMain.getInstance().sendMessageDiscord(message, this.channelResponse);
+            }
         }
     }
 
@@ -67,6 +76,16 @@ public class BotSender implements ConsoleCommandSender {
         for(String message : messages) {
             this.sendMessage(message);
         }
+    }
+
+    @Override
+    public void sendMessage(@Nullable UUID sender, @NotNull String message) {
+
+    }
+
+    @Override
+    public void sendMessage(@Nullable UUID sender, @NotNull String... messages) {
+
     }
 
     @Override
@@ -168,5 +187,18 @@ public class BotSender implements ConsoleCommandSender {
     @Override
     public void sendRawMessage(String message) {
         this.sendMessage(message);
+    }
+
+    @Override
+    public void sendRawMessage(@Nullable UUID sender, @NotNull String message) {
+
+    }
+
+    public void setChannelResponse(String channelId) {
+        this.channelResponse = channelId;
+    }
+
+    public void clearResponse() {
+        this.channelResponse = null;
     }
 }

@@ -85,8 +85,15 @@ public class DiscordBotMain {
     }
 
     public void sendMessageDiscord(String message) {
+        this.sendMessageDiscord(message, null);
+    }
+
+    public void sendMessageDiscord(String message, String specificChannel) {
         if(botActive)
-            getTextChannel().ifPresent(tx -> tx.forEach(textChannel -> textChannel.sendMessage(message).queue()));
+            getTextChannel().ifPresent(tx -> tx.forEach(textChannel -> {
+                if(specificChannel == null || specificChannel.equals(textChannel.getId()))
+                    textChannel.sendMessage(message).queue();
+            }));
     }
 
     public DiscordUser getUserFromPlayerUUID(String mcUUID) {
