@@ -13,6 +13,7 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import play.me.dragonrealm.geiloutils.GeiloUtils;
 import play.me.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 
 import java.util.Set;
@@ -56,14 +57,14 @@ public class BotSender implements ConsoleCommandSender {
     public void sendMessage(@NotNull String message) {
         if (!isSilent) {
             if (useBlockResp) {
-                if(channelResponse == null){
+                if(this.channelResponse == null){
                     DiscordBotMain.getInstance().sendMessageDiscord("```" + message + "```");
                 } else {
                     DiscordBotMain.getInstance().sendMessageDiscord("```" + message + "```", this.channelResponse);
                 }
                 return;
             }
-            if(channelResponse == null) {
+            if(this.channelResponse == null) {
                 DiscordBotMain.getInstance().sendMessageDiscord(message);
             } else {
                 DiscordBotMain.getInstance().sendMessageDiscord(message, this.channelResponse);
