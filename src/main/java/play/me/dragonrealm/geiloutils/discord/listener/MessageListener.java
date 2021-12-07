@@ -25,6 +25,7 @@ public class MessageListener extends ListenerAdapter {
 		if(ConfigAccess.getDiscordConfig().getChannelIDRelay().contains(event.getChannel().getId()) && !(event.getAuthor().getId().equals(DiscordBotMain.getInstance().getBotID()))) {
 
 			Message msg = event.getMessage();
+			String userName = event.getMember() == null ? event.getAuthor().getName() : event.getMember().getEffectiveName();
 
 			if(msg.getContentDisplay().startsWith(ConfigAccess.getDiscordConfig().getDiscordCommandPrefix())){
 				boolean deleteMessage = CommandProcessor.processCommand(new DiscordUser(event.getAuthor()), msg.getContentDisplay(), event.getChannel().getId());
@@ -34,13 +35,17 @@ public class MessageListener extends ListenerAdapter {
 				return;
             }
 
+			String secondHalf = msg.getContentDisplay();
+			if(secondHalf.equals("") && msg.getAttachments().size() > 0) {
+				secondHalf = "Uploaded Media in Discord Channel";
+			}
 
-			String output = getPrefix(msg.getAuthor().isBot(), msg.getAuthor().getName()) + " " + "\u00A76" + "\u00BB " + "\u00A7r" +msg.getContentDisplay();
+			String output = getPrefix(msg.getAuthor().isBot(), userName) + " " + "\u00A76" + "\u00BB " + "\u00A7r" + secondHalf;
 			// Multi-server chat clogs up the readers view. This allows us to mute any chat network we don't like
 			if (ConfigAccess.getDiscordConfig().isSingleToMulti()){
 				for (Player player : GeiloUtils.getInstanceServer().getOnlinePlayers()) {
 					PlayerStats ps = PlayerUtils.getPlayerstatByUUID(player.getUniqueId().toString());
-					if(ps != null && !ps.getMutedChats().contains(msg.getAuthor().getName())) {
+					if(ps != null && !ps.getMutedChats().contains(userName)) {
 						player.sendMessage(output);
 					}
 				}
