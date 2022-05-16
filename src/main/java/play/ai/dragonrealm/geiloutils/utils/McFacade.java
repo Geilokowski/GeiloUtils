@@ -1,4 +1,4 @@
-package play.ai.dragonrealm.geiloutils.discord.utils;
+package play.ai.dragonrealm.geiloutils.utils;
 
 import java.util.List;
 import net.minecraft.entity.player.ServerPlayerEntity;

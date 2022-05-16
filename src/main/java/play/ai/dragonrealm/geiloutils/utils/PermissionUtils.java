@@ -3,16 +3,16 @@ package play.ai.dragonrealm.geiloutils.utils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Permission;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Rank;
 
 public class PermissionUtils {
-	public static Rank getRankFromPlayer(EntityPlayer player){
+	public static Rank getRankFromPlayer(PlayerEntity player){
 		for(Playerstat ps : ConfigAccess.getPlayerStatsConfig().getPlayerstats()){
-			if(ps.getUuid().equals(player.getCachedUniqueIdString())){
+			if(ps.getUuid().equals(player.getStringUUID())){
 				return getRankFromName(ps.getRank());
 			}
 		}

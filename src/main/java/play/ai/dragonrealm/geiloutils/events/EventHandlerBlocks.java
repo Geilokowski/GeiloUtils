@@ -16,7 +16,7 @@ public class EventHandlerBlocks {
 	@SubscribeEvent(priority= EventPriority.NORMAL)
 	  public void onBlockPlace(BlockEvent.EntityPlaceEvent event)
 	  {
-	    if (isBannedBlock(event.getPlacedBlock().getBlock().getRegistryName().toString(), event.get.getHeldItemMainhand().getMetadata(), event.getPlayer()) && !event.getPlayer().getName().equals("Geilokowski"))
+	    if (isBannedBlock(event.getPlacedBlock().getBlock().getRegistryName().toString(), event.getPlacedBlock().getBlockState().toString(), event.getEntity()) && !event.getEntity().getName().equals("Geilokowski"))
 	    {
 	      event.setCanceled(true);
 	      ITextComponent msg = new StringTextComponent("[GeiloUtils] You are not allowed to place that here. To get the block back just click on the inventory slot it was in.");
@@ -24,16 +24,16 @@ public class EventHandlerBlocks {
 	    }
 	  }
 	  
-	  public static boolean isBannedBlock(String checkName, int checkMetadata, Entity player)
+	  public static boolean isBannedBlock(String checkName, String blockstate, Entity player)
 	  {
 	    for (BannedBlock bannedBlock : ConfigAccess.getBannedBlocksConfig().getBannedBlocks()) {
 	      if (bannedBlock.getDimension().equals("all")){
-		      if (checkName.equals(bannedBlock.getRegistryName()) && (bannedBlock.getMetadata().equals("all") || Integer.parseInt(bannedBlock.getMetadata()) == checkMetadata)) {
+		      if (checkName.equals(bannedBlock.getRegistryName()) && (bannedBlock.getMetadata().equals("all") /*|| Integer.parseInt(bannedBlock.getMetadata()) == checkMetadata*/)) {
 		    	  return true;
 		      }
 	      } else {
 		      if ((bannedBlock.getDimension().equals("all") || player.getCommandSenderWorld().dimension().getRegistryName().getPath().equals(bannedBlock.getDimension())) &&
-				  (checkName.equals(bannedBlock.getRegistryName()) && (bannedBlock.getMetadata().equals("all") || Integer.parseInt(bannedBlock.getMetadata()) == checkMetadata))) {
+				  (checkName.equals(bannedBlock.getRegistryName()) && (bannedBlock.getMetadata().equals("all") /*|| Integer.parseInt(bannedBlock.getMetadata()) == checkMetadata*/))) {
 		        return true;
 		      }
 	      }

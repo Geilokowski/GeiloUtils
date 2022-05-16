@@ -1,8 +1,9 @@
 package play.ai.dragonrealm.geiloutils.discord.command.commands;
 
 
-import net.minecraft.command.ICommandSender;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.command.ICommandSource;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.StringTextComponent;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 
@@ -27,10 +28,10 @@ public class DeclareAllCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(ICommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
+    public boolean executeCommand(ICommandSource sender, DiscordUser discordUser, String[] commandFeatures) {
         List<DiscordRole> roleList = DiscordBotMain.getInstance().getRolesOnUser(Long.parseLong(commandFeatures[0]));
         for(DiscordRole role: roleList) {
-            sender.sendMessage(new TextComponentString("ROLE: " + role.getName() + "|| ID:" + role.getId()));
+            sender.sendMessage(new StringTextComponent("ROLE: " + role.getName() + "|| ID:" + role.getId()), Util.NIL_UUID);
         }
         return false;
     }

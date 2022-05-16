@@ -1,7 +1,8 @@
 package play.ai.dragonrealm.geiloutils.discord.command.commands;
 
-import net.minecraft.command.ICommandSender;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.command.ICommandSource;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.StringTextComponent;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordUser;
 
@@ -22,11 +23,11 @@ public class MiraCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(ICommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
+    public boolean executeCommand(ICommandSource sender, DiscordUser discordUser, String[] commandFeatures) {
         if(discordUser.getName().equals("Tesca")){
-            sender.sendMessage(new TextComponentString("Mira's a pretty bad guy!"));
+            sender.sendMessage(new StringTextComponent("Mira's a pretty bad guy!"), Util.NIL_UUID);
         } else {
-            sender.sendMessage(new TextComponentString("Mira's pretty cool, eh?"));
+            sender.sendMessage(new StringTextComponent("Mira's pretty cool, eh?"), Util.NIL_UUID);
         }
         return false;
     }

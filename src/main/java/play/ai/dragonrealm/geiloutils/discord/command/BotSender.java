@@ -1,15 +1,20 @@
 package play.ai.dragonrealm.geiloutils.discord.command;
 
-import net.minecraft.command.ICommandSender;
+import java.util.UUID;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.ICommandSource;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 
-import javax.annotation.Nullable;
 
-public class BotSender implements ICommandSender {
+public class BotSender implements ICommandSource {
 
     public static BotSender INSTANCE = new BotSender();
     public static BotSender BLOCK_INSTANCE = new BotSender(true);
@@ -31,21 +36,22 @@ public class BotSender implements ICommandSender {
 
     public BotSender(){}
 
+    public CommandSource getCommandSource() {
+        return new CommandSource(this, Vector3d.ZERO, Vector2f.ZERO, this.getEntityWorld(), 4, "Server", new StringTextComponent("Server"), this.getServer(), (Entity)null);
+    }
 
     public String getName() {
         return "[GeiloBot]";
     }
 
 
-    @Override
-    public World getEntityWorld() {
-        return getServer().getWorld(0);
+    public ServerWorld getEntityWorld() {
+        return getServer().overworld();
     }
 
-    @Nullable
-    @Override
+
     public MinecraftServer getServer() {
-        return FMLCommonHandler.instance().getMinecraftServerInstance();
+        return ServerLifecycleHooks.getCurrentServer();
     }
 
     public void sendMessage(ITextComponent component){
@@ -54,7 +60,27 @@ public class BotSender implements ICommandSender {
                 DiscordBotMain.getInstance().sendMessageDiscord("```" + component.getString() + "```");
                 return;
             }
-            DiscordBotMain.getInstance().sendMessageDiscord(component.getUnformattedText());
+            DiscordBotMain.getInstance().sendMessageDiscord(component.getContents());
         }
+    }
+
+    @Override
+    public void sendMessage(ITextComponent component, UUID uuid) {
+        this.sendMessage(component);
+    }
+
+    @Override
+    public boolean acceptsSuccess() {
+        return false;
+    }
+
+    @Override
+    public boolean acceptsFailure() {
+        return false;
+    }
+
+    @Override
+    public boolean shouldInformAdmins() {
+        return false;
     }
 }

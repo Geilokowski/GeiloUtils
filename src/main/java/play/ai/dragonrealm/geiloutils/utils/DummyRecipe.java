@@ -1,14 +1,14 @@
 package play.ai.dragonrealm.geiloutils.utils;
 
-import net.minecraft.inventory.InventoryCrafting;
+//import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.IForgeRegistryEntry.Impl;
+//import net.minecraftforge.registries.IForgeRegistryEntry.Impl;
 
-public class DummyRecipe extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<IRecipe> implements IRecipe 
+public class DummyRecipe /*extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<IRecipe> implements IRecipe */
 {
-	private final ItemStack output;
+	/*private final ItemStack output;
 
     public DummyRecipe(ItemStack output)
     {
@@ -42,6 +42,6 @@ public class DummyRecipe extends net.minecraftforge.registries.IForgeRegistryEnt
     public ItemStack getRecipeOutput()
     {
         return output;
-    }
+    }*/
 }
 

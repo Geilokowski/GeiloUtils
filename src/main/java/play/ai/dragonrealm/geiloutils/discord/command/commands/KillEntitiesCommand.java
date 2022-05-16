@@ -1,7 +1,7 @@
 package play.ai.dragonrealm.geiloutils.discord.command.commands;
 
-import net.minecraft.command.ICommandSender;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraft.command.ICommandSource;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import play.ai.dragonrealm.geiloutils.discord.command.BotSender;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
 
@@ -26,26 +26,16 @@ public class KillEntitiesCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(ICommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
+    public boolean executeCommand(ICommandSource sender, DiscordUser discordUser, String[] commandFeatures) {
         if(commandFeatures.length == 1) {
             Integer number = Integer.getInteger(commandFeatures[0]);
             String cmd = String.format("kill @e[type=Item,r=[%s]]", number);
-            FMLCommonHandler.instance().getMinecraftServerInstance().callFromMainThread(new Callable<Object>() {
-
-                @Override
-                public Object call() throws Exception {
-                    FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(BotSender.BLOCK_INSTANCE, cmd);
-                    return null;
-                }
+            ServerLifecycleHooks.getCurrentServer().executeBlocking(() -> {
+                ServerLifecycleHooks.getCurrentServer().getCommands().performCommand(BotSender.BLOCK_INSTANCE.getCommandSource(), cmd);
             });
         } else {
-            FMLCommonHandler.instance().getMinecraftServerInstance().callFromMainThread(new Callable<Object>() {
-
-                @Override
-                public Object call() throws Exception {
-                    FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(BotSender.BLOCK_INSTANCE, "kill @e[type=item]");
-                    return null;
-                }
+            ServerLifecycleHooks.getCurrentServer().executeBlocking(() -> {
+                ServerLifecycleHooks.getCurrentServer().getCommands().performCommand(BotSender.BLOCK_INSTANCE.getCommandSource(), "kill @e[type=item]");
             });
         }
         return false;

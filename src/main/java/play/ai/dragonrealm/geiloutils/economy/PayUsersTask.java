@@ -1,14 +1,15 @@
 package play.ai.dragonrealm.geiloutils.economy;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.StringTextComponent;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Permission;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Rank;
 import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
+import play.ai.dragonrealm.geiloutils.utils.McFacade;
 import play.ai.dragonrealm.geiloutils.utils.PermissionUtils;
 import play.ai.dragonrealm.geiloutils.utils.PlayerUtils;
 
@@ -21,11 +22,11 @@ public class PayUsersTask extends TimerTask {
     public void run() {
         //TODO: Can this be done in less than O(n^2)? Too much complexity!
         GeiloUtils.getLogger().info("Payments Starting");
-        if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList() != null) { //DON'T TRUST INTELLIJ HERE, THIS IS NULL ON LOADING GAME!
-            for (EntityPlayerMP player : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers()) {
+        if(McFacade.getServerPlayerList() != null) { //DON'T TRUST INTELLIJ HERE, THIS IS NULL ON LOADING GAME!
+            for (ServerPlayerEntity player : McFacade.getOnlinePlayers()) {
                 double baseIncome = ConfigAccess.getEconomyConfig().getBaseTierIncome() * ConfigAccess.getEconomyConfig().getBaseMultiplier();
                 double rankIncome = 0;
-                Playerstat stat = PlayerUtils.getPlayerstatByUUID(player.getUniqueID().toString());
+                Playerstat stat = PlayerUtils.getPlayerstatByUUID(player.getStringUUID());
                 if(stat != null) {
                     String rankString = stat.getRank();
                     Rank rank = PermissionUtils.getRankFromName(rankString);
@@ -42,9 +43,9 @@ public class PayUsersTask extends TimerTask {
                 double totalIncome = baseIncome + rankIncome;
 
                 if(shouldDirectDeposit(stat)) {
-                    GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).addPlayerMoney(player.getCachedUniqueIdString(), totalIncome);
+                    GeiloUtils.getManager().getConfig(PlayerStatsConfig.class).addPlayerMoney(player.getStringUUID(), totalIncome);
                     if(!stat.isPaymentMsgMuted()) {
-                        player.sendMessage(new TextComponentString("$" + totalIncome + " has been deposited to your bank account. You can check total amount with /balance"));
+                        player.sendMessage(new StringTextComponent("$" + totalIncome + " has been deposited to your bank account. You can check total amount with /balance"), Util.NIL_UUID);
                     }
                 }else {
                     payment(player, totalIncome);
@@ -62,7 +63,7 @@ public class PayUsersTask extends TimerTask {
     }
 
 
-    private void payment(EntityPlayerMP player, double cash) {
+    private void payment(ServerPlayerEntity player, double cash) {
         double money = cash;
         while (money > 0) {
 

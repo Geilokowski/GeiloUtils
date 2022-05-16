@@ -1,14 +1,14 @@
 package play.ai.dragonrealm.geiloutils.utils;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTException;
-import net.minecraft.nbt.NBTTagCompound;
 import play.ai.dragonrealm.geiloutils.GeiloUtils;
 import play.ai.dragonrealm.geiloutils.new_configs.ConfigAccess;
 import play.ai.dragonrealm.geiloutils.new_configs.containers.PlayerStatsConfig;
@@ -20,21 +20,21 @@ import play.ai.dragonrealm.geiloutils.new_configs.models.Playerstat;
 import play.ai.dragonrealm.geiloutils.new_configs.models.Rank;
 
 public class KitUtils {
-    public static boolean deliverKit(EntityPlayer player, Kit kit){
+    public static boolean deliverKit(PlayerEntity player, Kit kit){
     	int kitSize = kit.getItems().size();
     	int inventoryFree = 0;
-    	for(ItemStack stack: player.inventory.mainInventory){
+    	for(ItemStack stack: player.inventory.items){
     		if(stack.isEmpty() || stack.equals(ItemStack.EMPTY)){
     			inventoryFree++;
 			}
 		}
 		if(kitSize <= inventoryFree){
 			for(KitItem ki : kit.getItems()){
-				NBTTagCompound compound = null;
+				CompoundNBT compound = null;
 				try {
 					if(ki.getNbtMap() != null)
-						compound = JsonToNBT.getTagFromJson(ki.getNbtMap());
-				} catch (NBTException e) {
+						compound = JsonToNBT.parseTag(ki.getNbtMap());
+				} catch (CommandSyntaxException e) {
 
 				}
 				PlayerUtils.addItemByName(player, ki.getRegistryName(), ki.getCount(), ki.getMetadata(), compound);
@@ -47,9 +47,9 @@ public class KitUtils {
 		return false;
     }
 
-    private static void updateLastUsed(EntityPlayer player, Kit kit){
+    private static void updateLastUsed(PlayerEntity player, Kit kit){
         Date date = new Date();
-        Playerstat ps = PlayerUtils.getPlayerstatByUUID(player.getCachedUniqueIdString());
+        Playerstat ps = PlayerUtils.getPlayerstatByUUID(player.getStringUUID());
         for(KitLastUsed klu : ps.getKitLastUsed()){
             if(klu.getKitname().equals(kit.getName())){
                 ps.getKitLastUsed().remove(klu);
@@ -66,7 +66,7 @@ public class KitUtils {
 
     }
 
-	public static boolean canPlayerUseKit(EntityPlayer player, Kit kit){
+	public static boolean canPlayerUseKit(PlayerEntity player, Kit kit){
 		Rank rank = PermissionUtils.getRankFromPlayer(player);
 		if(kit.getPermissionList().isEmpty()){
 			return !isCooldownStillActive(player, kit);
@@ -80,16 +80,16 @@ public class KitUtils {
 
 		return false;
 	}
-	private static boolean isCooldownStillActive(EntityPlayer player, Kit kit){
+	private static boolean isCooldownStillActive(PlayerEntity player, Kit kit){
 	    if(kit.getCooldown() == 0){
             //System.out.println("1");
             return false;
         }else{
-	        if(PlayerUtils.getPlayerstatByUUID(player.getCachedUniqueIdString()).getKitLastUsed().isEmpty()){
+	        if(PlayerUtils.getPlayerstatByUUID(player.getStringUUID()).getKitLastUsed().isEmpty()){
                 //System.out.println("2");
 	            return false;
             }else{
-	            for(KitLastUsed lastUsed : PlayerUtils.getPlayerstatByUUID(player.getCachedUniqueIdString()).getKitLastUsed()){
+	            for(KitLastUsed lastUsed : PlayerUtils.getPlayerstatByUUID(player.getStringUUID()).getKitLastUsed()){
 	                if(lastUsed.getKitname().equals(kit.getName())){
 	                    if(kit.getCooldown() < 0){
 	                        return true;

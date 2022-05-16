@@ -1,6 +1,5 @@
 package play.ai.dragonrealm.geiloutils.discord.utils;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import play.ai.dragonrealm.geiloutils.discord.command.BotSender;
 
@@ -15,15 +14,10 @@ public class DiscordUtils {
 
     public static void autoModRankUser(@Nonnull UserRanks rank, String playerUsername) {
         String[] commands = rank.getRawRankCommands();
-        FMLCommonHandler.instance().getMinecraftServerInstance().callFromMainThread(new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                for (String command : commands) {
-                    String entry = String.format(command, playerUsername);
-                    ServerLifecycleHooks.getCurrentServer().getCommands().performCommand()
-                    FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(BotSender.SILENT_BOT, entry);
-                }
-                return null;
+        ServerLifecycleHooks.getCurrentServer().executeBlocking(() ->  {
+            for (String command : commands) {
+                String entry = String.format(command, playerUsername);
+                ServerLifecycleHooks.getCurrentServer().getCommands().performCommand(BotSender.SILENT_BOT.getCommandSource(), entry);
             }
         });
     }

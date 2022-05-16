@@ -1,7 +1,8 @@
 package play.ai.dragonrealm.geiloutils.discord.command.commands;
 
-import net.minecraft.command.ICommandSender;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.command.ICommandSource;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.StringTextComponent;
 import play.ai.dragonrealm.geiloutils.discord.command.CommandProcessor;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordUser;
@@ -23,9 +24,9 @@ public class ListCommandsCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(ICommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
+    public boolean executeCommand(ICommandSource sender, DiscordUser discordUser, String[] commandFeatures) {
         String res = CommandProcessor.listCommandsForUser(discordUser);
-        sender.sendMessage(new TextComponentString(res));
+        sender.sendMessage(new StringTextComponent(res), Util.NIL_UUID);
         return false;
     }
 

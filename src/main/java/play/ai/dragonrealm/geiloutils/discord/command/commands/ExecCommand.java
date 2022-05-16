@@ -1,7 +1,7 @@
 package play.ai.dragonrealm.geiloutils.discord.command.commands;
 
-import net.minecraft.command.ICommandSender;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraft.command.ICommandSource;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import play.ai.dragonrealm.geiloutils.discord.command.BotSender;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
@@ -29,7 +29,7 @@ public class ExecCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(ICommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
+    public boolean executeCommand(ICommandSource sender, DiscordUser discordUser, String[] commandFeatures) {
         if(commandFeatures.length > 0) {
             StringBuilder builder = new StringBuilder();
             for (String s : commandFeatures) {
@@ -38,13 +38,8 @@ public class ExecCommand implements ICommand {
             int len = builder.length();
             builder = builder.delete(len - 1, len);
             String finalStr = builder.toString();
-            FMLCommonHandler.instance().getMinecraftServerInstance().callFromMainThread(new Callable<Object>() {
-
-                @Override
-                public Object call() throws Exception {
-                    FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(BotSender.BLOCK_INSTANCE, finalStr);
-                    return null;
-                }
+            ServerLifecycleHooks.getCurrentServer().executeBlocking(() -> {
+                ServerLifecycleHooks.getCurrentServer().getCommands().performCommand(BotSender.BLOCK_INSTANCE.getCommandSource(), finalStr);
             });
         }
         return false;

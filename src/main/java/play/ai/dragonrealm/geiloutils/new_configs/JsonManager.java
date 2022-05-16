@@ -21,6 +21,7 @@ public class JsonManager {
     public void initializeConfigs(){
         loadAllConfigs();
 
+        GeiloUtils.getLogger().fatal(configLocation);
         if(!configLocation.exists()) {
             configLocation.mkdirs();
         }

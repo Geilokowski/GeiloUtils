@@ -3,12 +3,12 @@ package play.ai.dragonrealm.geiloutils.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 public class MoneyUtils {
-	public static Map<String, Double> moneyValues = new HashMap();
-	  public static Map<Double, String> moneyValuesDS = new HashMap();
+	public static Map<String, Double> moneyValues = new HashMap<>();
+	  public static Map<Double, String> moneyValuesDS = new HashMap<>();
 	  
 	  public static void init()
 	  {
@@ -41,15 +41,15 @@ public class MoneyUtils {
 	    moneyValuesDS.put(100.0D, "item.modcurrency:banknote_5");
 	  }
 	  
-	  public static double getMoneyValueAndRemove(EntityPlayer player)
+	  public static double getMoneyValueAndRemove(PlayerEntity player)
 	  {
 	    double counter = 0.0D;
-	    for (int i = 0; i < player.inventory.getSizeInventory(); i++){
-	      ItemStack currentItem = player.inventory.getStackInSlot(i);
-	      if (moneyValues.get(currentItem.getUnlocalizedName()) != null)
+	    for (int i = 0; i < player.inventory.getContainerSize(); i++){
+	      ItemStack currentItem = player.inventory.getItem(i);
+	      if (moneyValues.get(currentItem.getItem().getRegistryName().toString()) != null)
 	      {  
-	        counter += ((Double)moneyValues.get(currentItem.getUnlocalizedName())) * currentItem.getCount();
-	        player.inventory.removeStackFromSlot(i);
+	        counter += ((Double)moneyValues.get(currentItem.getItem().getRegistryName().toString())) * currentItem.getCount();
+	        player.inventory.removeItemNoUpdate(i);
 	      }
 	    }
 	    return counter;

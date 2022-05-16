@@ -1,37 +1,22 @@
 package play.ai.dragonrealm.geiloutils.discord.command;
 
+import java.util.function.Function;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Teleporter;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.server.ServerWorld;
 
 public class GeiloPorter extends Teleporter {
 
-    public GeiloPorter(WorldServer worldIn) {
+    public GeiloPorter(ServerWorld worldIn) {
         super(worldIn);
     }
 
     @Override
-    public void placeInPortal(Entity entity, float rotationYaw) {
-
-    }
-
-    @Override
-    public boolean placeInExistingPortal(Entity entity, float rotationYaw) {
-        entity.motionX = 0;
-        entity.motionY = 0;
-        entity.motionZ = 0;
+    public Entity placeEntity(Entity entity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
+        entity.setDeltaMovement(Vector3d.ZERO);
         entity.fallDistance = 0;
-        return true;
-    }
-
-    @Override
-    public boolean makePortal(Entity entity) {
-        return true;
-    }
-
-    @Override
-    public void removeStalePortalLocations(long worldTime) {
-
+        return entity;
     }
 
 

@@ -1,10 +1,11 @@
 package play.ai.dragonrealm.geiloutils.discord.command.commands;
 
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.command.ICommandSource;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordUser;
 
@@ -25,16 +26,16 @@ public class TellCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(ICommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
-        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+    public boolean executeCommand(ICommandSource sender, DiscordUser discordUser, String[] commandFeatures) {
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if(server != null) {
-            EntityPlayerMP player = server.getPlayerList().getPlayerByUsername(commandFeatures[0]);
+            ServerPlayerEntity player = server.getPlayerList().getPlayerByName(commandFeatures[0]);
             StringBuilder b = new StringBuilder();
             for(int i = 1; i < commandFeatures.length; i++){
                 b.append(commandFeatures[i]).append(" ");
             }
             if(player != null) {
-                player.sendMessage(new TextComponentString("[Discord DM] " + discordUser.getName() + " \u003e\u003e" + b.toString()));
+                player.sendMessage(new StringTextComponent("[Discord DM] " + discordUser.getName() + " \u003e\u003e" + b.toString()), Util.NIL_UUID);
                 return true;
             }
         }

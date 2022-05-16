@@ -2,17 +2,14 @@ package play.ai.dragonrealm.geiloutils.discord.command.commands;
 
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.command.ICommandSource;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.storage.IPlayerFileData;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import play.ai.dragonrealm.geiloutils.discord.command.GeiloPorter;
 import play.ai.dragonrealm.geiloutils.discord.command.ICommand;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordUser;
@@ -34,16 +31,16 @@ public class SpawnPlaceCommand implements ICommand {
     }
 
     @Override
-    public boolean executeCommand(ICommandSender sender, DiscordUser discordUser, String[] commandFeatures) {
-        if(commandFeatures.length > 0) {
-            MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-            WorldServer world = server.getWorld(0);
+    public boolean executeCommand(ICommandSource sender, DiscordUser discordUser, String[] commandFeatures) {
+        /*if(commandFeatures.length > 0) {
+            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+            ServerWorld world = server.overworld();
 
-            BlockPos spawnPos = world.getSpawnPoint();
-            EntityPlayerMP player = server.getPlayerList().getPlayerByUsername(commandFeatures[0]);
+            BlockPos spawnPos = world.getSharedSpawnPos();
+            ServerPlayerEntity player = server.getPlayerList().getPlayerByName(commandFeatures[0]);
 
             if(player != null) {
-                if(player.dimension != 0) {
+                if(!player.getLevel().dimension().getRegistryName().getPath().equals("overworld")) {
                     int dimID = player.dimension;
                     server.getPlayerList().transferPlayerToDimension(player, 0, new GeiloPorter(world));
 
@@ -84,7 +81,7 @@ public class SpawnPlaceCommand implements ICommand {
                 }
             }
         }
-        sender.sendMessage(new TextComponentString("Player moved to world spawn!"));
+        sender.sendMessage(new TextComponentString("Player moved to world spawn!"));*/
         return false;
     }
 

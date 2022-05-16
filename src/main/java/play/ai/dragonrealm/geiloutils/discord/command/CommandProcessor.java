@@ -1,7 +1,7 @@
 package play.ai.dragonrealm.geiloutils.discord.command;
 
 
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import play.ai.dragonrealm.geiloutils.discord.command.commands.*;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordBotMain;
 import play.ai.dragonrealm.geiloutils.discord.main.DiscordUser;
@@ -52,13 +52,13 @@ public class CommandProcessor {
                     String[] features = Arrays.copyOfRange(keys, 1, keys.length);
                     return commandMap.get(rootCommand).executeCommand(BotSender.INSTANCE, discordAgent, features);
                 } else {
-                    BotSender.INSTANCE.sendMessage(new TextComponentString("User doesn't have permission to run this command!"));
+                    BotSender.INSTANCE.sendMessage(new StringTextComponent("User doesn't have permission to run this command!"));
                 }
             } else {
-                BotSender.INSTANCE.sendMessage(new TextComponentString("Command disabled by config!"));
+                BotSender.INSTANCE.sendMessage(new StringTextComponent("Command disabled by config!"));
             }
         } else {
-            BotSender.INSTANCE.sendMessage(new TextComponentString("Command not found in registry!"));
+            BotSender.INSTANCE.sendMessage(new StringTextComponent("Command not found in registry!"));
         }
         return false;
     }
