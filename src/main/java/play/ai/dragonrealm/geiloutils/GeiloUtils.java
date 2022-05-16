@@ -61,6 +61,7 @@ public class GeiloUtils {
     public GeiloUtils() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::preInit);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverInit);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::postInit);
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -80,8 +81,8 @@ public class GeiloUtils {
         }
     }
 
-    @SubscribeEvent
-    public static void serverInit(FMLServerStartingEvent event) {
+
+    public void serverInit(FMLDedicatedServerSetupEvent event) {
 //        event.registerServerCommand(new CommandRTP());
 //        event.registerServerCommand(new CommandRTPGamerules());
 //        event.registerServerCommand(new CommandGeiloBan());
