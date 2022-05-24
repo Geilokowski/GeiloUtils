@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public class JsonManager {
 
-    private static File configLocation = new File(FMLPaths.GAMEDIR.get().resolve(FMLConfig.defaultConfigPath()) + File.separator + GeiloUtils.MODID);
+    private static File configLocation = new File(FMLPaths.CONFIGDIR.get() + File.separator + GeiloUtils.MODID);
     private static Gson json = new GsonBuilder().setPrettyPrinting().create();
 
     private static HashMap<String, IJsonFile> fileTable = new HashMap<>();
