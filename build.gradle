@@ -8,7 +8,8 @@ buildscript {
     }
 }
 plugins {
-    id 'com.github.johnrengelman.shadow' version '2.0.2'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'java'
 }
 
 apply plugin: 'net.minecraftforge.gradle'
@@ -60,7 +61,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                geiloutils {
                     source sourceSets.main
                 }
             }
@@ -82,7 +83,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                geiloutils {
                     source sourceSets.main
                 }
             }
@@ -104,10 +105,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'geiloutils', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                examplemod {
+                geiloutils {
                     source sourceSets.main
                 }
             }
@@ -124,6 +125,10 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
+configurations {
+    shade
+}
+
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
@@ -131,6 +136,7 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
 
     implementation 'com.github.DV8FromtheWorld:JDA:4.4.0'
+    shade 'com.github.DV8FromtheWorld:JDA:4.4.0'
 
 }
 
@@ -138,17 +144,21 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "examplemod",
-            "Specification-Vendor": "examplemodsareus",
+            "Specification-Title": "geiloutils",
+            "Specification-Vendor": "TeamDMFMM",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"examplemodsareus",
+            "Implementation-Vendor" :"TeamDMFMM",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
 
+
+reobf {
+    shadowJar { }
+}
 // Example configuration to allow publishing using the maven-publish task
 // This is the preferred method to reobfuscate your jar file
 jar.finalizedBy('reobfJar') 
@@ -170,6 +180,7 @@ publishing {
 
 shadowJar {
     classifier = ""
+    configurations = [project.configurations.shade]
     relocate "org.slf4j","play.ai.dragonrealm.geiloutils.repack.org.slf4j"
     relocate "com.iwebpp.crypto", "play.ai.dragonrealm.geiloutils.repack.com.iwebpp.crypto"
     relocate "com.neovisionaries.ws.client", "play.ai.dragonrealm.geiloutils.repack.com.neovisionaries.ws.client"
